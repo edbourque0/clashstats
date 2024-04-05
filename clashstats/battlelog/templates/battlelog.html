@@ -8,11 +8,14 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
 </head>
 <body>
+    <div>
+        Average elixir leaked:
+    </div>
     <div class="container text-center">
         <div>
             {% for battle in battles %}
                 <div class="col mb-4">
-                    <div class="p-3 border rounded" style='width:1300px;'>
+                    <div class="p-3 border rounded" style='width:1500px;'>
                         <h1>{{ battle.team.name }} vs {{ battle.opponent.name }}</h1>
                         <div>
                             <p1>{{ battle.battleTime }}</p1>
@@ -77,6 +80,13 @@
                                 <img src="{{ battle.team.card8.iconUrlsm }}" alt="{{ battle.team.card8.name }}" title="{{ battle.team.card8.name }}" style="width:100%;height:auto;"/>
                                 <div>
                                     <h4 class='bold'>{{ battle.team.card8.name }}</h4>
+                                </div>
+                                </div> 
+                            <div class='col'>
+                                <h4 class='bold'>Level {{ battle.team.card8.level }}</h4>
+                                <img src="{{ battle.team.supportCards.iconUrlsm }}" alt="{{ battle.team.supportCards.name }}" title="{{ battle.team.supportCards.name }}" style="width:100%;height:auto;"/>
+                                <div>
+                                    <h4 class='bold'>{{ battle.team.supportCards.name }}</h4>
                                 </div>
                                 </div> 
                         </div>

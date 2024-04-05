@@ -193,7 +193,7 @@ def battlelog(request, tag):
             'clans': Clans,
             'cards': Cards,
             'players': Players,
-            'battles': Battles,
+            'battles': Battles
         }
     
     return HttpResponse(template.render(context, request))
