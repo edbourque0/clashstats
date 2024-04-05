@@ -16,19 +16,18 @@ class Clan(models.Model):
     badgeId = models.PositiveIntegerField()
 
 class Card(models.Model):
-    id = models.PositiveIntegerField(primary_key=True)
+    id = models.CharField(max_length=15, primary_key=True)
     name = models.CharField(max_length=100)
     level = models.PositiveIntegerField()
     maxLevel = models.PositiveIntegerField()
     rarity = models.CharField(max_length=50)
-    elixirCost = models.PositiveIntegerField()
+    elixirCost = models.PositiveIntegerField(null=True, blank=True)
     iconUrlsm = models.CharField(max_length=50)
     iconUrlse = models.CharField(max_length=50)
 
 class Player(models.Model):
-    tag = models.CharField(max_length=20, primary_key=True)
+    tag = models.CharField(max_length=20)
     name = models.CharField(max_length=100)
-    startingTrophies = models.PositiveIntegerField()
     crowns = models.PositiveIntegerField()
     kingTowerHitPoints = models.PositiveIntegerField()
     princessTower1HitPoints = models.PositiveIntegerField()
@@ -43,7 +42,6 @@ class Player(models.Model):
     card7 = models.ForeignKey(Card, on_delete=models.SET_NULL, null=True, related_name='card7')
     card8 = models.ForeignKey(Card, on_delete=models.SET_NULL, null=True, related_name='card8')
     supportCards = models.ForeignKey(Card, on_delete=models.SET_NULL, null=True, related_name='supportcard')
-    globalRank = models.CharField(max_length=5, null=True)
     elixirLeaked = models.FloatField()
 
 class Battle(models.Model):

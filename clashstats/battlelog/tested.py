@@ -8,7 +8,9 @@ headers = {
 
 r = requests.get(f'https://api.clashroyale.com/v1/players/%23CJG89UPQR/battlelog', headers=headers)
 
-data = r.json()
+rawdata = r.json()
 
-for int, battle in enumerate(data):
-    print(data[int]['team'][0]['clan']['tag'])
+for int, battle in enumerate(rawdata):
+    data = rawdata[int]
+    for int, opponent in enumerate(data['opponent']): 
+        print(data['opponent'][int]['clan'])
