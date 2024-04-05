@@ -10,4 +10,5 @@ r = requests.get(f'https://api.clashroyale.com/v1/players/%23CJG89UPQR/battlelog
 
 data = r.json()
 
-print(data['gameMode']['id'])
+for int, battle in enumerate(data):
+    print(data[int]['team'][0]['clan']['tag'])

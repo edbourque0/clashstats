@@ -23,89 +23,141 @@ def battlelog(request, tag):
     }
     
     r = requests.get(f'https://api.clashroyale.com/v1/players/%23{tag}/battlelog', headers=headers)
-    data = r.json()[0]
+    rawdata = r.json()
     
-    gamemode = GameMode.objects.create(
-        id = data['gameMode']['id'],
-        name = data['gameMode']['name']
-    )
-    
-    arena = Arena.objects.create(
-        id = data['arena']['id'],
-        name = data['arena']['name']
-    )
-    
-    clan = Clan.objects.create(
-        tag = data['clan']['tag'],
-        name = data['clan']['name'],
-        badgeId = data['clan']['badgeId']
-    )
-    
-    for card in data['team']['cards']:
-        card = Card.objects.get_or_create(
-            id = card['id'],
-            name = card['name'],
-            level = card['level'],
-            maxLevel = card['maxLevel'],
-            rarity = card['rarity'],
-            elixirCost = card['elixirCost'],
-            iconUrlsm = card['iconUrls']['medium'],
-            iconUrlse = card['iconUrls']['evolutionMedium']
+    for int, battle in enumerate(rawdata):
+        data = rawdata[int]
+        gamemode = GameMode.objects.get_or_create(
+            id = data['gameMode']['id'],
+            name = data['gameMode']['name']
         )
         
-    for card in data['opponent']['cards']:
-        card = Card.objects.get_or_create(
-            id = card['id'],
-            name = card['name'],
-            level = card['level'],
-            maxLevel = card['maxLevel'],
-            rarity = card['rarity'],
-            elixirCost = card['elixirCost'],
-            iconUrlsm = card['iconUrls']['medium'],
-            iconUrlse = card['iconUrls']['evolutionMedium']
+        arena = Arena.objects.get_or_create(
+            id = data['arena']['id'],
+            name = data['arena']['name']
         )
-
-    player = Player.objects.create(
-        tag = data['player']['tag'],
-        name = data['player']['name'],
-        startingTrophies = data['player']['startingTrophies'],
-        crowns = data['player']['crowns'],
-        kingTowerHitPoints = data['player']['kingTowerHitPoints'],
-        clan = data['player']['clan']['tag'],
-        card1 = data['player']['cards'][0]['id'],
-        card2 = data['player']['cards'][1]['id'],
-        card3 = data['player']['cards'][2]['id'],
-        card4 = data['player']['cards'][3]['id'],
-        card5 = data['player']['cards'][4]['id'],
-        card6 = data['player']['cards'][5]['id'],
-        card7 = data['player']['cards'][6]['id'],
-        card8 = data['player']['cards'][7]['id'],
-        supportCards = data['player']['supportCards']['id'],
-        globalRank = data['player']['globalRank'],
-        elixirLeaked = data['player']['elixirLeaked']
-    )
-    
-    battle = Battle.objects.create(
-        battleTime = data['battleTime'],
-        type = data['type'],
-        isLadderTournament = data['isLadderTournament'],
-        arena = data['arena']['id'],
-        gamemode = data['gameMode']['id'],
-        deckSelection = data['deckSelection'],
-        team = data['team']['tag'],
-        opponent = data['opponent']['tag'],
-        isHostedMatch = data['isHostedMatch'],
-        leagueNumber = data['leagueNumber']   
-    )
-    
-    template = loader.get_template('battlelog.html')
-    context = {
-        'arenas': Arenas,
-        'gamemodes': Gamemodes,
-        'clans': Clans,
-        'cards': Cards,
-        'players': Players,
-        'battles': Battles,
-    }
+        
+        for int, team in enumerate(data['team']):
+            clanteam = Clan.objects.get_or_create(
+                tag = data['team'][int]['clan']['tag'][1:],
+                name = data['team'][int]['clan']['name'],
+                badgeId = data['team'][int]['clan']['badgeId']
+            )
+            
+            for card in data['team'][int]['cards']:
+                card = Card.objects.get_or_create(
+                    id = card['id'],
+                    name = card['name'],
+                    level = card['level'],
+                    maxLevel = card['maxLevel'],
+                    rarity = card['rarity'],
+                    elixirCost = card['elixirCost'],
+                    iconUrlsm = card['iconUrls']['medium']
+                )
+                
+            supportCards = Card.objects.get_or_create(
+                id = data['team'][int]['supportCards'][0]['id'],
+                name = data['team'][int]['supportCards'][0]['name'],
+                level = data['team'][int]['supportCards'][0]['level'],
+                maxLevel = data['team'][int]['supportCards'][0]['maxLevel'],
+                rarity = data['team'][int]['supportCards'][0]['rarity'],
+                elixirCost = 0,
+                iconUrlsm = data['team'][int]['supportCards'][0]['iconUrls']['medium']
+            )
+                
+            team = Player.objects.get_or_create(
+                tag = data['team'][int]['tag'][1:],
+                name = data['team'][int]['name'],
+                startingTrophies = data['team'][int]['startingTrophies'],
+                crowns = data['team'][int]['crowns'],
+                kingTowerHitPoints = data['team'][int]['kingTowerHitPoints'],
+                princessTower1HitPoints = data['team'][int]['princessTowerHitPoints'][0] if data['team'][int].get('princessTowerHitPoints') and len(data['team'][int]['princessTowerHitPoints']) > 0 else 0,
+                princessTower2HitPoints = data['team'][int]['princessTowerHitPoints'][1] if data['team'][int].get('princessTowerHitPoints') and len(data['team'][int]['princessTowerHitPoints']) > 1 else 0,
+                clan = Clan.objects.get(tag=data['team'][int]['clan']['tag'][1:]),
+                card1 = Card.objects.get(id=data['team'][int]['cards'][0]['id']),
+                card2 = Card.objects.get(id=data['team'][int]['cards'][1]['id']),
+                card3 = Card.objects.get(id=data['team'][int]['cards'][2]['id']),
+                card4 = Card.objects.get(id=data['team'][int]['cards'][3]['id']),
+                card5 = Card.objects.get(id=data['team'][int]['cards'][4]['id']),
+                card6 = Card.objects.get(id=data['team'][int]['cards'][5]['id']),
+                card7 = Card.objects.get(id=data['team'][int]['cards'][6]['id']),
+                card8 = Card.objects.get(id=data['team'][int]['cards'][7]['id']),
+                supportCards = Card.objects.get(id=data['team'][int]['supportCards'][0]['id']),
+                globalRank = data['team'][int]['globalRank'],
+                elixirLeaked = data['team'][int]['elixirLeaked']
+            )
+            
+        for int, opponent in enumerate(data['opponent']):       
+            clanopponent = Clan.objects.get_or_create(
+                tag = data['opponent'][int]['clan']['tag'][1:],
+                name = data['opponent'][int]['clan']['name'],
+                badgeId = data['opponent'][int]['clan']['badgeId']
+            )
+        
+            for card in data['opponent'][int]['cards']:
+                card = Card.objects.get_or_create(
+                    id = card['id'],
+                    name = card['name'],
+                    level = card['level'],
+                    maxLevel = card['maxLevel'],
+                    rarity = card['rarity'],
+                    elixirCost = card['elixirCost'],
+                    iconUrlsm = card['iconUrls']['medium']
+                )
+                
+            supportCards = Card.objects.get_or_create(
+                id = data['opponent'][int]['supportCards'][0]['id'],
+                name = data['opponent'][int]['supportCards'][0]['name'],
+                level = data['opponent'][int]['supportCards'][0]['level'],
+                maxLevel = data['opponent'][int]['supportCards'][0]['maxLevel'],
+                rarity = data['opponent'][int]['supportCards'][0]['rarity'],
+                elixirCost = 0,
+                iconUrlsm = data['opponent'][int]['supportCards'][0]['iconUrls']['medium']
+            )
+        
+            opponent = Player.objects.get_or_create(
+                tag = data['opponent'][int]['tag'][1:],
+                name = data['opponent'][int]['name'],
+                startingTrophies = data['opponent'][int]['startingTrophies'],
+                crowns = data['opponent'][int]['crowns'],
+                kingTowerHitPoints = data['opponent'][int]['kingTowerHitPoints'],
+                princessTower1HitPoints=data['opponent'][int]['princessTowerHitPoints'][0] if data['team'][int].get('princessTowerHitPoints') and len(data['team'][int]['princessTowerHitPoints']) > 0 else 0,
+                princessTower2HitPoints=data['opponent'][int]['princessTowerHitPoints'][1] if data['team'][int].get('princessTowerHitPoints') and len(data['team'][int]['princessTowerHitPoints']) > 1 else 0,
+                clan = Clan.objects.get(tag=data['opponent'][int]['clan']['tag'][1:]),
+                card1 = Card.objects.get(id=data['opponent'][int]['cards'][0]['id']),
+                card2 = Card.objects.get(id=data['opponent'][int]['cards'][1]['id']),
+                card3 = Card.objects.get(id=data['opponent'][int]['cards'][2]['id']),
+                card4 = Card.objects.get(id=data['opponent'][int]['cards'][3]['id']),
+                card5 = Card.objects.get(id=data['opponent'][int]['cards'][4]['id']),
+                card6 = Card.objects.get(id=data['opponent'][int]['cards'][5]['id']),
+                card7 = Card.objects.get(id=data['opponent'][int]['cards'][6]['id']),
+                card8 = Card.objects.get(id=data['opponent'][int]['cards'][7]['id']),
+                supportCards = Card.objects.get(id=data['opponent'][int]['supportCards'][0]['id']),
+                globalRank = data['opponent'][int]['globalRank'],
+                elixirLeaked = data['opponent'][int]['elixirLeaked']
+            )
+            
+        battle = Battle.objects.create(
+            battleTime = data['battleTime'],
+            type = data['type'],
+            isLadderTournament = data['isLadderTournament'],
+            arena = Arena.objects.get(id=data['arena']['id']),
+            gameMode = GameMode.objects.get(id=data['gameMode']['id']),
+            deckSelection = data['deckSelection'],
+            team = Player.objects.get(tag=data['team'][0]['tag'][1:]),
+            opponent = Player.objects.get(tag=data['opponent'][0]['tag'][1:]),
+            isHostedMatch = data['isHostedMatch'],
+            leagueNumber = data['leagueNumber']   
+        )
+        
+        template = loader.get_template('battlelog.html')
+        context = {
+            'arenas': Arenas,
+            'gamemodes': Gamemodes,
+            'clans': Clans,
+            'cards': Cards,
+            'players': Players,
+            'battles': Battles,
+        }
     
     return HttpResponse(template.render(context, request))
