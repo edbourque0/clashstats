@@ -62,7 +62,27 @@ def battlelog(request, tag):
                     iconUrlsm = card['iconUrls']['medium']
                 )
                 
-            if 'supportCards' in data['team'][int]:
+                
+            team = Player.objects.get_or_create(
+                tag = f'{data['team'][int]['tag'][1:]}-{battint}',
+                name = data['team'][int]['name'],
+                crowns = data['team'][int]['crowns'],
+                kingTowerHitPoints = data['team'][int]['kingTowerHitPoints'],
+                princessTower1HitPoints = data['team'][int]['princessTowersHitPoints'][0] if data['team'][int].get('princessTowersHitPoints') and len(data['team'][int]['princessTowersHitPoints']) > 0 else 0,
+                princessTower2HitPoints = data['team'][int]['princessTowersHitPoints'][1] if data['team'][int].get('princessTowersHitPoints') and len(data['team'][int]['princessTowersHitPoints']) > 1 else 0,
+                clan = Clan.objects.get(tag=data['team'][int]['clan']['tag'][1:]),
+                card1 = Card.objects.get(id=f'{data['team'][int]['cards'][0]['id']}-{battint}'),
+                card2 = Card.objects.get(id=f'{data['team'][int]['cards'][1]['id']}-{battint}'),
+                card3 = Card.objects.get(id=f'{data['team'][int]['cards'][2]['id']}-{battint}'),
+                card4 = Card.objects.get(id=f'{data['team'][int]['cards'][3]['id']}-{battint}'),
+                card5 = Card.objects.get(id=f'{data['team'][int]['cards'][4]['id']}-{battint}'),
+                card6 = Card.objects.get(id=f'{data['team'][int]['cards'][5]['id']}-{battint}'),
+                card7 = Card.objects.get(id=f'{data['team'][int]['cards'][6]['id']}-{battint}'),
+                card8 = Card.objects.get(id=f'{data['team'][int]['cards'][7]['id']}-{battint}'),
+                elixirLeaked = data['team'][int]['elixirLeaked']
+            )
+            
+            if len(data['team'][int]['supportCards']) == 1:
                 supportCards = Card.objects.get_or_create(
                     id = f'{data['team'][int]['supportCards'][0]['id']}-{battint}',
                     name = data['team'][int]['supportCards'][0]['name'],
@@ -73,32 +93,15 @@ def battlelog(request, tag):
                     iconUrlsm = data['team'][int]['supportCards'][0]['iconUrls']['medium']
                 )
                 
-            team = Player.objects.get_or_create(
-                tag = f'{data['team'][int]['tag'][1:]}-{battint}',
-                name = data['team'][int]['name'],
-                crowns = data['team'][int]['crowns'],
-                kingTowerHitPoints = data['team'][int]['kingTowerHitPoints'],
-                princessTower1HitPoints = data['team'][int]['princessTowerHitPoints'][0] if data['team'][int].get('princessTowerHitPoints') and len(data['team'][int]['princessTowerHitPoints']) > 0 else 0,
-                princessTower2HitPoints = data['team'][int]['princessTowerHitPoints'][1] if data['team'][int].get('princessTowerHitPoints') and len(data['team'][int]['princessTowerHitPoints']) > 1 else 0,
-                clan = Clan.objects.get(tag=data['team'][int]['clan']['tag'][1:]),
-                card1 = Card.objects.get(id=f'{data['team'][int]['cards'][0]['id']}-{battint}'),
-                card2 = Card.objects.get(id=f'{data['team'][int]['cards'][1]['id']}-{battint}'),
-                card3 = Card.objects.get(id=f'{data['team'][int]['cards'][2]['id']}-{battint}'),
-                card4 = Card.objects.get(id=f'{data['team'][int]['cards'][3]['id']}-{battint}'),
-                card5 = Card.objects.get(id=f'{data['team'][int]['cards'][4]['id']}-{battint}'),
-                card6 = Card.objects.get(id=f'{data['team'][int]['cards'][5]['id']}-{battint}'),
-                card7 = Card.objects.get(id=f'{data['team'][int]['cards'][6]['id']}-{battint}'),
-                card8 = Card.objects.get(id=f'{data['team'][int]['cards'][7]['id']}-{battint}'),
-                supportCards = Card.objects.get(id=f'{data['team'][int]['supportCards'][0]['id']}-{battint}'),
-                elixirLeaked = data['team'][int]['elixirLeaked']
-            )
+                Player.objects.filter(tag=f'{data['team'][int]['tag'][1:]}-{battint}').update(supportCards = Card.objects.get(id=f'{data['team'][int]['supportCards'][0]['id']}-{battint}'))
+                
             
             if 'clan' in data['team'][int]:
-                clanopponent = Player.objects.update(
+                clanopponent = Player.objects.filter(tag=f'{data['team'][int]['tag'][1:]}-{battint}').update(
                     clan = Clan.objects.get(tag=data['team'][int]['clan']['tag'][1:]),
                 )
             else:
-                clanopponent = Player.objects.update(
+                clanopponent = Player.objects.filter(tag=f'{data['team'][int]['tag'][1:]}-{battint}').update(
                     clan = Clan.objects.get(tag='None'),
                 )
             
@@ -135,15 +138,6 @@ def battlelog(request, tag):
                         elixirCost = card['elixirCost']
                     ),
                 
-            supportCards = Card.objects.get_or_create(
-                id = f'{data['opponent'][int]['supportCards'][0]['id']}-{battint}{int+1000}',
-                name = data['opponent'][int]['supportCards'][0]['name'],
-                level = data['opponent'][int]['supportCards'][0]['level'],
-                maxLevel = data['opponent'][int]['supportCards'][0]['maxLevel'],
-                rarity = data['opponent'][int]['supportCards'][0]['rarity'],
-                elixirCost = 0,
-                iconUrlsm = data['opponent'][int]['supportCards'][0]['iconUrls']['medium']
-            )
         
             opponent = Player.objects.get_or_create(
                 tag = f'{data['opponent'][int]['tag'][1:]}-{battint}',
@@ -160,16 +154,29 @@ def battlelog(request, tag):
                 card6 = Card.objects.get(id=f'{data['opponent'][int]['cards'][5]['id']}-{battint}{int+1000}'),
                 card7 = Card.objects.get(id=f'{data['opponent'][int]['cards'][6]['id']}-{battint}{int+1000}'),
                 card8 = Card.objects.get(id=f'{data['opponent'][int]['cards'][7]['id']}-{battint}{int+1000}'),
-                supportCards = Card.objects.get(id=f'{data['opponent'][int]['supportCards'][0]['id']}-{battint}{int+1000}'),
                 elixirLeaked = data['opponent'][int]['elixirLeaked']
             )
             
+            if len(data['opponent'][int]['supportCards']) == 1:
+                supportCards = Card.objects.get_or_create(
+                    id = f'{data['opponent'][int]['supportCards'][0]['id']}-{battint}{int+1000}',
+                    name = data['opponent'][int]['supportCards'][0]['name'],
+                    level = data['opponent'][int]['supportCards'][0]['level'],
+                    maxLevel = data['opponent'][int]['supportCards'][0]['maxLevel'],
+                    rarity = data['opponent'][int]['supportCards'][0]['rarity'],
+                    elixirCost = 0,
+                    iconUrlsm = data['opponent'][int]['supportCards'][0]['iconUrls']['medium']
+                )
+                
+                
+                Player.objects.filter(tag=f'{data['opponent'][int]['tag'][1:]}-{battint}').update(supportCards = Card.objects.get(id=f'{data['opponent'][int]['supportCards'][0]['id']}-{battint}{int+1000}'))
+            
             if 'clan' in data['opponent'][int]:
-                clanopponent = Player.objects.update(
+                clanopponent = Player.objects.filter(tag=f'{data['opponent'][int]['tag'][1:]}-{battint}').update(
                     clan = Clan.objects.get(tag=data['opponent'][int]['clan']['tag'][1:]),
                 )
             else:
-                clanopponent = Player.objects.update(
+                clanopponent = Player.objects.filter(tag=f'{data['opponent'][int]['tag'][1:]}-{battint}').update(
                     clan = Clan.objects.get(tag='None'),
                 )
             
