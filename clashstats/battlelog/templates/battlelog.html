@@ -30,7 +30,7 @@
                     </div>
                     <div class='row'>
                         <div class="col col d-flex align-items-stretch p-3">
-                            <div class="d-flex justify-content-between border rounded p-3" style='width:470px;'>
+                            <div class="d-flex justify-content-between border rounded p-3" style='width:450px;'>
                                 <div class="card-body">
                                     <h5><a data-bs-toggle="tooltip" data-bs-title={{battle.team.tag|slice:":9"}}>{{battle.team.name}}</a></h5>
                                     <p></p>
@@ -66,7 +66,7 @@
                             </div>
                         </div>
                         <div class="col col d-flex align-items-stretch p-3">
-                            <div class="d-flex justify-content-between border rounded p-3" style='width:470px;'>
+                            <div class="d-flex justify-content-between border rounded p-3" style='width:450px;'>
                                 <div class="card-body">
                                     <h5><a data-bs-toggle="tooltip" data-bs-title={{battle.opponent.tag|slice:":9"}}>{{battle.opponent.name}}</a></h5>
                                     <p></p>
@@ -102,6 +102,9 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class='p-3'>
+                    <h4>{{battle.team.name}}'s deck</h4>
                 </div>
                 <div class="row row-cols-1 row-cols-md-auto g-2 p-3 d-flex justify-content-between">
                         <div class="col d-flex align-items-stretch">
@@ -276,6 +279,189 @@
                                         {% elif battle.team.card8.rarity == 'legendary' %}
                                         <span class="badge text-bg-info">Legendary</span>
                                         {% elif battle.team.card8.rarity == 'champion'%}
+                                        <span class="badge text-bg-success">Champion</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                                                                                   
+                </div>
+                <div class='p-3'>
+                    <h4>{{battle.opponent.name}}'s deck</h4>
+                </div>
+                <div class="row row-cols-1 row-cols-md-auto g-2 p-3 d-flex justify-content-between">
+                        <div class="col d-flex align-items-stretch">
+                            <div {% if battle.opponent.card1.level >= battle.opponent.card1.maxLevel %} class="card border-info" {% else %} class="card" {% endif %} style="width: 9rem; display: flex; flex-direction: column;">
+                                <img src="{{ battle.opponent.card1.iconUrlsm }}" class="card-img-top d-block mx-auto" alt="{{ battle.opponent.card1.name }}" style="width:75%;height:auto;">
+                                <div class="card-body d-flex flex-column justify-content-between">
+                                    <div>
+                                        <h5 class="card-title">{{ battle.opponent.card1.name }}</h5>
+                                        <p class="card-text">Level {{ battle.opponent.card1.level }}</p>
+                                    </div>
+                                    <div>
+                                        {% if battle.opponent.card1.rarity == 'common' %}
+                                        <span class="badge text-bg-secondary">Common</span>
+                                        {% elif battle.opponent.card1.rarity == 'rare' %}
+                                        <span class="badge text-bg-warning">Rare</span>
+                                        {% elif battle.opponent.card1.rarity == 'epic' %}
+                                        <span class="badge text-bg-primary">Epic</span>
+                                        {% elif battle.opponent.card1.rarity == 'legendary' %}
+                                        <span class="badge text-bg-info">Legendary</span>
+                                        {% elif battle.opponent.card1.rarity == 'champion'%}
+                                        <span class="badge text-bg-success">Champion</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col d-flex align-items-stretch">
+                            <div {% if battle.opponent.card2.level >= battle.opponent.card2.maxLevel %} class="card border-info" {% else %} class="card" {% endif %}style="width: 9rem;">
+                                <img src="{{ battle.opponent.card2.iconUrlsm }}" class="card-img-top d-block mx-auto" alt="{{ battle.opponent.card2.name }}" style="width:75%;height:auto;">
+                                <div class="card-body d-flex flex-column justify-content-between">
+                                    <h5 class="card-title">{{ battle.opponent.card2.name }}</h5>
+                                    <p class="card-text">Level {{ battle.opponent.card2.level }}</p>
+                                    <div>
+                                        {% if battle.opponent.card2.rarity == 'common' %}
+                                        <span class="badge text-bg-secondary">Common</span>
+                                        {% elif battle.opponent.card2.rarity == 'rare' %}
+                                        <span class="badge text-bg-warning">Rare</span>
+                                        {% elif battle.opponent.card2.rarity == 'epic' %}
+                                        <span class="badge text-bg-primary">Epic</span>
+                                        {% elif battle.opponent.card2.rarity == 'legendary' %}
+                                        <span class="badge text-bg-info">Legendary</span>
+                                        {% elif battle.opponent.card2.rarity == 'champion'%}
+                                        <span class="badge text-bg-success">Champion</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col d-flex align-items-stretch">
+                            <div {% if battle.opponent.card3.level >= battle.opponent.card3.maxLevel %} class="card border-info" {% else %} class="card" {% endif %}style="width: 9rem;">
+                                <img src="{{ battle.opponent.card3.iconUrlsm }}" class="card-img-top d-block mx-auto" alt="{{ battle.opponent.card3.name }}" style="width:75%;height:auto;">
+                                <div class="card-body d-flex flex-column justify-content-between">
+                                    <h5 class="card-title">{{ battle.opponent.card3.name }}</h5>
+                                    <p class="card-text">Level {{ battle.opponent.card3.level }}</p>
+                                    <div>
+                                        {% if battle.opponent.card3.rarity == 'common' %}
+                                        <span class="badge text-bg-secondary">Common</span>
+                                        {% elif battle.opponent.card3.rarity == 'rare' %}
+                                        <span class="badge text-bg-warning">Rare</span>
+                                        {% elif battle.opponent.card3.rarity == 'epic' %}
+                                        <span class="badge text-bg-primary">Epic</span>
+                                        {% elif battle.opponent.card3.rarity == 'legendary' %}
+                                        <span class="badge text-bg-info">Legendary</span>
+                                        {% elif battle.opponent.card3.rarity == 'champion'%}
+                                        <span class="badge text-bg-success">Champion</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col d-flex align-items-stretch">
+                            <div {% if battle.opponent.card4.level >= battle.opponent.card4.maxLevel %} class="card border-info" {% else %} class="card" {% endif %}style="width: 9rem;">
+                                <img src="{{ battle.opponent.card4.iconUrlsm }}" class="card-img-top d-block mx-auto" alt="{{ battle.opponent.card4.name }}" style="width:75%;height:auto;">
+                                <div class="card-body d-flex flex-column justify-content-between">
+                                    <h5 class="card-title">{{ battle.opponent.card4.name }}</h5>
+                                    <p class="card-text">Level {{ battle.opponent.card4.level }}</p>
+                                    <div>
+                                        {% if battle.opponent.card4.rarity == 'common' %}
+                                        <span class="badge text-bg-secondary">Common</span>
+                                        {% elif battle.opponent.card4.rarity == 'rare' %}
+                                        <span class="badge text-bg-warning">Rare</span>
+                                        {% elif battle.opponent.card4.rarity == 'epic' %}
+                                        <span class="badge text-bg-primary">Epic</span>
+                                        {% elif battle.opponent.card4.rarity == 'legendary' %}
+                                        <span class="badge text-bg-info">Legendary</span>
+                                        {% elif battle.opponent.card4.rarity == 'champion'%}
+                                        <span class="badge text-bg-success">Champion</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col d-flex align-items-stretch">
+                            <div {% if battle.opponent.card5.level >= battle.opponent.card5.maxLevel %} class="card border-info" {% else %} class="card" {% endif %}style="width: 9rem;">
+                                <img src="{{ battle.opponent.card5.iconUrlsm }}" class="card-img-top d-block mx-auto" alt="{{ battle.opponent.card5.name }}" style="width:75%;height:auto;">
+                                <div class="card-body d-flex flex-column justify-content-between">
+                                    <h5 class="card-title">{{ battle.opponent.card5.name }}</h5>
+                                    <p class="card-text">Level {{ battle.opponent.card5.level }}</p>
+                                    <div>
+                                        {% if battle.opponent.card5.rarity == 'common' %}
+                                        <span class="badge text-bg-secondary">Common</span>
+                                        {% elif battle.opponent.card5.rarity == 'rare' %}
+                                        <span class="badge text-bg-warning">Rare</span>
+                                        {% elif battle.opponent.card5.rarity == 'epic' %}
+                                        <span class="badge text-bg-primary">Epic</span>
+                                        {% elif battle.opponent.card5.rarity == 'legendary' %}
+                                        <span class="badge text-bg-info">Legendary</span>
+                                        {% elif battle.opponent.card5.rarity == 'champion'%}
+                                        <span class="badge text-bg-success">Champion</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col d-flex align-items-stretch">
+                            <div {% if battle.opponent.card6.level >= battle.opponent.card6.maxLevel %} class="card border-info" {% else %} class="card" {% endif %}style="width: 9rem;">
+                                <img src="{{ battle.opponent.card6.iconUrlsm }}" class="card-img-top d-block mx-auto" alt="{{ battle.opponent.card6.name }}" style="width:75%;height:auto;">
+                                <div class="card-body d-flex flex-column justify-content-between">
+                                    <h5 class="card-title">{{ battle.opponent.card6.name }}</h5>
+                                    <p class="card-text">Level {{ battle.opponent.card6.level }}</p>
+                                    <div>
+                                        {% if battle.opponent.card6.rarity == 'common' %}
+                                        <span class="badge text-bg-secondary">Common</span>
+                                        {% elif battle.opponent.card6.rarity == 'rare' %}
+                                        <span class="badge text-bg-warning">Rare</span>
+                                        {% elif battle.opponent.card6.rarity == 'epic' %}
+                                        <span class="badge text-bg-primary">Epic</span>
+                                        {% elif battle.opponent.card6.rarity == 'legendary' %}
+                                        <span class="badge text-bg-info">Legendary</span>
+                                        {% elif battle.opponent.card6.rarity == 'champion'%}
+                                        <span class="badge text-bg-success">Champion</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col d-flex align-items-stretch">
+                            <div {% if battle.opponent.card7.level >= battle.opponent.card7.maxLevel %} class="card border-info" {% else %} class="card" {% endif %}style="width: 9rem;">
+                                <img src="{{ battle.opponent.card7.iconUrlsm }}" class="card-img-top d-block mx-auto" alt="{{ battle.opponent.card7.name }}" style="width:75%;height:auto;">
+                                <div class="card-body d-flex flex-column justify-content-between">
+                                    <h5 class="card-title">{{ battle.opponent.card7.name }}</h5>
+                                    <p class="card-text">Level {{ battle.opponent.card7.level }}</p>
+                                    <div>
+                                        {% if battle.opponent.card7.rarity == 'common' %}
+                                        <span class="badge text-bg-secondary">Common</span>
+                                        {% elif battle.opponent.card7.rarity == 'rare' %}
+                                        <span class="badge text-bg-warning">Rare</span>
+                                        {% elif battle.opponent.card7.rarity == 'epic' %}
+                                        <span class="badge text-bg-primary">Epic</span>
+                                        {% elif battle.opponent.card7.rarity == 'legendary' %}
+                                        <span class="badge text-bg-info">Legendary</span>
+                                        {% elif battle.opponent.card7.rarity == 'champion'%}
+                                        <span class="badge text-bg-success">Champion</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col d-flex align-items-stretch">
+                            <div {% if battle.opponent.card8.level >= battle.opponent.card8.maxLevel %} class="card border-info" {% else %} class="card" {% endif %}style="width: 9rem;">
+                                <img src="{{ battle.opponent.card8.iconUrlsm }}" class="card-img-top d-block mx-auto" alt="{{ battle.opponent.card8.name }}" style="width:75%;height:auto;">
+                                <div class="card-body d-flex flex-column justify-content-between">
+                                    <h5 class="card-title">{{ battle.opponent.card8.name }}</h5>
+                                    <p class="card-text">Level {{ battle.opponent.card8.level }}</p>
+                                    <div class='d-flex align-items-end'>
+                                        {% if battle.opponent.card8.rarity == 'common' %}
+                                        <span class="badge text-bg-secondary">Common</span>
+                                        {% elif battle.opponent.card8.rarity == 'rare' %}
+                                        <span class="badge text-bg-warning">Rare</span>
+                                        {% elif battle.opponent.card8.rarity == 'epic' %}
+                                        <span class="badge text-bg-primary">Epic</span>
+                                        {% elif battle.opponent.card8.rarity == 'legendary' %}
+                                        <span class="badge text-bg-info">Legendary</span>
+                                        {% elif battle.opponent.card8.rarity == 'champion'%}
                                         <span class="badge text-bg-success">Champion</span>
                                         {% endif %}
                                     </div>
