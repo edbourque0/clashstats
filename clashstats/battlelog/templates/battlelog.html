@@ -15,9 +15,81 @@
             });
         });
     </script>
+    <style>
+        .custom-badge {
+        background-color: #d63384;
+        color: white;
+      }
+    </style>
 </head>
 <body>
     <div class="container py-3">
+        <h1>Player info</h1>
+        {% for player in playerinfo %}
+        <div class='mb-5 border border-secondary border-3 rounded'>
+            <div>
+                <div class='p-3'>
+                    <div class='d-flex justify-content-start'>
+                        <div class='g-2'>
+                            <h2 class='text-warning'>{{ player.name }}</h2>
+                            <h5 class='text-muted'>{{ player.tag }}</h5>
+                        </div>
+                        <div class='p-2 mx-3'>
+                            <p><i class="ti ti-building-stadium"></i> {{ player.arena.name }}</p>
+                            <p><i class="ti ti-rosette"></i> XP level : {{ player.expLevel }}</p>
+                        </div>
+                        <div class='p-2 mx-auto'>
+                            <p><i class="ti ti-rosette"></i> Total XP points : {{ player.totalExpPoints }}</p>
+                            <p><i class="ti ti-star"></i> Star points : {{ player.starPoints }}</p>
+                        </div>
+                        <div class='p-2 mx-auto'>
+                            <p><i class="ti ti-trophy"></i> Trophies : {{ player.trophies }}</p>
+                            <p><i class="ti ti-trophy-off"></i> Best trophies : {{ player.bestTrophies }}</p>
+                        </div>
+                        <div class='p-2 mx-auto'>
+                            <p><i class="ti ti-award"></i> Wins : {{ player.wins }}</p>
+                            <p><i class="ti ti-skull"></i> Losses : {{ player.losses }}</p>
+                        </div>
+                        <div class='p-2 mx-auto'>
+                            <p><i class="ti ti-swords"></i> Battles played : {{ player.battleCount }}</p>
+                            <p><i class="ti ti-building-castle"></i> 3 crown wins : {{ player.threeCrownWins }}</p>
+                        </div>
+                        <div class='p-2 mx-auto'>
+                            <p><i class="ti ti-play-card"></i> Challenge cards won : {{ player.challengeCardsWon }}</p>
+                        </div>
+                    </div>
+                    <div class='row row-cols-auto row-cols-md-auto g-2 p-2 d-flex'>
+                        <div class='border rounded p-3 d-block mx-3'>
+                            <h5 class='text-info p-2'>Clan</h5>
+                            <p><i class="ti ti-forms"></i> Name : {{ player.clan.name }}</p>
+                            <p><i class="ti ti-user"></i> Role : {{ player.role }}</p>
+                            <p><i class="ti ti-hand-stop"></i> Donations : {{ player.donations }}</p>
+                            <p><i class="ti ti-hand-grab"></i> Donations received : {{ player.donationsReceived }}</p>
+                            <p><i class="ti ti-cards"></i> Total donations : {{ player.totalDonations }}</p>
+                        </div>
+                        <div class='border rounded p-3 d-block mx-3'>
+                            <h5 class='text-info p-2'>Badges</h5>
+                            <div class='row row-cols-auto row-cols-md-auto g-2 d-flex justify-content-start overflow-y-scroll' style='width:450px; height:450px'>
+                                {% for badge in badge %}
+                                <div class='card col d-flex flex-column mx-auto' style="width: 9rem;">
+                                    <img src={{ badge.iconUrls }} class="card-img-top d-block mx-auto">
+                                    <div class="card-body d-flex flex-column justify-content-between">
+                                        <p class='fw-bold fs-6'>{{ badge.name }}</p>
+                                        <p class='card-text'>Level {{ badge.level }} / {{ badge.maxLevel }}</p>
+                                        <div class="progress" role="progressbar" aria-label="Badge progress" aria-valuenow="{{ badge.progress }}" aria-valuemin="0" aria-valuemax="{{ badge.target }}">
+                                            <div class="progress-bar" style="width: {{ badge.progressPerc }}%">{{ badge.progress }} / {{ badge.target }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <h1>Battle log</h1>
         {% for battle in battles %}
             <div class="mb-5 border border-secondary border-3 rounded" style="width: 100%; max-width: 2500px; margin: auto;">
                 <div class="d-flex justify-content-between">
@@ -44,7 +116,7 @@
                                 <div class="d-flex justify-items-center p-3 {% if battle.team.supportCards.name %} visible {% else %} invisible {% endif %}">
                                     <div class="card border-light" style="width: 9rem; height: auto">
                                         <img src="{{ battle.team.supportCards.iconUrlsm }}" class="card-img-top d-block mx-auto" alt="{{ battle.team.supportCards.name }}" style="width:75%;height:auto;">
-                                        <div class="card-body">
+                                        <div class="card-body d-flex flex-column justify-content-between">
                                             <h5 class="card-title">{{ battle.team.supportCards.name }}</h5>
                                             <p class="card-text">Level {{ battle.team.supportCards.level }}</p>
                                             <div>
@@ -105,6 +177,9 @@
                 </div>
                 <div class='p-3'>
                     <h4>{{battle.team.name}}'s deck</h4>
+                    <div>
+                        <h5><span class="badge custom-badge rounded-pill">{{battle.team.averageElixir}}</span></h5>
+                    </div>
                 </div>
                 <div class="row row-cols-1 row-cols-md-auto g-2 p-3 d-flex justify-content-between">
                         <div class="col d-flex align-items-stretch">
@@ -115,7 +190,7 @@
                                         <h5 class="card-title">{{ battle.team.card1.name }}</h5>
                                         <p class="card-text">Level {{ battle.team.card1.level }}</p>
                                     </div>
-                                    <div>
+                                    <div class='d-flex justify-content-between align-items-center'>
                                         {% if battle.team.card1.rarity == 'common' %}
                                         <span class="badge text-bg-secondary">Common</span>
                                         {% elif battle.team.card1.rarity == 'rare' %}
@@ -127,6 +202,9 @@
                                         {% elif battle.team.card1.rarity == 'champion'%}
                                         <span class="badge text-bg-success">Champion</span>
                                         {% endif %}
+                                        <div class='d-flex flex-column'>
+                                            <span class="badge custom-badge rounded-pill">{{ battle.team.card1.elixirCost }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -137,7 +215,7 @@
                                 <div class="card-body d-flex flex-column justify-content-between">
                                     <h5 class="card-title">{{ battle.team.card2.name }}</h5>
                                     <p class="card-text">Level {{ battle.team.card2.level }}</p>
-                                    <div>
+                                    <div class='d-flex justify-content-between align-items-center'>
                                         {% if battle.team.card2.rarity == 'common' %}
                                         <span class="badge text-bg-secondary">Common</span>
                                         {% elif battle.team.card2.rarity == 'rare' %}
@@ -149,6 +227,9 @@
                                         {% elif battle.team.card2.rarity == 'champion'%}
                                         <span class="badge text-bg-success">Champion</span>
                                         {% endif %}
+                                        <div class='d-flex flex-column'>
+                                            <span class="badge custom-badge rounded-pill">{{ battle.team.card2.elixirCost }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -159,7 +240,7 @@
                                 <div class="card-body d-flex flex-column justify-content-between">
                                     <h5 class="card-title">{{ battle.team.card3.name }}</h5>
                                     <p class="card-text">Level {{ battle.team.card3.level }}</p>
-                                    <div>
+                                    <div class='d-flex justify-content-between align-items-center'>
                                         {% if battle.team.card3.rarity == 'common' %}
                                         <span class="badge text-bg-secondary">Common</span>
                                         {% elif battle.team.card3.rarity == 'rare' %}
@@ -171,6 +252,9 @@
                                         {% elif battle.team.card3.rarity == 'champion'%}
                                         <span class="badge text-bg-success">Champion</span>
                                         {% endif %}
+                                        <div class='d-flex flex-column'>
+                                            <span class="badge custom-badge rounded-pill">{{ battle.team.card3.elixirCost }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -181,7 +265,7 @@
                                 <div class="card-body d-flex flex-column justify-content-between">
                                     <h5 class="card-title">{{ battle.team.card4.name }}</h5>
                                     <p class="card-text">Level {{ battle.team.card4.level }}</p>
-                                    <div>
+                                    <div class='d-flex justify-content-between align-items-center'>
                                         {% if battle.team.card4.rarity == 'common' %}
                                         <span class="badge text-bg-secondary">Common</span>
                                         {% elif battle.team.card4.rarity == 'rare' %}
@@ -193,6 +277,9 @@
                                         {% elif battle.team.card4.rarity == 'champion'%}
                                         <span class="badge text-bg-success">Champion</span>
                                         {% endif %}
+                                        <div class='d-flex flex-column'>
+                                            <span class="badge custom-badge rounded-pill">{{ battle.team.card4.elixirCost }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -203,7 +290,7 @@
                                 <div class="card-body d-flex flex-column justify-content-between">
                                     <h5 class="card-title">{{ battle.team.card5.name }}</h5>
                                     <p class="card-text">Level {{ battle.team.card5.level }}</p>
-                                    <div>
+                                    <div class='d-flex justify-content-between align-items-center'>
                                         {% if battle.team.card5.rarity == 'common' %}
                                         <span class="badge text-bg-secondary">Common</span>
                                         {% elif battle.team.card5.rarity == 'rare' %}
@@ -215,6 +302,9 @@
                                         {% elif battle.team.card5.rarity == 'champion'%}
                                         <span class="badge text-bg-success">Champion</span>
                                         {% endif %}
+                                        <div class='d-flex flex-column'>
+                                            <span class="badge custom-badge rounded-pill">{{ battle.team.card5.elixirCost }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -225,7 +315,7 @@
                                 <div class="card-body d-flex flex-column justify-content-between">
                                     <h5 class="card-title">{{ battle.team.card6.name }}</h5>
                                     <p class="card-text">Level {{ battle.team.card6.level }}</p>
-                                    <div>
+                                    <div class='d-flex justify-content-between align-items-center'>
                                         {% if battle.team.card6.rarity == 'common' %}
                                         <span class="badge text-bg-secondary">Common</span>
                                         {% elif battle.team.card6.rarity == 'rare' %}
@@ -237,6 +327,9 @@
                                         {% elif battle.team.card6.rarity == 'champion'%}
                                         <span class="badge text-bg-success">Champion</span>
                                         {% endif %}
+                                        <div class='d-flex flex-column'>
+                                            <span class="badge custom-badge rounded-pill">{{ battle.team.card6.elixirCost }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -247,7 +340,7 @@
                                 <div class="card-body d-flex flex-column justify-content-between">
                                     <h5 class="card-title">{{ battle.team.card7.name }}</h5>
                                     <p class="card-text">Level {{ battle.team.card7.level }}</p>
-                                    <div>
+                                    <div class='d-flex justify-content-between align-items-center'>
                                         {% if battle.team.card7.rarity == 'common' %}
                                         <span class="badge text-bg-secondary">Common</span>
                                         {% elif battle.team.card7.rarity == 'rare' %}
@@ -259,6 +352,9 @@
                                         {% elif battle.team.card7.rarity == 'champion'%}
                                         <span class="badge text-bg-success">Champion</span>
                                         {% endif %}
+                                        <div class='d-flex flex-column'>
+                                            <span class="badge custom-badge rounded-pill">{{ battle.team.card7.elixirCost }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -269,7 +365,7 @@
                                 <div class="card-body d-flex flex-column justify-content-between">
                                     <h5 class="card-title">{{ battle.team.card8.name }}</h5>
                                     <p class="card-text">Level {{ battle.team.card8.level }}</p>
-                                    <div class='d-flex align-items-end'>
+                                    <div class='d-flex justify-content-between align-items-center'>
                                         {% if battle.team.card8.rarity == 'common' %}
                                         <span class="badge text-bg-secondary">Common</span>
                                         {% elif battle.team.card8.rarity == 'rare' %}
@@ -281,6 +377,9 @@
                                         {% elif battle.team.card8.rarity == 'champion'%}
                                         <span class="badge text-bg-success">Champion</span>
                                         {% endif %}
+                                        <div class='d-flex flex-column'>
+                                            <span class="badge custom-badge rounded-pill">{{ battle.team.card8.elixirCost }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -288,6 +387,9 @@
                 </div>
                 <div class='p-3'>
                     <h4>{{battle.opponent.name}}'s deck</h4>
+                    <div>
+                        <h5><span class="badge custom-badge rounded-pill">{{battle.team.averageElixir}}</span></h5>
+                    </div>
                 </div>
                 <div class="row row-cols-1 row-cols-md-auto g-2 p-3 d-flex justify-content-between">
                         <div class="col d-flex align-items-stretch">
@@ -298,7 +400,7 @@
                                         <h5 class="card-title">{{ battle.opponent.card1.name }}</h5>
                                         <p class="card-text">Level {{ battle.opponent.card1.level }}</p>
                                     </div>
-                                    <div>
+                                    <div class='d-flex justify-content-between align-items-center'>
                                         {% if battle.opponent.card1.rarity == 'common' %}
                                         <span class="badge text-bg-secondary">Common</span>
                                         {% elif battle.opponent.card1.rarity == 'rare' %}
@@ -310,6 +412,9 @@
                                         {% elif battle.opponent.card1.rarity == 'champion'%}
                                         <span class="badge text-bg-success">Champion</span>
                                         {% endif %}
+                                        <div class='d-flex flex-column'>
+                                            <span class="badge custom-badge rounded-pill">{{ battle.opponent.card1.elixirCost }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -320,7 +425,7 @@
                                 <div class="card-body d-flex flex-column justify-content-between">
                                     <h5 class="card-title">{{ battle.opponent.card2.name }}</h5>
                                     <p class="card-text">Level {{ battle.opponent.card2.level }}</p>
-                                    <div>
+                                    <div class='d-flex justify-content-between align-items-center'>
                                         {% if battle.opponent.card2.rarity == 'common' %}
                                         <span class="badge text-bg-secondary">Common</span>
                                         {% elif battle.opponent.card2.rarity == 'rare' %}
@@ -332,6 +437,9 @@
                                         {% elif battle.opponent.card2.rarity == 'champion'%}
                                         <span class="badge text-bg-success">Champion</span>
                                         {% endif %}
+                                        <div class='d-flex flex-column'>
+                                            <span class="badge custom-badge rounded-pill">{{ battle.opponent.card2.elixirCost }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -342,7 +450,7 @@
                                 <div class="card-body d-flex flex-column justify-content-between">
                                     <h5 class="card-title">{{ battle.opponent.card3.name }}</h5>
                                     <p class="card-text">Level {{ battle.opponent.card3.level }}</p>
-                                    <div>
+                                    <div class='d-flex justify-content-between align-items-center'>
                                         {% if battle.opponent.card3.rarity == 'common' %}
                                         <span class="badge text-bg-secondary">Common</span>
                                         {% elif battle.opponent.card3.rarity == 'rare' %}
@@ -354,6 +462,9 @@
                                         {% elif battle.opponent.card3.rarity == 'champion'%}
                                         <span class="badge text-bg-success">Champion</span>
                                         {% endif %}
+                                        <div class='d-flex flex-column'>
+                                            <span class="badge custom-badge rounded-pill">{{ battle.opponent.card3.elixirCost }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -364,7 +475,7 @@
                                 <div class="card-body d-flex flex-column justify-content-between">
                                     <h5 class="card-title">{{ battle.opponent.card4.name }}</h5>
                                     <p class="card-text">Level {{ battle.opponent.card4.level }}</p>
-                                    <div>
+                                    <div class='d-flex justify-content-between align-items-center'>
                                         {% if battle.opponent.card4.rarity == 'common' %}
                                         <span class="badge text-bg-secondary">Common</span>
                                         {% elif battle.opponent.card4.rarity == 'rare' %}
@@ -376,6 +487,9 @@
                                         {% elif battle.opponent.card4.rarity == 'champion'%}
                                         <span class="badge text-bg-success">Champion</span>
                                         {% endif %}
+                                        <div class='d-flex flex-column'>
+                                            <span class="badge custom-badge rounded-pill">{{ battle.opponent.card4.elixirCost }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -386,7 +500,7 @@
                                 <div class="card-body d-flex flex-column justify-content-between">
                                     <h5 class="card-title">{{ battle.opponent.card5.name }}</h5>
                                     <p class="card-text">Level {{ battle.opponent.card5.level }}</p>
-                                    <div>
+                                    <div class='d-flex justify-content-between align-items-center'>
                                         {% if battle.opponent.card5.rarity == 'common' %}
                                         <span class="badge text-bg-secondary">Common</span>
                                         {% elif battle.opponent.card5.rarity == 'rare' %}
@@ -398,6 +512,9 @@
                                         {% elif battle.opponent.card5.rarity == 'champion'%}
                                         <span class="badge text-bg-success">Champion</span>
                                         {% endif %}
+                                        <div class='d-flex flex-column'>
+                                            <span class="badge custom-badge rounded-pill">{{ battle.opponent.card5.elixirCost }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -408,7 +525,7 @@
                                 <div class="card-body d-flex flex-column justify-content-between">
                                     <h5 class="card-title">{{ battle.opponent.card6.name }}</h5>
                                     <p class="card-text">Level {{ battle.opponent.card6.level }}</p>
-                                    <div>
+                                    <div class='d-flex justify-content-between align-items-center'>
                                         {% if battle.opponent.card6.rarity == 'common' %}
                                         <span class="badge text-bg-secondary">Common</span>
                                         {% elif battle.opponent.card6.rarity == 'rare' %}
@@ -420,6 +537,9 @@
                                         {% elif battle.opponent.card6.rarity == 'champion'%}
                                         <span class="badge text-bg-success">Champion</span>
                                         {% endif %}
+                                        <div class='d-flex flex-column'>
+                                            <span class="badge custom-badge rounded-pill">{{ battle.opponent.card6.elixirCost }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -430,7 +550,7 @@
                                 <div class="card-body d-flex flex-column justify-content-between">
                                     <h5 class="card-title">{{ battle.opponent.card7.name }}</h5>
                                     <p class="card-text">Level {{ battle.opponent.card7.level }}</p>
-                                    <div>
+                                    <div class='d-flex justify-content-between align-items-center'>
                                         {% if battle.opponent.card7.rarity == 'common' %}
                                         <span class="badge text-bg-secondary">Common</span>
                                         {% elif battle.opponent.card7.rarity == 'rare' %}
@@ -442,6 +562,9 @@
                                         {% elif battle.opponent.card7.rarity == 'champion'%}
                                         <span class="badge text-bg-success">Champion</span>
                                         {% endif %}
+                                        <div class='d-flex flex-column'>
+                                            <span class="badge custom-badge rounded-pill">{{ battle.opponent.card7.elixirCost }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -452,7 +575,7 @@
                                 <div class="card-body d-flex flex-column justify-content-between">
                                     <h5 class="card-title">{{ battle.opponent.card8.name }}</h5>
                                     <p class="card-text">Level {{ battle.opponent.card8.level }}</p>
-                                    <div class='d-flex align-items-end'>
+                                    <div class='d-flex justify-content-between align-items-center'>
                                         {% if battle.opponent.card8.rarity == 'common' %}
                                         <span class="badge text-bg-secondary">Common</span>
                                         {% elif battle.opponent.card8.rarity == 'rare' %}
@@ -464,6 +587,9 @@
                                         {% elif battle.opponent.card8.rarity == 'champion'%}
                                         <span class="badge text-bg-success">Champion</span>
                                         {% endif %}
+                                        <div class='d-flex flex-column'>
+                                            <span class="badge custom-badge rounded-pill">{{ battle.opponent.card8.elixirCost }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -43,6 +43,9 @@ class Player(models.Model):
     card8 = models.ForeignKey(Card, on_delete=models.SET_NULL, null=True, related_name='card8')
     supportCards = models.ForeignKey(Card, on_delete=models.SET_NULL, null=True, related_name='supportcard')
     elixirLeaked = models.FloatField()
+    @property
+    def averageElixir(self):
+        return round((self.card1.elixirCost + self.card2.elixirCost + self.card3.elixirCost + self.card4.elixirCost + self.card5.elixirCost + self.card6.elixirCost + self.card7.elixirCost + self.card8.elixirCost) / 8, 1)
 
 class Battle(models.Model):
     battleTime = models.DateTimeField()
@@ -55,3 +58,61 @@ class Battle(models.Model):
     opponent = models.ForeignKey(Player, on_delete=models.SET_NULL, null=True, related_name='opponent')
     isHostedMatch = models.CharField(max_length=5)
     leagueNumber = models.PositiveIntegerField(null=True, blank=True)
+    
+
+class PlayerInfo(models.Model):
+    tag = models.CharField(max_length=15, unique=True)
+    name = models.CharField(max_length=100)
+    expLevel = models.IntegerField()
+    trophies = models.IntegerField()
+    bestTrophies = models.IntegerField()
+    wins = models.IntegerField()
+    losses = models.IntegerField()
+    battleCount = models.IntegerField()
+    threeCrownWins = models.IntegerField()
+    challengeCardsWon = models.IntegerField()
+    challengeMaxWins = models.IntegerField()
+    tournamentCardsWon = models.IntegerField()
+    tournamentBattleCount = models.IntegerField()
+    role = models.CharField(max_length=50)
+    donations = models.IntegerField()
+    donationsReceived = models.IntegerField()
+    totalDonations = models.IntegerField()
+    warDayWins = models.IntegerField()
+    clanCardsCollected = models.IntegerField()
+    clan = models.ForeignKey(Clan, on_delete=models.SET_NULL, null=True)
+    arena = models.ForeignKey(Arena, on_delete=models.SET_NULL, null=True)
+    starPoints = models.IntegerField(null=True, blank=True)
+    expPoints = models.IntegerField(null=True, blank=True)
+    legacyTrophyRoadHighScore = models.IntegerField()
+    currentPathOfLegendSeasonResult = models.CharField(max_length=50, null=True, blank=True)
+    lastPathOfLegendSeasonResult = models.CharField(max_length=50, null=True, blank=True)
+    bestPathOfLegendSeasonResult = models.CharField(max_length=50, null=True, blank=True)
+    totalExpPoints = models.IntegerField()
+    
+class Badge(models.Model):
+    name = models.CharField(max_length=100)
+    level = models.IntegerField()
+    maxLevel = models.IntegerField()
+    progress = models.IntegerField()
+    target = models.IntegerField()
+    iconUrls = models.CharField(max_length=150)
+    @property
+    def progressPerc(self):
+        return round((self.progress / self.target) * 100, 1)
+    
+class Achievement(models.Model):
+    name = models.CharField(max_length=100)
+    stars = models.IntegerField()
+    value = models.IntegerField()
+    target = models.IntegerField()
+    info = models.CharField(max_length=150)
+    completionInfo = models.CharField(max_length=150, null=True, blank=True)
+    
+class FavoriteCard(models.Model):
+    name = models.CharField(max_length=100)
+    id = models.CharField(max_length=15, primary_key=True)
+    maxLevel = models.IntegerField()
+    elixirCost = models.IntegerField()
+    iconUrls = models.CharField(max_length=150)
+    rarity = models.CharField(max_length=50)

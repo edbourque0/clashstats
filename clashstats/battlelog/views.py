@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.template import loader
 import requests
-from .models import Arena, GameMode, Clan, Card, Player, Battle
+from .models import Arena, GameMode, Clan, Card, Player, Battle, Badge, Achievement, FavoriteCard, PlayerInfo
 
 # Create your views here.
 def home(request):
@@ -16,14 +16,21 @@ def battlelog(request, tag):
     Cards = Card.objects.all().values()
     Players = Player.objects.select_related('card1').all()
     Battles = Battle.objects.select_related('opponent').all()
+    PlayerInfos = PlayerInfo.objects.select_related('clan').all()
+    Badges = Badge.objects.all()
+    Achievements = Achievement.objects.all()
+    FavoriteCards = FavoriteCard.objects.all()
     
     APIKEY = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6ImQ0YmNiMzEzLTRmZjYtNDJhZC05YTRkLWY5YjU1YmU5NzhlZCIsImlhdCI6MTcxMjI2OTg2OCwic3ViIjoiZGV2ZWxvcGVyLzNkNjhmM2MyLWM4ZmItNDAyYy0zZTU4LTk0YjIzMGY1Y2IzZCIsInNjb3BlcyI6WyJyb3lhbGUiXSwibGltaXRzIjpbeyJ0aWVyIjoiZGV2ZWxvcGVyL3NpbHZlciIsInR5cGUiOiJ0aHJvdHRsaW5nIn0seyJjaWRycyI6WyI3NC4xMi4xNjkuMjMwIl0sInR5cGUiOiJjbGllbnQifV19.-bksJLAGJNvzXkxR5rrDkzUVgxMDYC7OQFFhKDOvimXboDA1ggddmbVod8qREXbq4yCYp8adTXOtNUy1YCFhMg'
     headers = {
         'Authorization': 'Bearer ' + APIKEY,
     }
     
+    s = requests.get(f'https://api.clashroyale.com/v1/players/%23{tag}', headers=headers)
     r = requests.get(f'https://api.clashroyale.com/v1/players/%23{tag}/battlelog', headers=headers)
+    
     rawdata = r.json()
+    rawdatas = s.json()
     
     Battle.objects.all().delete()
     Player.objects.all().delete()
@@ -31,6 +38,10 @@ def battlelog(request, tag):
     Clan.objects.all().delete()
     GameMode.objects.all().delete()
     Arena.objects.all().delete()
+    PlayerInfo.objects.all().delete()
+    Badge.objects.all().delete()
+    Achievement.objects.all().delete()
+    FavoriteCard.objects.all().delete()
     
     for battint, battle in enumerate(rawdata):
         data = rawdata[battint]
@@ -194,15 +205,78 @@ def battlelog(request, tag):
             isHostedMatch = data['isHostedMatch'],
             leagueNumber = data['leagueNumber']   
         )
-        
-        template = loader.get_template('battlelog.html')
-        context = {
-            'arenas': Arenas,
-            'gamemodes': Gamemodes,
-            'clans': Clans,
-            'cards': Cards,
-            'players': Players,
-            'battles': Battles
-        }
+    
+    PlayerInfo.objects.create(
+        tag = rawdatas['tag'],
+        name = rawdatas['name'],
+        expLevel = rawdatas['expLevel'],
+        trophies = rawdatas['trophies'],
+        bestTrophies = rawdatas['bestTrophies'],
+        wins = rawdatas['wins'],
+        losses = rawdatas['losses'],
+        battleCount = rawdatas['battleCount'],
+        threeCrownWins = rawdatas['threeCrownWins'],
+        challengeCardsWon = rawdatas['challengeCardsWon'],
+        challengeMaxWins = rawdatas['challengeMaxWins'],
+        tournamentCardsWon = rawdatas['tournamentCardsWon'],
+        tournamentBattleCount = rawdatas['tournamentBattleCount'],
+        role = rawdatas['role'],
+        donations = rawdatas['donations'],
+        donationsReceived = rawdatas['donationsReceived'],
+        totalDonations = rawdatas['totalDonations'],
+        warDayWins = rawdatas['warDayWins'],
+        clanCardsCollected = rawdatas['clanCardsCollected'],
+        clan = Clan.objects.get(tag=rawdatas['clan']['tag'][1:]),
+        arena = Arena.objects.get(id=rawdatas['arena']['id']),
+        starPoints = rawdatas['starPoints'],
+        legacyTrophyRoadHighScore = rawdatas['legacyTrophyRoadHighScore'],
+        currentPathOfLegendSeasonResult = rawdatas['currentPathOfLegendSeasonResult'],
+        lastPathOfLegendSeasonResult = rawdatas['lastPathOfLegendSeasonResult'],
+        bestPathOfLegendSeasonResult = rawdatas['bestPathOfLegendSeasonResult'],
+        totalExpPoints = rawdatas['totalExpPoints']
+    )
+    
+    for badge in rawdatas['badges']:
+        Badge.objects.create(
+            name = badge['name'],
+            progress = badge['progress'],
+            level = badge['level'],
+            maxLevel = badge['maxLevel'],
+            target = badge['target'],
+            iconUrls = badge['iconUrls']['large'],
+        )
+    
+    for achievement in rawdatas['achievements']:
+        Achievement.objects.create(
+            name = achievement['name'],
+            stars = achievement['stars'],
+            value = achievement['value'],
+            target = achievement['target'],
+            info = achievement['info'],
+            completionInfo = achievement['completionInfo'],
+        )
+    
+    FavoriteCard.objects.create(
+        name = rawdatas['currentFavouriteCard']['name'],
+        id = rawdatas['currentFavouriteCard']['id'],
+        maxLevel = rawdatas['currentFavouriteCard']['maxLevel'],
+        elixirCost = rawdatas['currentFavouriteCard']['elixirCost'],
+        iconUrls = rawdatas['currentFavouriteCard']['iconUrls']['medium'],
+        rarity = rawdatas['currentFavouriteCard']['rarity']
+    )
+    
+    template = loader.get_template('battlelog.html')
+    context = {
+        'arenas': Arenas,
+        'gamemodes': Gamemodes,
+        'clans': Clans,
+        'cards': Cards,
+        'players': Players,
+        'battles': Battles,
+        'playerinfo': PlayerInfos,
+        'achievements': Achievements,
+        'favoritecard': FavoriteCards,
+        'badge': Badges
+    }
     
     return HttpResponse(template.render(context, request))
