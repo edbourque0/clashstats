@@ -16,10 +16,9 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import path
+from . import views
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path('', include('battlelog.urls')),
-    path('', include('clanranking.urls'))
+    path('clanranking/<slug:clantag>', views.clanranking, name='clanranking')
 ]
