@@ -13,9 +13,8 @@
         // Check if form is valid
         if (!this.checkValidity()) {
           event.stopPropagation();
-          this.classList.add('was-validated'); // Bootstrap class to handle form validation feedback
+          this.classList.add('was-validated');
         } else {
-          // If form is valid, change button to a spinner and submit form
           const submitButton = document.getElementById('submitButton');
           submitButton.innerHTML = `
               <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
@@ -50,6 +49,22 @@
         <button id='submitButton' type="submit" class="btn btn-primary">Sumbit</button>
       </div>
     </form>
+    <form id="clanTagForm" class="row g-3 container mx-auto p-3 needs-validation" style="width: 500px" action="#" method='post' novalidate>
+      {% csrf_token %}
+      <div>
+        <label for="ClanTag" class="form-label">Clan tag</label>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">#</span>
+            <input type="text" id="clanTagInput" class="form-control" placeholder="G9JVLC2C" aria-label="Clan tag" aria-describedby="clanTagHelpBlock" pattern="[A-Za-z0-9]{9}" oninput="this.value = this.value.toUpperCase()" required>
+        </div>
+        <div id="playerTagHelpBlock" class="form-text">
+          Votre clan tag est inscrit sous votre nom de clan lorsque vous cliquer sur celui-ci dans Clash Royale
+        </div>
+      </div>
+      <div class="col-12">
+        <button id='submitButtonClan' type="submit" class="btn btn-primary">Sumbit</button>
+      </div>
+    </form>
     <script>
         document.getElementById('submitButton').addEventListener('click', function() {
           // Change the button to a spinner
@@ -58,6 +73,14 @@
               <span role="status">Loading...</span>
           `;
           this.disabled = true;
+
+          document.getElementById('submitButtonClan').addEventListener('click', function() {
+            // Change the button to a spinner
+            this.innerHTML = `
+                <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                <span role="status">Loading...</span>
+            `;
+            this.disabled = true;
       
           const playerTag = document.getElementById('playerTagInput').value;
           const form = document.getElementById('playerTagForm');

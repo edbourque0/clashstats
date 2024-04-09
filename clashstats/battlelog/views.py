@@ -56,11 +56,12 @@ def battlelog(request, tag):
         )
         
         for int, team in enumerate(data['team']):
-            clanteam = Clan.objects.get_or_create(
-                tag = data['team'][int]['clan']['tag'][1:],
-                name = data['team'][int]['clan']['name'],
-                badgeId = data['team'][int]['clan']['badgeId']
-            )
+            if 'clan' in data['team'][int]:
+                clanteam = Clan.objects.get_or_create(
+                    tag = data['team'][int]['clan']['tag'][1:],
+                    name = data['team'][int]['clan']['name'],
+                    badgeId = data['team'][int]['clan']['badgeId']
+                )
             
             for card in data['team'][int]['cards']:
                 card1 = Card.objects.get_or_create(
@@ -86,7 +87,7 @@ def battlelog(request, tag):
                 kingTowerHitPoints = data['team'][int]['kingTowerHitPoints'],
                 princessTower1HitPoints = data['team'][int]['princessTowersHitPoints'][0] if data['team'][int].get('princessTowersHitPoints') and len(data['team'][int]['princessTowersHitPoints']) > 0 else 0,
                 princessTower2HitPoints = data['team'][int]['princessTowersHitPoints'][1] if data['team'][int].get('princessTowersHitPoints') and len(data['team'][int]['princessTowersHitPoints']) > 1 else 0,
-                clan = Clan.objects.get(tag=data['team'][int]['clan']['tag'][1:]),
+                clan = Clan.objects.get(tag=data['team'][int]['clan']['tag'][1:] if 'clan' in data['team'][int] else 'None'),
                 card1 = Card.objects.get(id=f'{data["team"][int]["cards"][0]["id"]}-{battint}{int}'),
                 card2 = Card.objects.get(id=f'{data["team"][int]["cards"][1]["id"]}-{battint}{int}'),
                 card3 = Card.objects.get(id=f'{data["team"][int]["cards"][2]["id"]}-{battint}{int}'),
@@ -242,7 +243,7 @@ def battlelog(request, tag):
             progress = badge['progress'],
             level = badge['level'],
             maxLevel = badge['maxLevel'],
-            target = badge['target'],
+            target = badge['target'] if 'target' in badge else 0,
             iconUrls = badge['iconUrls']['large'],
         )
     

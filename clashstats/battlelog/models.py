@@ -4,7 +4,7 @@ from django.db import models
 
 class Arena(models.Model):
     id = models.PositiveIntegerField(primary_key=True)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, null=True, blank=True)
 
 class GameMode(models.Model):
     id = models.PositiveIntegerField(primary_key=True)
@@ -84,11 +84,17 @@ class PlayerInfo(models.Model):
     arena = models.ForeignKey(Arena, on_delete=models.SET_NULL, null=True)
     starPoints = models.IntegerField(null=True, blank=True)
     expPoints = models.IntegerField(null=True, blank=True)
-    legacyTrophyRoadHighScore = models.IntegerField()
+    legacyTrophyRoadHighScore = models.IntegerField(null=True, blank=True)
     currentPathOfLegendSeasonResult = models.CharField(max_length=50, null=True, blank=True)
     lastPathOfLegendSeasonResult = models.CharField(max_length=50, null=True, blank=True)
     bestPathOfLegendSeasonResult = models.CharField(max_length=50, null=True, blank=True)
     totalExpPoints = models.IntegerField()
+    
+    def timespent(self):
+        return (self.battleCount * 3)/60
+    
+    def timeratio(self):
+        return round(self.trophies / self.timespent())
     
 class Badge(models.Model):
     name = models.CharField(max_length=100)
@@ -99,7 +105,10 @@ class Badge(models.Model):
     iconUrls = models.CharField(max_length=150)
     @property
     def progressPerc(self):
-        return round((self.progress / self.target) * 100, 1)
+        if self.target == 0:
+            return 0
+        else:
+            return round((self.progress / self.target) * 100, 1)
     
 class Achievement(models.Model):
     name = models.CharField(max_length=100)

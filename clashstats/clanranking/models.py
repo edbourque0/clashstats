@@ -25,9 +25,21 @@ class Members(models.Model):
     clanPoints = models.PositiveIntegerField()
     wonBattles = models.PositiveIntegerField()
     lostBattles = models.PositiveIntegerField()
-    
     def __str__(self):
         return self.tag
+    
+    def wlratio(self):
+        if self.lostBattles == 0:
+            return self.wonBattles
+        else:
+            return round(self.wonBattles/self.lostBattles, 1)
+        
+    def wgratio(self):
+        if self.lostBattles == 0:
+            return self.wonBattles
+        else:
+            return round(self.wonBattles/(self.wonBattles+self.lostBattles), 1)
+
     
 class Battles(models.Model):
     id = models.CharField(max_length=50, primary_key=True)

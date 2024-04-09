@@ -56,20 +56,22 @@
                         </div>
                         <div class='p-2 mx-auto'>
                             <p><i class="ti ti-play-card"></i> Challenge cards won : {{ player.challengeCardsWon }}</p>
+                            <p><i class="ti ti-hourglass-empty"></i> Play time : {{ player.timespent }}h ({{ player.timeratio }})</p>
                         </div>
                     </div>
                     <div class='row row-cols-auto row-cols-md-auto g-2 p-2 d-flex'>
+
                         <div class='border rounded p-3 d-block mx-3'>
                             <h5 class='text-info p-2'>Clan</h5>
                             <p><i class="ti ti-forms"></i> Name : {{ player.clan.name }}</p>
                             <p><i class="ti ti-user"></i> Role : {{ player.role }}</p>
-                            <p><i class="ti ti-hand-stop"></i> Donations : {{ player.donations }}</p>
-                            <p><i class="ti ti-hand-grab"></i> Donations received : {{ player.donationsReceived }}</p>
+                            <p><i class="ti ti-hand-stop"></i> Week donations : {{ player.donations }}</p>
+                            <p><i class="ti ti-hand-grab"></i> Week received : {{ player.donationsReceived }}</p>
                             <p><i class="ti ti-cards"></i> Total donations : {{ player.totalDonations }}</p>
                         </div>
-                        <div class='border rounded p-3 d-block mx-3'>
+                        <div class='border rounded p-3 d-block mx-auto'>
                             <h5 class='text-info p-2'>Badges</h5>
-                            <div class='row row-cols-auto row-cols-md-auto g-2 d-flex justify-content-start overflow-y-scroll' style='width:450px; height:450px'>
+                            <div class='row row-cols-auto row-cols-md-auto g-2 d-flex justify-content-start overflow-y-scroll' style='width:900px; height:450px'>
                                 {% for badge in badge %}
                                 <div class='card col d-flex flex-column mx-auto' style="width: 9rem;">
                                     <img src={{ badge.iconUrls }} class="card-img-top d-block mx-auto">
@@ -77,7 +79,7 @@
                                         <p class='fw-bold fs-6'>{{ badge.name }}</p>
                                         <p class='card-text'>Level {{ badge.level }} / {{ badge.maxLevel }}</p>
                                         <div class="progress" role="progressbar" aria-label="Badge progress" aria-valuenow="{{ badge.progress }}" aria-valuemin="0" aria-valuemax="{{ badge.target }}">
-                                            <div class="progress-bar" style="width: {{ badge.progressPerc }}%">{{ badge.progress }} / {{ badge.target }}</div>
+                                            <div class="progress-bar" style="width: {{ badge.progressPerc }}%"></div>
                                         </div>
                                     </div>
                                 </div>

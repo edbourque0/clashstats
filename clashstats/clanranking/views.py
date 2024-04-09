@@ -102,8 +102,8 @@ def clanranking(request, clantag):
             
     template = loader.get_template('clanranking.html')
     context = {
-        'clans': Clans.objects.all(),
-        'members': Members.objects.all(),
+        'clan': Clans.objects.get(tag=f'#{clantag}'),
+        'members': Members.objects.order_by('-wonBattles').all(),
         'battles': Battles.objects.all()
     }
     return HttpResponse(template.render(context, request))
