@@ -91,7 +91,7 @@ def clanranking(request, clantag):
             )
             
             Members.objects.filter(tag = loserTag ).update(
-                clanPoints = Members.objects.get(tag = loserTag).clanPoints + loserPts
+                clanPoints = Battles.objects.filter(team1Tag = Members.objects.get(tag = loserTag)).count()
             )
             
     for member in Members.objects.all():

@@ -42,49 +42,65 @@
                         <h5><i class="ti ti-building-stadium"></i> Arena : {{ member.arena }}</h5>
                         <h5><i class="ti ti-award"></i> Wins : {{ member.wonBattles }}</h5>
                         <h5><i class="ti ti-skull"></i> Losses : {{ member.lostBattles }}</h5>
-                        <!-- Assuming wlratio and wgratio are calculated properties or context variables -->
                         <h5><i class="ti ti-divide"></i> Win / loss ratio : {{ member.wlratio }}</h5>
                         <h5><i class="ti ti-math-x-divide-y-2"></i> Win / game ratio : {{ member.wgratio }}</h5>
                     </div>
                 </div>
                 <div>
-                    <div class='p-3' style='width:400px; height:150px;'>
-                        <h3>Recent battles</h3>
+                    <div class='p-3 border rounded' style='width:400px;'>
+                        <h4>Recent battles</h4>
                         <div class='overflow-auto' style='height:240px;'>
                         {% load clanrankingtags %}
                         {% get_combined_battles member as combined_battles %}
                         {% for battle in combined_battles %}
-                            <div class='{% if battle.winner1Tag == member.tag %}border border-success {% else %} border {% endif %} rounded mb-2' style='height:100px'>
-                                <div class='p-2'>
-                                    <p class='fs-5'>{{ battle.winner1Tag.name }} <span class='text-warning'>vs</span> {{ battle.loser1Tag.name }}</p>
-                                    <p><i class="ti ti-swords"></i> Type : {{ battle.type }}</p>
+                            <div class="{% if battle.winner1Tag == member.tag %}border border-success{% else %}border{% endif %} rounded mb-2">
+                                <div class='row d-flex justify-content-between align-items-center p-2'>
+                                    <div class='col'>
+                                        <p class='fs-5'>{{ battle.winner1Tag.name }} <span class='text-warning'>vs</span> {{ battle.loser1Tag.name }}</p>
+                                    </div>
+                                    <div class='col'>
+                                        <p><i class="ti ti-swords"></i> {{ battle.type }}</p>
+                                    </div>
+                                    <div class='row d-flex justify-content-between mx-auto'>
+                                        <div class='col d-flex'>
+                                            <p><i class="ti ti-award"></i></i> Winner : {{ battle.winner1Tag.name }}</p>
+                                        </div>
+                                        <div class='col d-flex'>
+                                            <p><i class="ti ti-skull"></i> Loser : {{ battle.loser1Tag.name }}</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         {% endfor %}
                         </div>
                     </div>
+                    
                 </div>
-                <div class='p-3 border rounded overflow-auto' style='height:310px; width:400px;'>
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col">Opponent</th>
-                            <th scope="col">Wins</th>
-                            <th scope="col">Losses</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% get_battle_stats member as battle_stats %}
-                        {% for opponent_name, results in battle_stats.items %}
+                <div class='p-3 border rounded' style='height:310px; width:400px;'>
+                    <div>
+                        <h4>Clanmates wins/losses</h4>
+                    </div>
+                    <div class='overflow-auto' style='height:240px;'>
+                        <table class="table">
+                            <thead>
                             <tr>
-                                <td>{{ opponent_name }}</td>
-                                <td>{{ results.wins }}</td>
-                                <td>{{ results.losses }}</td>
+                                <th scope="col">Opponent</th>
+                                <th scope="col">Wins</th>
+                                <th scope="col">Losses</th>
                             </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-
+                            </thead>
+                            <tbody>
+                            {% get_battle_stats member as battle_stats %}
+                            {% for opponent_name, results in battle_stats.items %}
+                                <tr>
+                                    <td>{{ opponent_name }}</td>
+                                    <td>{{ results.wins }}</td>
+                                    <td>{{ results.losses }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

@@ -6,9 +6,8 @@ headers = {
     'Authorization': 'Bearer ' + APIKEY,
 }
 
-r = requests.get(f'https://api.clashroyale.com/v1/players/%23CJG89UPQR/battlelog', headers=headers)
+r = requests.get(f'https://api.clashroyale.com/v1/clans/%23G9JVLC2C', headers=headers)
 
 rawdata = r.json()
 
-for battint, battle in enumerate(rawdata):
-    print(rawdata[battint])
+print(rawdata)

@@ -108,7 +108,7 @@
                                 <div class="card-body">
                                     <h5><a data-bs-toggle="tooltip" data-bs-title={{battle.team.tag|slice:":9"}}>{{battle.team.name}}</a></h5>
                                     <p></p>
-                                    <p class='card-text'><i class="ti ti-users-group"></i> Clan : {{ battle.team.clan.name }}</p>
+                                    <p class='card-text'><a class='link-opacity-100-hover text-light' href="/clanranking/{{ battle.team.clan }}"><i class="ti ti-users-group"></i> Clan : {{ battle.team.clan.name }}</a></p>
                                     <p class='card-text'><i class="ti ti-droplet"></i> Elixir leaked : {{ battle.team.elixirLeaked }}</p>
                                     <p class='card-text'><i class="ti ti-crown"></i> Crowns won : {{ battle.team.crowns }}</p>
                                     <p class='card-text'><i class="ti ti-building-castle"></i> King tower points : {{ battle.team.kingTowerHitPoints }}</p>
@@ -144,7 +144,7 @@
                                 <div class="card-body">
                                     <h5><a data-bs-toggle="tooltip" data-bs-title={{battle.opponent.tag|slice:":9"}}>{{battle.opponent.name}}</a></h5>
                                     <p></p>
-                                    <p class='card-text'><i class="ti ti-users-group"></i> Clan : {{ battle.opponent.clan.name }}</p>
+                                    <p class='card-text'><a class='link-opacity-100-hover text-light' href="/clanranking/{{ battle.opponent.clan.tag }}"><i class="ti ti-users-group"></i> Clan : {{ battle.opponent.clan.name }}</a></p>
                                     <p class='card-text'><i class="ti ti-droplet"></i> Elixir leaked : {{ battle.opponent.elixirLeaked }}</p>
                                     <p class='card-text'><i class="ti ti-crown"></i> Crowns won : {{ battle.opponent.crowns }}</p>
                                     <p class='card-text'><i class="ti ti-building-castle"></i> King tower points : {{ battle.opponent.kingTowerHitPoints }}</p>
@@ -179,9 +179,7 @@
                 </div>
                 <div class='p-3'>
                     <h4>{{battle.team.name}}'s deck</h4>
-                    <div>
-                        <h5><span class="badge custom-badge rounded-pill">{{battle.team.averageElixir}}</span></h5>
-                    </div>
+                    <h5><span class="badge custom-badge rounded-pill">{{battle.team.averageElixir}}</span></h5>
                 </div>
                 <div class="row row-cols-1 row-cols-md-auto g-2 p-3 d-flex justify-content-between">
                         <div class="col d-flex align-items-stretch">
@@ -389,9 +387,7 @@
                 </div>
                 <div class='p-3'>
                     <h4>{{battle.opponent.name}}'s deck</h4>
-                    <div>
-                        <h5><span class="badge custom-badge rounded-pill">{{battle.team.averageElixir}}</span></h5>
-                    </div>
+                    <h5><span class="badge custom-badge rounded-pill">{{battle.opponent.averageElixir}}</span></h5>
                 </div>
                 <div class="row row-cols-1 row-cols-md-auto g-2 p-3 d-flex justify-content-between">
                         <div class="col d-flex align-items-stretch">
