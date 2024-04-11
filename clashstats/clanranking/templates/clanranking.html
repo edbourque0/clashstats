@@ -41,7 +41,6 @@
                         <h5><span class="badge text-bg-light">{{ member.eloRating }}</span></h5>
                     </div>
                     <div>
-                        <h5><i class="ti ti-arrow-back-up"></i> Last seen : {{ member.lastSeen }}</h5>
                         <h5><i class="ti ti-trophy"></i> Trophies : {{ member.trophies }}</h5>
                         <h5><i class="ti ti-rosette"></i> XP level : {{ member.expLevel }}</h5>
                         <h5><i class="ti ti-building-stadium"></i> Arena : {{ member.arena }}</h5>
@@ -54,7 +53,7 @@
                 <div>
                     <div class='p-3 border rounded' style='width:450px;'>
                         <h4>Recent battles</h4>
-                        <div class='overflow-auto' style='height:300px;'>
+                        <div class='overflow-auto' style='height:270px;'>
                         {% load clanrankingtags %}
                         {% get_combined_battles member as combined_battles %}
                         {% for battle in combined_battles %}
@@ -84,7 +83,7 @@
                     <div>
                         <h4>Clanmates wins/losses</h4>
                     </div>
-                    <div class='overflow-auto' style='height:300px;'>
+                    <div class='overflow-auto' style='height:270px;'>
                         <table class="table">
                             <thead>
                             <tr>
