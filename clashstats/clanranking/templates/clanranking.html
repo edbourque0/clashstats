@@ -58,27 +58,23 @@
                         {% load clanrankingtags %}
                         {% get_combined_battles member as combined_battles %}
                         {% for battle in combined_battles %}
-                            <div class="{% if battle.winner1Tag == member.tag %}border border-success{% else %}border{% endif %} rounded mb-2">
-                                <div class='row d-flex justify-content-between align-items-center p-2'>
-                                    <div class='col'>
-                                        <div>
-                                            <p class='fs-5'>{{ battle.winner1Tag.name }} <span class='text-warning'>vs</span> {{ battle.loser1Tag.name }}</p>
-                                            <p class='text-body-secondary'>{{ battle.battleTime }}</p>
-                                        </div>
-                                    </div>
-                                    <div class='col'>
-                                        <p><i class="ti ti-swords"></i> {{ battle.type }}</p>
-                                    </div>
-                                    <div class='row d-flex justify-content-between mx-auto'>
-                                        <div class='col d-flex'>
-                                            <p><i class="ti ti-award"></i></i> Winner : {{ battle.winner1Tag.name }}</p>
-                                        </div>
-                                        <div class='col d-flex'>
-                                            <p><i class="ti ti-skull"></i> Loser : {{ battle.loser1Tag.name }}</p>
-                                        </div>
-                                    </div>
+                        <div class="border rounded mb-2">
+                            <div class="p-2">
+                                <div class="mb-2">
+                                    <h5>
+                                        {{ battle.winner1Tag.name }} <span class="text-warning">vs</span> {{ battle.loser1Tag.name }}
+                                    </h5>
+                                    <span class='text-muted'>{{ battle.battleTime }}</span>
+                                </div>
+                                <p>
+                                    <i class="ti ti-swords"></i> Battle Type: {{ battle.type }}
+                                </p>
+                                <div class="d-flex justify-content-start align-items-center">
+                                    <p class="me-4"><i class="ti ti-award"></i> Winner: {{ battle.winner1Tag.name }}</p>
+                                    <p><i class="ti ti-skull"></i> Loser: {{ battle.loser1Tag.name }}</p>
                                 </div>
                             </div>
+                        </div>
                         {% endfor %}
                         </div>
                     </div>

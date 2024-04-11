@@ -23,7 +23,7 @@ def get_battle_stats(member):
         models.Q(opponent2Tag=member)
     ).distinct()
 
-    for battle in involved_battles:
+    for battle in involved_battles.order_by('-battleTime'):
         # Determine the opponent and whether the member won or lost.
         if battle.winner1Tag == member:
             opponent = battle.loser1Tag
