@@ -26,18 +26,20 @@ def get_battle_stats(member):
     for battle in involved_battles:
         # Determine the opponent and whether the member won or lost.
         if battle.winner1Tag == member:
-            opponent = battle.loser1Tag.name
+            opponent = battle.loser1Tag
             result = 'wins'
         else:
-            opponent = battle.winner1Tag.name
+            opponent = battle.winner1Tag
             result = 'losses'
         
+        opponent_name = opponent.name
         # Initialize opponent's stats in the dictionary if not already present.
-        if opponent not in stats:
-            stats[opponent] = {'wins': 0, 'losses': 0}
+        if opponent_name not in stats:
+            # It seems the intention is to calculate expectation against opponent1Tag, but you might need to adjust based on actual opponent
+            eloExp = 1 / (1 + 10 ** ((opponent.eloRating - member.eloRating) / 400))
+            stats[opponent_name] = {'wins': 0, 'losses': 0, 'eloExpectation': round(eloExp * 100, 2)}
         
         # Increment the win or loss count.
-        if opponent:
-            stats[opponent][result] += 1
+        stats[opponent_name][result] += 1
 
     return stats

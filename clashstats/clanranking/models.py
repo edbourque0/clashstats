@@ -25,6 +25,7 @@ class Members(models.Model):
     clanPoints = models.PositiveIntegerField()
     wonBattles = models.PositiveIntegerField()
     lostBattles = models.PositiveIntegerField()
+    eloRating = models.PositiveIntegerField(default=1000)
     def __str__(self):
         return self.tag
     

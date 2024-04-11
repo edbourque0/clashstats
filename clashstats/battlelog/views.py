@@ -2,11 +2,22 @@ from django.http import HttpResponse
 from django.template import loader
 import requests
 from .models import Arena, GameMode, Clan, Card, Player, Battle, Badge, Achievement, FavoriteCard, PlayerInfo
+from clanranking.models import Members
 
 # Create your views here.
 def home(request):
     template = loader.get_template('home.html')
-    context = {}
+    context = {
+        'members': Members.objects.all(),
+        'clans' : Clan.objects.all(),
+    }
+    return HttpResponse(template.render(context, request))
+
+def playerstatssearch(request):
+    template = loader.get_template('playerstatssearch.html')
+    context = {
+        'members': Members.objects.all(),
+    }
     return HttpResponse(template.render(context, request))
 
 def battlelog(request, tag):

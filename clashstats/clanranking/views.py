@@ -1,7 +1,16 @@
 from django.http import HttpResponse
 from django.template import loader
+from django.db import models
+from django.db.models import Q
 import requests
 from .models import Members, Clans, Battles
+
+def clanrankingsearch(request):
+    template = loader.get_template('clanrankinghome.html')
+    context = {
+        'clans': Clans.objects.all(),
+    }
+    return HttpResponse(template.render(context, request))
 
 def clanranking(request, clantag):
     #Request variables
@@ -99,11 +108,24 @@ def clanranking(request, clantag):
             wonBattles=Battles.objects.filter(winner1Tag=member.tag).count(),
             lostBattles=Battles.objects.filter(loser1Tag=member.tag).count()
         )
+     
+    lastmemlen = Members.objects.all().count()
+    if Members.objects.all().count() > lastmemlen:
+        for battle in Battles.objects.all():
+            #Team 1 expectation
+            expectation_t = 1 / (1 + 10 ** ((battle.team1Tag.eloRating - battle.opponent1Tag.eloRating) / 400))
+            expectation_o = 1 - expectation_t
+            sAt = 1 if battle.team1Tag == battle.winner1Tag else 0
+            sAo = 1 if battle.opponent1Tag == battle.winner1Tag else 0
+            newRanking_t = battle.team1Tag.eloRating + 32 * (sAt - expectation_t)
+            newRanking_o = battle.opponent1Tag.eloRating + 32 * (sAo - expectation_o)
+            Members.objects.filter(tag=battle.team1Tag).update(eloRating=newRanking_t)
+            Members.objects.filter(tag=battle.opponent1Tag).update(eloRating=newRanking_o)
             
     template = loader.get_template('clanranking.html')
     context = {
         'clan': Clans.objects.get(tag=f'#{clantag}'),
-        'members': Members.objects.order_by('-wonBattles').all(),
+        'members': Members.objects.filter(~Q(eloRating=1000)).order_by('-eloRating').all(),
         'battles': Battles.objects.all()
     }
     return HttpResponse(template.render(context, request))

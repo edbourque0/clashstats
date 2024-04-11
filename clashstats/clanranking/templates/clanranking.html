@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-bs-theme='dark'>
+<html lang="fr" data-bs-theme='dark'>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=800px, initial-scale=1">
@@ -34,9 +34,14 @@
         <div class='mb-3 border border-secondary border-3 rounded p-3'>
             <div class='d-flex justify-content-between'>
                 <div>
-                    <h1><a class="link-opacity-100-hover link-underline-dark text-warning mb-4" href="/battlelog/{{ member.tag }}">#{{ forloop.counter }} <span class='text-light'>{{ member.name }}</span></a></h1>
                     <div>
-                        <h5><i class="ti ti-arrow-back-up"></i> Last game : {{ member.lastSeen }}</h5>
+                        <h1><a class="link-opacity-100-hover link-underline-dark text-warning mb-4" href="/battlelog/{{ member.tag }}">#{{ forloop.counter }} <span class='text-light'>{{ member.name }}</span></a></h1>
+                    </div>
+                    <div class='p-2'>
+                        <h5><span class="badge text-bg-light">{{ member.eloRating }}</span></h5>
+                    </div>
+                    <div>
+                        <h5><i class="ti ti-arrow-back-up"></i> Last seen : {{ member.lastSeen }}</h5>
                         <h5><i class="ti ti-trophy"></i> Trophies : {{ member.trophies }}</h5>
                         <h5><i class="ti ti-rosette"></i> XP level : {{ member.expLevel }}</h5>
                         <h5><i class="ti ti-building-stadium"></i> Arena : {{ member.arena }}</h5>
@@ -47,16 +52,19 @@
                     </div>
                 </div>
                 <div>
-                    <div class='p-3 border rounded' style='width:400px;'>
+                    <div class='p-3 border rounded' style='width:450px;'>
                         <h4>Recent battles</h4>
-                        <div class='overflow-auto' style='height:240px;'>
+                        <div class='overflow-auto' style='height:300px;'>
                         {% load clanrankingtags %}
                         {% get_combined_battles member as combined_battles %}
                         {% for battle in combined_battles %}
                             <div class="{% if battle.winner1Tag == member.tag %}border border-success{% else %}border{% endif %} rounded mb-2">
                                 <div class='row d-flex justify-content-between align-items-center p-2'>
                                     <div class='col'>
-                                        <p class='fs-5'>{{ battle.winner1Tag.name }} <span class='text-warning'>vs</span> {{ battle.loser1Tag.name }}</p>
+                                        <div>
+                                            <p class='fs-5'>{{ battle.winner1Tag.name }} <span class='text-warning'>vs</span> {{ battle.loser1Tag.name }}</p>
+                                            <p class='text-body-secondary'>{{ battle.battleTime }}</p>
+                                        </div>
                                     </div>
                                     <div class='col'>
                                         <p><i class="ti ti-swords"></i> {{ battle.type }}</p>
@@ -76,17 +84,18 @@
                     </div>
                     
                 </div>
-                <div class='p-3 border rounded' style='height:310px; width:400px;'>
+                <div class='p-3 border rounded' style='width:400px;'>
                     <div>
                         <h4>Clanmates wins/losses</h4>
                     </div>
-                    <div class='overflow-auto' style='height:240px;'>
+                    <div class='overflow-auto' style='height:300px;'>
                         <table class="table">
                             <thead>
                             <tr>
                                 <th scope="col">Opponent</th>
                                 <th scope="col">Wins</th>
                                 <th scope="col">Losses</th>
+                                <th scope="col">% of win</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -96,6 +105,7 @@
                                     <td>{{ opponent_name }}</td>
                                     <td>{{ results.wins }}</td>
                                     <td>{{ results.losses }}</td>
+                                    <td>{{ results.eloExpectation }} %</td>
                                 </tr>
                             {% endfor %}
                             </tbody>

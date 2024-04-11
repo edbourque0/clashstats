@@ -22,9 +22,29 @@
       </div>
     </div>
   </nav>
-    <div class='d-flex justify-content-center'>
-        <h1 class='p-5'>CLASHSTATS</h1>
+    <div class='p-2 d-flex justify-content-center'>
+      <h1 class='text-warning'>Clan ranking</h1>
     </div>
+    <form id="clanTagForm" class="row g-3 container mx-auto p-3 needs-validation" style="width: 500px" action="#" method='post' novalidate>
+      {% csrf_token %}
+      <div>
+        <label for="clanTag" class="form-label">Clan tag</label>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon2">#</span>
+          <input type="text" class="form-control" id="clanTagInput" placeholder="Choose a clan or enter clan tag..." aria-label="Clan tag" aria-describedby="clanTagHelpBlock" required>
+          <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Clans</button>
+          <ul class="dropdown-menu dropdown-menu-end" id="clanList">
+              <li><a class="dropdown-item" href="#" data-value="G9JVLC2C">Vulve3527</a></li>
+          </ul>
+      </div>
+        <div id="clanTagHelpBlock" class="form-text">
+          Votre clan tag est inscrit sous votre nom de clan lorsque vous cliquer sur celui-ci dans Clash Royale
+        </div>
+      </div>
+      <div class="col-12">
+        <button id='submitButtonClan' type="submit" class="btn btn-primary">Sumbit</button>
+      </div>
+    </form>
     <script>
         document.getElementById('submitButton').addEventListener('click', function() {
           // Change the button to a spinner
