@@ -26,96 +26,13 @@
     <div class='d-flex justify-content-center'>
         <h1 class='p-5'>CLASHSTATS</h1>
     </div>
-    <script>
-        document.getElementById('submitButton').addEventListener('click', function() {
-          // Change the button to a spinner
-          this.innerHTML = `
-              <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-              <span role="status">Loading...</span>
-          `;
-          this.disabled = true;
-      
-          const playerTag = document.getElementById('playerTagInput').value;
-          const form = document.getElementById('playerTagForm');
-          form.action = '/battlelog/' + encodeURIComponent(playerTag);
-          form.submit();
-      });
-    </script>
-    <script>
-      document.getElementById('submitButtonClan').addEventListener('click', function() {
-        // Change the button to a spinner
-        this.innerHTML = `
-            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-            <span role="status">Loading...</span>
-        `;
-        this.disabled = true;
-    
-        const clanTag = document.getElementById('clanTagInput').value;
-        const form = document.getElementById('clanTagForm');
-        form.action = '/clanranking/' + encodeURIComponent(clanTag);
-        form.submit();
-    });
-  </script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var playerList = document.getElementById('playerList');
-        var playerTagInput = document.getElementById('playerTagInput');
-    
-        playerList.addEventListener('click', function (e) {
-            e.preventDefault();
-            if (e.target && e.target.matches("a.dropdown-item")) {
-                // Use the data-value attribute to fill in the visible input field
-                playerTagInput.value = e.target.getAttribute('data-value');
-            }
-        });
-    });
-    </script>
-    <script>
-      window.addEventListener('pageshow', function () {
-        var clanList = document.getElementById('clanList');
-        var clanTagInput = document.getElementById('clanTagInput');
-        
-        if(clanList && clanTagInput) {
-            clanList.addEventListener('click', function (e) {
-                e.preventDefault();
-                if (e.target && e.target.matches("a.dropdown-item")) {
-                    // Use the data-value attribute to fill in the visible input field with the clan tag
-                    clanTagInput.value = e.target.getAttribute('data-value');
-                }
-            });
-        }
-    });
-    </script>
-    <script>
-      window.addEventListener('pageshow', function () {
-        // Reset 'Submit' button for playerTagForm
-        var submitButton = document.getElementById('submitButton');
-        if(submitButton) {
-            submitButton.innerHTML = 'Submit';
-            submitButton.disabled = false;
-        }
-    
-        // Reset 'Submit' button for clanTagForm
-        var submitButtonClan = document.getElementById('submitButtonClan');
-        if(submitButtonClan) {
-            submitButtonClan.innerHTML = 'Submit';
-            submitButtonClan.disabled = false;
-        }
-    
-        var playerList = document.getElementById('playerList');
-        var playerTagInput = document.getElementById('playerTagInput');
-        
-        if(playerList && playerTagInput) {
-            playerList.addEventListener('click', function (e) {
-                e.preventDefault();
-                if (e.target && e.target.matches("a.dropdown-item")) {
-                    // Use the data-value attribute to fill in the visible input field
-                    playerTagInput.value = e.target.getAttribute('data-value');
-                }
-            });
-        }
-    });  
-    </script>
+    <div class='d-flex justify-content-center'>
+      <div>
+      <p>Bienvenue sur Clashstats, un site pour avoir de l'information sur les joueurs et les clans de Clash Royale.</p>
+      <p>Vous pouvez chercher des informations sur un joueur ou un clan en utilisant les onglets de la barre de navigation.</p>
+      <p>Pour rechercher un joueur, sélectionnex un joueur à partir de la liste (à droite du champ de recherche) ou entrez sont player tag manuellement</p>
+      </div>
+    </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
