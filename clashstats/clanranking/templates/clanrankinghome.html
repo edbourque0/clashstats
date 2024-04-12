@@ -10,7 +10,8 @@
   <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
     <div class="container-fluid">
       <a class="navbar-brand" href="/">Clashstats</a>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+<div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
             <a class="nav-link" aria-current="page" href="/playerstatssearch">Player stats</a>
@@ -25,13 +26,13 @@
     <div class='p-2 d-flex justify-content-center'>
       <h1 class='text-warning'>Clan ranking</h1>
     </div>
-    <form id="clanTagForm" class="row g-3 container mx-auto p-3 needs-validation" style="width: 500px" action="#" method='post' novalidate>
+    <form id="clanTagForm" class="row g-3 container mx-auto p-3 needs-validation" action="#" method='post' novalidate>
       {% csrf_token %}
       <div>
         <label for="clanTag" class="form-label">Clan tag</label>
         <div class="input-group mb-3">
           <span class="input-group-text" id="basic-addon2">#</span>
-          <input type="text" class="form-control" id="clanTagInput" placeholder="Choose a clan or enter clan tag..." aria-label="Clan tag" aria-describedby="clanTagHelpBlock" required>
+          <input type="text" class="form-control" id="clanTagInput" placeholder="Choose or enter clan tag..." aria-label="Clan tag" aria-describedby="clanTagHelpBlock" required>
           <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Clans</button>
           <ul class="dropdown-menu dropdown-menu-end" id="clanList">
               <li><a class="dropdown-item" href="#" data-value="G9JVLC2C">Vulve3527</a></li>

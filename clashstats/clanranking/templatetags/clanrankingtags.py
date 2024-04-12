@@ -37,7 +37,7 @@ def get_battle_stats(member):
         if opponent_name not in stats:
             # It seems the intention is to calculate expectation against opponent1Tag, but you might need to adjust based on actual opponent
             eloExp = 1 / (1 + 10 ** ((opponent.eloRating - member.eloRating) / 400))
-            stats[opponent_name] = {'wins': 0, 'losses': 0, 'eloExpectation': round(eloExp * 100, 2)}
+            stats[opponent_name] = {'wins': 0, 'losses': 0, 'eloExpectation': round(eloExp * 100)}
         
         # Increment the win or loss count.
         stats[opponent_name][result] += 1
