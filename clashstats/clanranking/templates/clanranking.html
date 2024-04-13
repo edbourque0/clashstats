@@ -103,7 +103,7 @@
                                     <td>{{ opponent_name }}</td>
                                     <td>{{ results.wins }}</td>
                                     <td>{{ results.losses }}</td>
-                                    <td class='{% if results.eloExpectation > 50 %} text-success fw-bold {% else %} text-danger f2-bold {% endif %}'>{{ results.eloExpectation }} %</td>
+                                    <td class='{% if results.eloExpectation > 50 %} text-success fw-bold {% else %} text-danger fw-bold {% endif %}'>{{ results.eloExpectation }} %</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
