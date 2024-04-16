@@ -14,6 +14,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Ensures you fetch all history for .git files
+          token: ${{ secrets.GITHUB_TOKEN }}  # Ensures the checkout action has permission to check out the code
 
       - name: Set up Python 3.12
         uses: actions/setup-python@v3
@@ -43,18 +46,14 @@ jobs:
       - name: Install Black
         run: pip install black
 
-      - name: Run Black
+      - name: Run Black and check for changes
         run: |
           cd clashstats
-          black .
-          
+          black . --check --diff
 
-      - name: Commit changes
+      - name: Commit changes if any
+        if: ${{ steps.black.outputs.has-changes == 'true' }}
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add -u
-          git commit -m "Format Python code with Black" || echo "No changes to commit"
+          git add -A
+          git commit -m "Format Python code with Black"
           git push origin HEAD:${{ github.ref }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
