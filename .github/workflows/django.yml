@@ -22,19 +22,27 @@ jobs:
 
       - name: Install dependencies
         run: |
+          cd clashstats
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Change to project directory
-        run: cd clashstats
+      - name: Make migrations
+        run: |
+          cd clashstats
+          python manage.py makemigrations
 
       - name: Run migrations
-        run: python manage.py migrate
+        run: |
+          cd clashstats
+          python manage.py migrate
 
       - name: Run tests
-        run: python manage.py test
+        run: |
+          cd clashstats
+          python manage.py test
 
       - name: Check code quality
         run: |
+          cd clashstats
           pip install flake8
           flake8 .
