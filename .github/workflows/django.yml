@@ -39,3 +39,20 @@ jobs:
         run: |
           cd clashstats
           python manage.py test
+
+      - name: Install Black
+        run: pip install black
+
+      - name: Run Black
+        run: |
+          cd clashstats
+          black .
+          
+
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -u
+          git commit -m "Format Python code with Black" || echo "No changes to commit"
+          git push
