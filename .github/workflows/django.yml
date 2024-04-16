@@ -39,9 +39,3 @@ jobs:
         run: |
           cd clashstats
           python manage.py test
-
-      - name: PEP-8 formating
-        run: |
-          cd clashstats
-          pip install black
-          black .
