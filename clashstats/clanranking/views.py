@@ -60,7 +60,7 @@ def clanranking(request, clantag):
             if Members.objects.filter(tag=rawb[battint]['team'][0]['tag'][1:]).exists() and Members.objects.filter(tag=rawb[battint]['opponent'][0]['tag'][1:]).exists() and Clans.objects.filter(tag=rawb[battint]['team'][0]['clan']['tag']).exists() and Clans.objects.filter(tag=rawb[battint]['opponent'][0]['clan']['tag']).exists() and Battles.objects.filter(id = f'{rawb[battint]["battleTime"]}-{rawb[battint]["opponent"][0]["tag"][1:]}-{rawb[battint]["team"][0]["tag"][1:]}').exists() == False:
                 rawbattles = rawb[battint]
                 Battles.objects.update_or_create(
-                    id = f'{rawbattles['battleTime']}-{rawbattles['team'][0]['tag'][1:]}-{rawbattles['opponent'][0]['tag'][1:]}',
+                    id = f"{rawbattles['battleTime']}-{rawbattles['team'][0]['tag'][1:]}-{rawbattles['opponent'][0]['tag'][1:]}",
                     battleTime = rawbattles['battleTime'],
                     type = rawbattles['type'],
                     isLadderTournament = rawbattles['isLadderTournament'],
