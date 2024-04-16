@@ -40,8 +40,8 @@ jobs:
           cd clashstats
           python manage.py test
 
-      - name: Check code quality
+      - name: PEP-8 formating
         run: |
           cd clashstats
-          pip install flake8
-          flake8 .
+          pip install black
+          black .
