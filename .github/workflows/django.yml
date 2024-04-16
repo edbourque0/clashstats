@@ -25,11 +25,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: CD to directory
+      - name: Change to project directory
         run: cd clashstats
-
-      - name: Make migrations
-        run: python manage.py makemigrations
 
       - name: Run migrations
         run: python manage.py migrate
