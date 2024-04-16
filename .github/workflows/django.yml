@@ -49,7 +49,7 @@ jobs:
       - name: Run Black and check for changes
         run: |
           cd clashstats
-          black . --check --diff
+          black .
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
