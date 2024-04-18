@@ -47,6 +47,7 @@
     </div>
     <div class='text-center'>
         <h4 class='p-3 fw-bold'><span class="badge text-bg-primary">{{ clan.name }}</span></h4>
+        <a href="/clanrefresh/{{ clan.tag|slice:"1:" }}" class="btn btn-primary" role="button">Refresh</a>
     </div>
     {% for member in members %}
     <div class='mb-3 border border-secondary border-3 rounded p-3'>

@@ -22,4 +22,5 @@ from . import views
 urlpatterns = [
     path("clanranking/<slug:clantag>", views.clanranking, name="clanranking"),
     path("clanrankingsearch", views.clanrankingsearch, name="clanrankingsearch"),
+    path("clanrefresh/<slug:clantag>", views.clanrefresh, name="clanrefresh"),
 ]
