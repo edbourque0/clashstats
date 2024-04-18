@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.template import loader
+from django.views.decorators.csrf import csrf_exempt
 import requests
 from .models import (
     Arena,
@@ -34,6 +35,7 @@ def playerstatssearch(request):
     return HttpResponse(template.render(context, request))
 
 
+@csrf_exempt
 def battlelog(request, tag):
     Arenas = Arena.objects.all().values()
     Gamemodes = GameMode.objects.all().values()
