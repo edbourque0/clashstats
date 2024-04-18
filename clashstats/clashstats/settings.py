@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-8hfp0i&_8v0fzr8)g$ia6w5xa$+^p)-k9omb=6x$y(8aj3z9a2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.2.39']
 
 
 # Application definition
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "battlelog",
     "clanranking",
+    'pwa',
 ]
 
 MIDDLEWARE = [
@@ -123,3 +124,35 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# PWA settings
+
+PWA_APP_NAME = 'Clashstats'
+PWA_APP_DESCRIPTION = "Clash Royale statistics"
+PWA_APP_THEME_COLOR = '#2b3036'
+PWA_APP_BACKGROUND_COLOR = '#212529'
+PWA_APP_DISPLAY = 'standalone'
+PWA_APP_SCOPE = '/'
+PWA_APP_ORIENTATION = 'portrait'
+PWA_APP_START_URL = '/'
+PWA_APP_STATUS_BAR_COLOR = '#2b3036'
+PWA_APP_ICONS = [
+    {
+        'src': 'https://i.ibb.co/cNprRSc/EB-01.png',
+        'sizes': '160x160'
+    }
+]
+PWA_APP_ICONS_APPLE = [
+    {
+        'src': 'https://i.ibb.co/cNprRSc/EB-01.png',
+        'sizes': '160x160'
+    }
+]
+PWA_APP_SPLASH_SCREEN = [
+    {
+        'src': 'https://i.ibb.co/cNprRSc/EB-01.png',
+        'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)'
+    }
+]
+PWA_APP_DIR = 'ltr'
+PWA_APP_LANG = 'en-US'

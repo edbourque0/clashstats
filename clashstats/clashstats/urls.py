@@ -22,4 +22,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("battlelog.urls")),
     path("", include("clanranking.urls")),
+    path('', include('pwa.urls')),
 ]
