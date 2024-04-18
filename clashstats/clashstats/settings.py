@@ -138,19 +138,19 @@ PWA_APP_START_URL = '/'
 PWA_APP_STATUS_BAR_COLOR = '#2b3036'
 PWA_APP_ICONS = [
     {
-        'src': 'https://i.ibb.co/cNprRSc/EB-01.png',
+        'src': 'https://i.ibb.co/SyZGnn1/clashroyale.png',
         'sizes': '160x160'
     }
 ]
 PWA_APP_ICONS_APPLE = [
     {
-        'src': 'https://i.ibb.co/cNprRSc/EB-01.png',
+        'src': 'https://i.ibb.co/SyZGnn1/clashroyale.png',
         'sizes': '160x160'
     }
 ]
 PWA_APP_SPLASH_SCREEN = [
     {
-        'src': 'https://i.ibb.co/cNprRSc/EB-01.png',
+        'src': 'https://i.ibb.co/SyZGnn1/clashroyale.png',
         'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)'
     }
 ]
