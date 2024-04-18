@@ -1,10 +1,11 @@
 from django.http import HttpResponse
 from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import redirect
 from django.db.models import Q
+from django.utils import timezone
 import requests
 from .models import Members, Clans, Battles
-from datetime import datetime
 
 
 def clanrankingsearch(request):
@@ -16,7 +17,7 @@ def clanrankingsearch(request):
 
 
 @csrf_exempt
-def clanranking(request, clantag):
+def clanrefresh(request, clantag):
     # Request variables
     APIKEY = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6IjRiODJiNzlmLTg5NzAtNDllYi05NGEyLWEyZDAzNzU5MjIyNSIsImlhdCI6MTcxMjk1MzUyMSwic3ViIjoiZGV2ZWxvcGVyLzNkNjhmM2MyLWM4ZmItNDAyYy0zZTU4LTk0YjIzMGY1Y2IzZCIsInNjb3BlcyI6WyJyb3lhbGUiXSwibGltaXRzIjpbeyJ0aWVyIjoiZGV2ZWxvcGVyL3NpbHZlciIsInR5cGUiOiJ0aHJvdHRsaW5nIn0seyJjaWRycyI6WyI3NC4xMi4xNjkuMjMwIiwiMTczLjE4Mi4xNTQuMjQ2IiwiMjA5LjE3MS4xNjIuMTQ1IiwiMjA3LjE2Ny4yMTYuODkiXSwidHlwZSI6ImNsaWVudCJ9XX0.YvF3ojCgj7r7KdBBCoSufuTnVj6Qd0wz6YaRWfdSet6QPIZOn3HSlXlJUlyLLfUQUQi0G6nfL3MPleE_CTnn2w"
     headers = {
@@ -27,8 +28,6 @@ def clanranking(request, clantag):
     )
 
     rawclan = c.json()
-    # -----------------
-
     for memint, member in enumerate(rawclan["memberList"]):
         if Members.objects.filter(tag=member["tag"][1:]).exists() == False:
             Members.objects.update_or_create(
@@ -58,6 +57,9 @@ def clanranking(request, clantag):
             requiredTrophies=rawclan["requiredTrophies"],
             donationsPerWeek=rawclan["donationsPerWeek"],
         )
+        
+    else:
+        Clans.objects.filter(tag=rawclan["tag"]).update(lastUpdated=timezone.now())
 
     for member in Members.objects.all():
         b = requests.get(
@@ -190,12 +192,21 @@ def clanranking(request, clantag):
         Members.objects.filter(tag=battle.team1Tag).update(eloRating=newRanking_t)
         Members.objects.filter(tag=battle.opponent1Tag).update(eloRating=newRanking_o)
 
+    return redirect(f'/clanranking/{clantag}')
+
+
+@csrf_exempt
+def clanranking(request, clantag):
     template = loader.get_template("clanranking.html")
+    tu = Clans.objects.get(tag=f"#{clantag}").lastUpdated
+    tn = timezone.now()
     context = {
         "clan": Clans.objects.get(tag=f"#{clantag}"),
+        "currentclantag": Clans.objects.get(tag=f"#{clantag}").tag,
         "members": Members.objects.filter(~Q(eloRating=1000))
         .order_by("-eloRating")
         .all(),
         "battles": Battles.objects.all(),
+        "lastUpdatedMin": round((tn - tu).total_seconds() / 60),
     }
     return HttpResponse(template.render(context, request))

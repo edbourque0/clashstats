@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 class Clans(models.Model):
@@ -11,6 +12,7 @@ class Clans(models.Model):
     clanWarTrophies = models.PositiveIntegerField()
     requiredTrophies = models.PositiveIntegerField()
     donationsPerWeek = models.PositiveIntegerField()
+    lastUpdated = models.DateTimeField(default=timezone.now)
 
 
 class Members(models.Model):
