@@ -68,11 +68,11 @@
                         <form id="dateForm" class='d-flex justify-content-between align-items-end'>
                             <div class="mb-3">
                                 <label for="startDateInput" class="form-label">Start date</label>
-                                <input type="date" class="form-control" id="startDate" name="start_date">
+                                <input type="date" class="form-control" id="startDate" name="start_date" min="2024-03-28" max={{today}}>
                             </div>
                             <div class="mb-3">
                                 <label for="endDateInput" class="form-label">End date</label>
-                                <input type="date" class="form-control" id="endDate" name="end_date">
+                                <input type="date" class="form-control" id="endDate" name="end_date" min="2024-03-28" max={{today}}>
                             </div>
                             <div class='mb-3'>
                                 <button type="submit" class="btn btn-primary">Submit</button>

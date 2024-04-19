@@ -209,6 +209,7 @@ def clanranking(request, clantag):
         .all(),
         "battles": Battles.objects.all(),
         "lastUpdatedMin": round((tn - tu).total_seconds() / 60),
+        "today": datetime.strftime(timezone.now(), "%Y-%m-%d"),
     }
     
     default_start_date = timezone.now() - timedelta(days=7)
@@ -222,7 +223,7 @@ def clanranking(request, clantag):
         end_date_str = request.POST.get('end_date')
 
         start_date = datetime.strptime(start_date_str, '%Y-%m-%d') if start_date_str else default_start_date
-        end_date = datetime.strptime(end_date_str, '%Y-%m-%d') if end_date_str else default_end_date
+        end_date = datetime.strptime(end_date_str, '%Y-%m-%d').replace(hour=23, minute=59) if end_date_str else default_end_date
 
         contextDates = {
             "start_date": start_date,
