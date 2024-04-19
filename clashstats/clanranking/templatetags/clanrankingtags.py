@@ -55,10 +55,7 @@ def get_battle_stats(member):
 
 
 @register.simple_tag
-def get_weekly_ranking():
-    week_start = datetime.now() - timedelta(weeks=1)
-    week_end = datetime.now()
-
+def get_weekly_ranking(week_start=datetime.now() - timedelta(weeks=1), week_end=datetime.now()):
     weeklyRanking.objects.all().delete()
     for member in Members.objects.all():
         weeklyRanking.objects.create(tag=Members.objects.filter(tag=member.tag).get())
@@ -79,7 +76,6 @@ def get_weekly_ranking():
             'name': member.tag.name,
             'eloRating': member.eloRating
         }
-
     return mem_dict
  
 @register.simple_tag

@@ -1,11 +1,13 @@
 from django.http import HttpResponse
 from django.template import loader
+from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import redirect
 from django.db.models import Q
 from django.utils import timezone
 import requests
 from .models import Members, Clans, Battles
+from datetime import datetime, timedelta
 
 
 def clanrankingsearch(request):
@@ -208,4 +210,28 @@ def clanranking(request, clantag):
         "battles": Battles.objects.all(),
         "lastUpdatedMin": round((tn - tu).total_seconds() / 60),
     }
+    
+    default_start_date = timezone.now() - timedelta(days=7)
+    default_end_date = timezone.now()
+
+    start_date = default_start_date
+    end_date = default_end_date
+    
+    if request.method == 'POST':
+        start_date_str = request.POST.get('start_date')
+        end_date_str = request.POST.get('end_date')
+
+        start_date = datetime.strptime(start_date_str, '%Y-%m-%d') if start_date_str else default_start_date
+        end_date = datetime.strptime(end_date_str, '%Y-%m-%d') if end_date_str else default_end_date
+
+        contextDates = {
+            "start_date": start_date,
+            "end_date": end_date,
+        }
+        
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                html = render_to_string('ranking_table.html', contextDates, request)
+                print(html)
+                return HttpResponse(html)
+        
     return HttpResponse(template.render(context, request))

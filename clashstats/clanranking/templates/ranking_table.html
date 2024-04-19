@@ -1,0 +1,20 @@
+{% load clanrankingtags %}
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th class='text-warning' scope="col">#</th>
+        <th scope="col">Player</th>
+        <th scope="col">Elo</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% get_weekly_ranking start_date end_date as weekly_ranking %}
+    {% for index, member_info in weekly_ranking.items %}
+    <tr>
+        <th class='text-warning' scope="row">{{ index }}</th>
+        <td>{{ member_info.name }}</td>
+        <td><span class="badge text-bg-light">{{ member_info.eloRating }}</span></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
