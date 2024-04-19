@@ -179,7 +179,6 @@ def clanrefresh(request, clantag):
         Members.objects.filter(tag=member.tag).update(eloRating=1000)
 
     for battle in Battles.objects.all():
-        # Team 1 expectations
         expectation_t = 1 / (
             1
             + 10 ** ((battle.opponent1Tag.eloRating - battle.team1Tag.eloRating) / 400)

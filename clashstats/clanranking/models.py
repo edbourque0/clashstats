@@ -89,3 +89,10 @@ class Battles(models.Model):
     loser1Tag = models.ForeignKey(
         Members, on_delete=models.SET_NULL, null=True, related_name="looser1tag"
     )
+
+
+class weeklyRanking(models.Model):
+    tag = models.ForeignKey(
+        Members, on_delete=models.SET_NULL, null=True, related_name="weekBattleTag"
+    )
+    eloRating = models.PositiveIntegerField(default=1000)

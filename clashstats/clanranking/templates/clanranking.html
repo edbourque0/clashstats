@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en" data-bs-theme='dark'>
 {% load pwa %}
+{% load clanrankingtags %}
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,10 +26,10 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active fw-bold" aria-current="page" href="/playerstatssearch">Player stats</a>
+                <a class="nav-link active" aria-current="page" href="/playerstatssearch">Player stats</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active fw-bold" aria-current="page" href="/clanrankingsearch"> Clan ranking</a>
+                <a class="nav-link active" aria-current="page" href="/clanrankingsearch"> Clan ranking</a>
               </li>
             </ul>
           </div>
@@ -42,17 +43,71 @@
         {% else %}
         <p class='text-muted'>Updated {{ lastUpdatedMin }} minutes ago</p>
         {% endif %}
-        <h4 class="fw-bold d-inline-block my-auto"><span class="badge text-bg-primary">{{ clan.name }}</span></h4>
-        <div class="mb-3 text-end">
-            <a id='refreshButton' href="/clanrefresh/{{ clan.tag|slice:"1:" }}" class="btn btn-outline-primary" role="button"><i class="bi bi-arrow-clockwise" style='-webkit-text-stroke: 1px;'></i></a>
+        <div class='d-flex justify-content-between'>
+            <div>
+                <button type="button" class="btn btn-outline-primary mb-4" data-bs-toggle="modal" data-bs-target="#weeklyRanking">
+                    Weekly ranking
+                </button>
+            </div>
+            <div class="btn-group mb-4 justify-content-center" role="group" aria-label="Basic example">
+                <button type="button" class="btn btn-primary pe-none">{{ clan.name }}</button>
+                <a id='refreshButton' href="/clanrefresh/{{ clan.tag|slice:"1:" }}" class="btn btn-outline-primary" role="button"><i class="bi bi-arrow-clockwise" style='-webkit-text-stroke: 1px;'></i></a>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="weeklyRanking" tabindex="-1" aria-labelledby="weeklyRankingLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h1 class="modal-title fs-5" id="weeklyRankingLabel">Weekly ranking</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <p class='text-muted'>{% week_start %} - {% week_end %}<p>
+                        <div class='container-fluid'>
+                            <div class='row d-flex justify-content-center'>
+                                <div class='col border rounded' style='width:300px;'>
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th class='text-warning' scope="col">#</th>
+                                            <th scope="col">Player</th>
+                                            <th scope="col">Elo</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% get_weekly_ranking as weekly_ranking %}
+                                        {% for index, member_info in weekly_ranking.items %}
+                                        <tr>
+                                            <th class='text-warning' scope="row">{{ index }}</th>
+                                            <td>{{ member_info.name }}</td>
+                                            <td><span class="badge text-bg-light">{{ member_info.eloRating }}</span></td>
+                                        </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
         </div>
     </div>
     {% for member in members %}
     <div class='mb-3 border border-secondary border-3 rounded p-3'>
         <div class='row'>
             <div class='col-12 col-md-4 mb-3'>
-                <h1><a class="link-opacity-100-hover link-underline-dark text-warning mb-4" href="/battlelog/{{ member.tag }}">#{{ forloop.counter }} <span class='text-light'>{{ member.name }}</span></a></h1>
-                <h5 class='mb-3'><span class="badge text-bg-light">{{ member.eloRating }}</span></h5>
+                <div class='d-flex justify-content-between align-items-center'>
+                    <div>
+                        <h1><a class="link-opacity-100-hover link-underline-dark text-warning mb-4" href="/battlelog/{{ member.tag }}">#{{ forloop.counter }} <span class='text-light'>{{ member.name }}</span></a></h1>
+                    </div>
+                    <div>
+                        <span class="badge text-bg-light fs-6">{{ member.eloRating }}</span>
+                    </div>
+                </div>
                 <h5><i class="ti ti-trophy"></i> {{ member.trophies }} trophies</h5>
                 <h5><i class="ti ti-rosette"></i> XP level {{ member.expLevel }}</h5>
                 <h5><i class="ti ti-building-stadium"></i> {{ member.arena }}</h5>
@@ -65,18 +120,24 @@
                 <div class='border rounded p-3 mb-3'>
                     <h4>Recent battles</h4>
                     <div class='overflow-auto' style='height:270px;'>
-                        {% load clanrankingtags %}
                         {% get_combined_battles member as combined_battles %}
                         {% for battle in combined_battles %}
                         <div class="border rounded mb-2">
                             <div class="p-2">
-                                <div class="mb-2">
-                                    <h5>
-                                        {{ battle.winner1Tag.name }} <span class="text-warning">vs</span> {{ battle.loser1Tag.name }}
-                                    </h5>
-                                    <span class='text-muted'>{{ battle.battleTime }}</span>
-                                    <p><i class="ti ti-award"></i> Winner: {{ battle.winner1Tag.name }}</p>
-                                    <p><i class="ti ti-skull"></i> Loser: {{ battle.loser1Tag.name }}</p>
+                                <div>
+                                    <div class='d-flex justify-content-between'>
+                                        <div>
+                                            <h5>{{ battle.winner1Tag.name }} <span class="text-warning">vs</span> {{ battle.loser1Tag.name }}</h5>
+                                        </div>
+                                        <div>
+                                            {% if battle.winner1Tag.name == member.name %}
+                                            <span class="badge text-bg-success">Won</span>
+                                            {% else %}
+                                            <span class="badge text-bg-danger">Lost</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <p class='text-muted'>{{ battle.battleTime }}</p>
                                 </div>
                             </div>
                         </div>

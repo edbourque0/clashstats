@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "battlelog",
     "clanranking",
-    'pwa',
+    "pwa",
 ]
 
 MIDDLEWARE = [
