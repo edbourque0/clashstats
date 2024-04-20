@@ -229,6 +229,5 @@ def clanranking(request, clantag):
 
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             html = render_to_string('ranking_table.html', contextDates, request)
-            print(html)
             return HttpResponse(html)
     return HttpResponse(template.render(context, request))

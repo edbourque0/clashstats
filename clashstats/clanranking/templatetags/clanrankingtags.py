@@ -77,12 +77,14 @@ def get_weekly_ranking(week_start=datetime.now() - timedelta(weeks=1), week_end=
             'eloRating': member.eloRating
         }
     return mem_dict
- 
+
+
 @register.simple_tag
 def week_start():
     date = datetime.now() - timedelta(weeks=1)
     return date.strftime("%m/%d/%Y")
- 
+
+
 @register.simple_tag
 def week_end():
     return datetime.now().strftime("%m/%d/%Y")

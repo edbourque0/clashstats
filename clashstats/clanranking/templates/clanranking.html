@@ -134,7 +134,7 @@
                         {% get_combined_battles member as combined_battles %}
                         {% for battle in combined_battles %}
                         <div class="border rounded mb-2">
-                            <div class="p-2">
+                            <div class="p-3">
                                 <div>
                                     <div class='d-flex justify-content-between'>
                                         <div>
@@ -149,6 +149,7 @@
                                         </div>
                                     </div>
                                     <p class='text-muted'>{{ battle.battleTime }}</p>
+                                    <i class="ti ti-swords"></i> {{ battle.gameMode }}
                                 </div>
                             </div>
                         </div>
