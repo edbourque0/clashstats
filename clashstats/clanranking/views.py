@@ -21,9 +21,9 @@ def clanrankingsearch(request):
 @csrf_exempt
 def clanrefresh(request, clantag):
     # Request variables
-    APIKEY = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6IjRiODJiNzlmLTg5NzAtNDllYi05NGEyLWEyZDAzNzU5MjIyNSIsImlhdCI6MTcxMjk1MzUyMSwic3ViIjoiZGV2ZWxvcGVyLzNkNjhmM2MyLWM4ZmItNDAyYy0zZTU4LTk0YjIzMGY1Y2IzZCIsInNjb3BlcyI6WyJyb3lhbGUiXSwibGltaXRzIjpbeyJ0aWVyIjoiZGV2ZWxvcGVyL3NpbHZlciIsInR5cGUiOiJ0aHJvdHRsaW5nIn0seyJjaWRycyI6WyI3NC4xMi4xNjkuMjMwIiwiMTczLjE4Mi4xNTQuMjQ2IiwiMjA5LjE3MS4xNjIuMTQ1IiwiMjA3LjE2Ny4yMTYuODkiXSwidHlwZSI6ImNsaWVudCJ9XX0.YvF3ojCgj7r7KdBBCoSufuTnVj6Qd0wz6YaRWfdSet6QPIZOn3HSlXlJUlyLLfUQUQi0G6nfL3MPleE_CTnn2w"
+    apikey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6IjRiODJiNzlmLTg5NzAtNDllYi05NGEyLWEyZDAzNzU5MjIyNSIsImlhdCI6MTcxMjk1MzUyMSwic3ViIjoiZGV2ZWxvcGVyLzNkNjhmM2MyLWM4ZmItNDAyYy0zZTU4LTk0YjIzMGY1Y2IzZCIsInNjb3BlcyI6WyJyb3lhbGUiXSwibGltaXRzIjpbeyJ0aWVyIjoiZGV2ZWxvcGVyL3NpbHZlciIsInR5cGUiOiJ0aHJvdHRsaW5nIn0seyJjaWRycyI6WyI3NC4xMi4xNjkuMjMwIiwiMTczLjE4Mi4xNTQuMjQ2IiwiMjA5LjE3MS4xNjIuMTQ1IiwiMjA3LjE2Ny4yMTYuODkiXSwidHlwZSI6ImNsaWVudCJ9XX0.YvF3ojCgj7r7KdBBCoSufuTnVj6Qd0wz6YaRWfdSet6QPIZOn3HSlXlJUlyLLfUQUQi0G6nfL3MPleE_CTnn2w"
     headers = {
-        "Authorization": "Bearer " + APIKEY,
+        "Authorization": "Bearer " + apikey,
     }
     c = requests.get(
         f"https://api.clashroyale.com/v1/clans/%23{clantag}", headers=headers
@@ -31,7 +31,7 @@ def clanrefresh(request, clantag):
 
     rawclan = c.json()
     for memint, member in enumerate(rawclan["memberList"]):
-        if Members.objects.filter(tag=member["tag"][1:]).exists() == False:
+        if not Members.objects.filter(tag=member["tag"][1:]).exists():
             Members.objects.update_or_create(
                 tag=member["tag"][1:],
                 name=member["name"],
@@ -47,7 +47,7 @@ def clanrefresh(request, clantag):
                 lostBattles=0,
             )
 
-    if Clans.objects.filter(tag=rawclan["tag"]).exists() == False:
+    if not Clans.objects.filter(tag=rawclan["tag"]).exists():
         Clans.objects.update_or_create(
             tag=rawclan["tag"],
             name=rawclan["name"],
@@ -59,7 +59,7 @@ def clanrefresh(request, clantag):
             requiredTrophies=rawclan["requiredTrophies"],
             donationsPerWeek=rawclan["donationsPerWeek"],
         )
-        
+
     else:
         Clans.objects.filter(tag=rawclan["tag"]).update(lastUpdated=timezone.now())
 
@@ -211,13 +211,10 @@ def clanranking(request, clantag):
         "lastUpdatedMin": round((tn - tu).total_seconds() / 60),
         "today": datetime.strftime(datetime.now(), "%Y-%m-%d"),
     }
-    
+
     default_start_date = datetime.now() - timedelta(days=7)
     default_end_date = datetime.now()
 
-    start_date = default_start_date
-    end_date = default_end_date
-    
     if request.method == 'POST':
         start_date_str = request.POST.get('start_date')
         end_date_str = request.POST.get('end_date')
@@ -229,10 +226,9 @@ def clanranking(request, clantag):
             "start_date": start_date,
             "end_date": end_date,
         }
-        
+
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-                html = render_to_string('ranking_table.html', contextDates, request)
-                print(html)
-                return HttpResponse(html)
-        
+            html = render_to_string('ranking_table.html', contextDates, request)
+            print(html)
+            return HttpResponse(html)
     return HttpResponse(template.render(context, request))

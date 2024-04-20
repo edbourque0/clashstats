@@ -12,12 +12,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <style>
-        .custom-badge {
-            background-color: #d63384;
-            color: white;
-        }
-    </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
@@ -52,7 +46,7 @@
                 <button type="button" class="btn btn-primary mb-4 mx-2" data-bs-toggle="modal" data-bs-target="#weeklyRanking">
                     <i class="ti ti-history"></i>
                 </button>
-                <a id='refreshButton' href="/clanrefresh/{{ clan.tag|slice:"1:" }}" class="btn btn-primary mb-4" role="button">
+                <a id='refreshButton' href="/clanrefresh/{{ clan.tag|slice:"1:"}}" class="btn btn-primary mb-4" role="button">
                     <i class="ti ti-refresh"></i>
                 </a>
             </div>
