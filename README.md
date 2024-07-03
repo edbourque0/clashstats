@@ -9,7 +9,7 @@ A Django web app to get Clash Royale player info, battlelog and a clan ranking b
 
 
 
-## 💻 Run Locally
+## Run Locally
 
 Clone the project
 
@@ -38,7 +38,7 @@ Start the server
 
 ## 📟 Tech Stack
 
-**Languages:** Python, HTML
+**Languages:** Python, HTML, CSS
 
 **CSS components:** Bootstrap
 
