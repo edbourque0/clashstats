@@ -3,13 +3,13 @@
 
 A Django web app to get Clash Royale player info, battlelog and a clan ranking based on the ELO ranking system.
 
-**Note that I am a beginner with Python and programing in general. This is one of my first projects, so some features may not be built efficiently.**
+**Note that I am a beginner with Python and programing in general. This is one of my first projects, so this project may not follow all developement guidlines.**
 
 
 
 
 
-## 💻 Run Locally
+## Run Locally
 
 Clone the project
 
@@ -38,7 +38,7 @@ Start the server
 
 ## 📟 Tech Stack
 
-**Languages:** Python, HTML
+**Languages:** Python, HTML, CSS
 
 **CSS components:** Bootstrap
 
