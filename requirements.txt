@@ -11,7 +11,7 @@ click-plugins==1.1.1
 click-repl==0.3.0
 Django==5.0.7
 django-pwa==1.1.0
-idna==3.6
+idna==3.7
 kombu==5.3.7
 mypy-extensions==1.0.0
 packaging==24.0
