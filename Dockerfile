@@ -48,4 +48,4 @@ COPY . .
 EXPOSE 80
 
 # Run the application.
-CMD python clashstats/manage.py runserver
+CMD python clashstats/manage.py runserver localhost:80
