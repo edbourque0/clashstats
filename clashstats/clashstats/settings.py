@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-8hfp0i&_8v0fzr8)g$ia6w5xa$+^p)-k9omb=6x$y(8aj3z9a2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "clashstats.azurewebsites.net"]
 
 
 # Application definition
@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     "clanranking",
     "pwa",
 ]
+
+CSRF_TRUSTED_ORIGINS = ["clashstats.azurewebsites.net"]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
