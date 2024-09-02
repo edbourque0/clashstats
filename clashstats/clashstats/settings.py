@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     "pwa",
 ]
 
-CSRF_TRUSTED_ORIGINS = ["clashstats.azurewebsites.net"]
+CSRF_TRUSTED_ORIGINS = ["https://clashstats.azurewebsites.net"]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
