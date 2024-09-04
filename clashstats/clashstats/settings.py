@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-8hfp0i&_8v0fzr8)g$ia6w5xa$+^p)-k9omb=6x$y(8aj3z9a2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "clashstats.azurewebsites.net", "10.0.0.28", "clash.ebourque.com"]
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
