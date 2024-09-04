@@ -31,3 +31,4 @@ urllib3==2.2.2
 vine==5.1.0
 wcwidth==0.2.13
 wget==3.2
+gunicorn
