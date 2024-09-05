@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/6e6d6c28-fddf-481a-8115-a16b8f388b3d/resourceGroups/clashstats_group/providers/Microsoft.Web/sites/clashstats",
+    "appService.deploySubpath": "."
+}

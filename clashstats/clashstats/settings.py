@@ -128,6 +128,8 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+CRSF_TRUSTED_ORIGINS = ["clashstats.azurewebsites.net"]
+
 # PWA settings
 
 PWA_APP_NAME = 'Clashstats'
