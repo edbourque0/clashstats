@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-8hfp0i&_8v0fzr8)g$ia6w5xa$+^p)-k9omb=6x$y(8aj3z9a2"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     "pwa",
 ]
 
-CSRF_TRUSTED_ORIGINS = ["https://clashstats.azurewebsites.net"]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -54,7 +53,7 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware"
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
 ROOT_URLCONF = "clashstats.urls"
