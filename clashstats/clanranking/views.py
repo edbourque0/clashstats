@@ -231,3 +231,83 @@ def clanranking(request, clantag):
             html = render_to_string('ranking_table.html', contextDates, request)
             return HttpResponse(html)
     return HttpResponse(template.render(context, request))
+
+def twovtwo(request):
+    def getPlayerName(tag):
+        players = {'UCPRP8P0C': 'Will', 'PQGY0QUG': 'Alex', 'J0CQYLC8J': 'Godet', 'CJG89UPQR': 'Ed', 'Q8YL0V0YG': 'Gui'}
+        return players[tag]
+    
+    Gui = {'Will': 0, 'Ed': 0, 'Godet': 0, 'Alex': 0}
+    Ed = {'Will': 0, 'Gui': 0, 'Godet': 0, 'Alex': 0}
+    Will = {'Ed': 0, 'Gui': 0, 'Godet': 0, 'Alex': 0}
+    Godet = {'Will': 0, 'Ed': 0, 'Gui': 0, 'Alex': 0}
+    Alex = {'Will': 0, 'Ed': 0, 'Godet': 0, 'Gui': 0}
+
+    def generate2v2Ranking():
+        for battle in Battles.objects.all():
+            if battle.winner1Tag_id == 'UCPRP8POC' and battle.gameMode[0:10] == 'TeamVsTeam' and battle.gameMode[-8:] == 'Friendly':
+                if battle.winner1Tag_id == battle.opponent1Tag_id:
+                    Will[getPlayerName(battle.opponent2Tag_id)] = Will.get(getPlayerName(battle.opponent2Tag_id)) + 1
+                if battle.winner1Tag_id == battle.opponent2Tag_id:
+                    Will[getPlayerName(battle.opponent1Tag_id)] = Will.get(getPlayerName(battle.opponent1Tag_id)) + 1
+                if battle.winner1Tag_id == battle.team1Tag_id:
+                    Will[getPlayerName(battle.team2Tag_id)] = Will.get(getPlayerName(battle.opponent1Tag_id)) + 1
+                if battle.winner1Tag_id == battle.team2Tag_id:
+                    Will[getPlayerName(battle.team1Tag_id)] = Will.get(getPlayerName(battle.opponent2Tag_id)) + 1
+                
+        for battle in Battles.objects.all():
+            if battle.winner1Tag_id == 'PQGYOQUG' and battle.gameMode[0:10] == 'TeamVsTeam' and battle.gameMode[-8:] == 'Friendly':
+                if battle.winner1Tag_id == battle.opponent1Tag_id:
+                    Alex[getPlayerName(battle.opponent2Tag_id)] = Alex.get(getPlayerName(battle.opponent2Tag_id)) + 1
+                if battle.winner1Tag_id == battle.opponent2Tag_id:
+                    Alex[getPlayerName(battle.opponent1Tag_id)] = Alex.get(getPlayerName(battle.opponent1Tag_id)) + 1
+                if battle.winner1Tag_id == battle.team1Tag_id:
+                    Alex[getPlayerName(battle.team2Tag_id)] = Alex.get(getPlayerName(battle.opponent1Tag_id)) + 1
+                if battle.winner1Tag_id == battle.team2Tag_id:
+                    Alex[getPlayerName(battle.team1Tag_id)] = Alex.get(getPlayerName(battle.opponent2Tag_id)) + 1
+                    
+        for battle in Battles.objects.all():
+            if battle.winner1Tag_id == 'JOCQYLC8J' and battle.gameMode[0:10] == 'TeamVsTeam' and battle.gameMode[-8:] == 'Friendly':
+                if battle.winner1Tag_id == battle.opponent1Tag_id:
+                    Godet[getPlayerName(battle.opponent2Tag_id)] = Godet.get(getPlayerName(battle.opponent2Tag_id)) + 1
+                if battle.winner1Tag_id == battle.opponent2Tag_id:
+                    Godet[getPlayerName(battle.opponent1Tag_id)] = Godet.get(getPlayerName(battle.opponent1Tag_id)) + 1
+                if battle.winner1Tag_id == battle.team1Tag_id:
+                    Godet[getPlayerName(battle.team2Tag_id)] = Godet.get(getPlayerName(battle.opponent1Tag_id)) + 1
+                if battle.winner1Tag_id == battle.team2Tag_id:
+                    Godet[getPlayerName(battle.team1Tag_id)] = Godet.get(getPlayerName(battle.opponent2Tag_id)) + 1
+
+        for battle in Battles.objects.all():
+            if battle.winner1Tag_id == 'CJG89UPQR' and battle.gameMode[0:10] == 'TeamVsTeam' and battle.gameMode[-8:] == 'Friendly':
+                if battle.winner1Tag_id == battle.opponent1Tag_id:
+                    Ed[getPlayerName(battle.opponent2Tag_id)] = Ed.get(getPlayerName(battle.opponent2Tag_id)) + 1
+                if battle.winner1Tag_id == battle.opponent2Tag_id:
+                    Ed[getPlayerName(battle.opponent1Tag_id)] = Ed.get(getPlayerName(battle.opponent1Tag_id)) + 1
+                if battle.winner1Tag_id == battle.team1Tag_id:
+                    Ed[getPlayerName(battle.team2Tag_id)] = Ed.get(getPlayerName(battle.opponent1Tag_id)) + 1
+                if battle.winner1Tag_id == battle.team2Tag_id:
+                    Ed[getPlayerName(battle.team1Tag_id)] = Ed.get(getPlayerName(battle.opponent2Tag_id)) + 1
+
+        for battle in Battles.objects.all():
+            if battle.winner1Tag_id == 'Q8YLOVOYG' and battle.gameMode[0:10] == 'TeamVsTeam' and battle.gameMode[-8:] == 'Friendly':
+                if battle.winner1Tag_id == battle.opponent1Tag_id:
+                    Gui[getPlayerName(battle.opponent2Tag_id)] = Gui.get(getPlayerName(battle.opponent2Tag_id)) + 1
+                if battle.winner1Tag_id == battle.opponent2Tag_id:
+                    Gui[getPlayerName(battle.opponent1Tag_id)] = Gui.get(getPlayerName(battle.opponent1Tag_id)) + 1
+                if battle.winner1Tag_id == battle.team1Tag_id:
+                    Gui[getPlayerName(battle.team2Tag_id)] = Gui.get(getPlayerName(battle.opponent1Tag_id)) + 1
+                if battle.winner1Tag_id == battle.team2Tag_id:
+                    Gui[getPlayerName(battle.team1Tag_id)] = Gui.get(getPlayerName(battle.opponent2Tag_id)) + 1
+        print('2v2 ranking generated')
+
+    generate2v2Ranking()
+
+    template = loader.get_template("2v2.html")
+    context = {
+        "Will": Will,
+        "Ed": Ed,
+        "Godet": Godet,
+        "Alex": Alex,
+        "Gui": Gui
+    }
+    return HttpResponse(template.render(context, request))
