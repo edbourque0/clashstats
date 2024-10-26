@@ -264,15 +264,15 @@ def twovtwo(request):
                         if battle.opponent2Tag_id in players.keys():
                             playerToList(players[player])[getPlayerName(battle.opponent2Tag_id)] = playerToList(players[player]).get(getPlayerName(battle.opponent2Tag_id)) + 1
                             playerToList(getPlayerName(battle.opponent2Tag_id))[getPlayerName(battle.winner1Tag_id)] = playerToList(getPlayerName(battle.opponent2Tag_id)).get(getPlayerName(battle.winner1Tag_id)) + 1
-                    if battle.winner1Tag_id == battle.opponent2Tag_id:
+                    elif battle.winner1Tag_id == battle.opponent2Tag_id:
                         if battle.opponent1Tag_id in players.keys():
                             playerToList(players[player])[getPlayerName(battle.opponent1Tag_id)] = playerToList(players[player]).get(getPlayerName(battle.opponent1Tag_id)) + 1
                             playerToList(getPlayerName(battle.opponent1Tag_id))[getPlayerName(battle.winner1Tag_id)] = playerToList(getPlayerName(battle.opponent1Tag_id)).get(getPlayerName(battle.winner1Tag_id)) + 1
-                    if battle.winner1Tag_id == battle.team1Tag_id:
+                    elif battle.winner1Tag_id == battle.team1Tag_id:
                         if battle.team2Tag_id in players.keys():
                             playerToList(players[player])[getPlayerName(battle.team2Tag_id)] = playerToList(players[player]).get(getPlayerName(battle.opponent1Tag_id)) + 1
                             playerToList(getPlayerName(battle.team2Tag_id))[getPlayerName(battle.winner1Tag_id)] = playerToList(getPlayerName(battle.team2Tag_id)).get(getPlayerName(battle.winner1Tag_id)) + 1
-                    if battle.winner1Tag_id == battle.team2Tag_id:
+                    elif battle.winner1Tag_id == battle.team2Tag_id:
                         if battle.team1Tag_id in players.keys():
                             playerToList(players[player])[getPlayerName(battle.team1Tag_id)] = playerToList(players[player]).get(getPlayerName(battle.opponent2Tag_id)) + 1
                             playerToList(getPlayerName(battle.team1Tag_id))[getPlayerName(battle.winner1Tag_id)] = playerToList(getPlayerName(battle.team1Tag_id)).get(getPlayerName(battle.winner1Tag_id)) + 1
