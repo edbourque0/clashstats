@@ -256,7 +256,7 @@ def twovtwo(request):
     Godet = {'Will': 0, 'Ed': 0, 'Gui': 0, 'Alex': 0}
     Alex = {'Will': 0, 'Ed': 0, 'Godet': 0, 'Gui': 0}
 
-    def generate2v2Ranking():
+    def generate2v2Ranking1():
         for battle in Battles.objects.all():
             for player in players:
                 if battle.winner1Tag_id == player and battle.gameMode[0:10] == 'TeamVsTeam' and battle.gameMode[-8:] == 'Friendly':
@@ -264,20 +264,40 @@ def twovtwo(request):
                         if battle.opponent2Tag_id in players.keys():
                             playerToList(players[player])[getPlayerName(battle.opponent2Tag_id)] = playerToList(players[player]).get(getPlayerName(battle.opponent2Tag_id)) + 1
                             playerToList(getPlayerName(battle.opponent2Tag_id))[getPlayerName(battle.winner1Tag_id)] = playerToList(getPlayerName(battle.opponent2Tag_id)).get(getPlayerName(battle.winner1Tag_id)) + 1
-                    elif battle.winner1Tag_id == battle.opponent2Tag_id:
+                    if battle.winner1Tag_id == battle.opponent2Tag_id:
                         if battle.opponent1Tag_id in players.keys():
                             playerToList(players[player])[getPlayerName(battle.opponent1Tag_id)] = playerToList(players[player]).get(getPlayerName(battle.opponent1Tag_id)) + 1
                             playerToList(getPlayerName(battle.opponent1Tag_id))[getPlayerName(battle.winner1Tag_id)] = playerToList(getPlayerName(battle.opponent1Tag_id)).get(getPlayerName(battle.winner1Tag_id)) + 1
-                    elif battle.winner1Tag_id == battle.team1Tag_id:
+                    if battle.winner1Tag_id == battle.team1Tag_id:
                         if battle.team2Tag_id in players.keys():
                             playerToList(players[player])[getPlayerName(battle.team2Tag_id)] = playerToList(players[player]).get(getPlayerName(battle.opponent1Tag_id)) + 1
                             playerToList(getPlayerName(battle.team2Tag_id))[getPlayerName(battle.winner1Tag_id)] = playerToList(getPlayerName(battle.team2Tag_id)).get(getPlayerName(battle.winner1Tag_id)) + 1
-                    elif battle.winner1Tag_id == battle.team2Tag_id:
+                    if battle.winner1Tag_id == battle.team2Tag_id:
                         if battle.team1Tag_id in players.keys():
                             playerToList(players[player])[getPlayerName(battle.team1Tag_id)] = playerToList(players[player]).get(getPlayerName(battle.opponent2Tag_id)) + 1
                             playerToList(getPlayerName(battle.team1Tag_id))[getPlayerName(battle.winner1Tag_id)] = playerToList(getPlayerName(battle.team1Tag_id)).get(getPlayerName(battle.winner1Tag_id)) + 1
 
         print('2v2 ranking generated')
+
+    def updatePlayerRanking(player, opponent, ranking_data):
+        player_list = playerToList(players[player])
+        opponent_name = getPlayerName(opponent)
+        player_list[opponent_name] = player_list.get(opponent_name, 0) + 1
+        opponent_list = playerToList(players[opponent])
+        opponent_list[getPlayerName(player)] = opponent_list.get(getPlayerName(player), 0) + 1
+    
+    def generate2v2Ranking():
+        for battle in Battles.objects.all():
+            if battle.gameMode.startswith('TeamVsTeam') and battle.gameMode.endswith('Friendly'):
+                if battle.winner1Tag_id in players:
+                    if battle.winner1Tag_id == battle.opponent1Tag_id and battle.opponent2Tag_id in players:
+                        updatePlayerRanking(battle.winner1Tag_id, battle.opponent2Tag_id, players)
+                    elif battle.winner1Tag_id == battle.opponent2Tag_id and battle.opponent1Tag_id in players:
+                        updatePlayerRanking(battle.winner1Tag_id, battle.opponent1Tag_id, players)
+                    elif battle.winner1Tag_id == battle.team1Tag_id and battle.team2Tag_id in players:
+                        updatePlayerRanking(battle.winner1Tag_id, battle.team2Tag_id, players)
+                    elif battle.winner1Tag_id == battle.team2Tag_id and battle.team1Tag_id in players:
+                        updatePlayerRanking(battle.winner1Tag_id, battle.team1Tag_id, players)
 
     generate2v2Ranking()
 
