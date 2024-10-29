@@ -50,7 +50,7 @@ def battlelog(request, tag):
     Achievements = Achievement.objects.all()
     FavoriteCards = FavoriteCard.objects.all()
 
-    apikey = os.getenv("API_KEY")
+    apikey = os.getenv("API_KEY", "abc123")
     headers = {
         "Authorization": "Bearer " + apikey,
     }

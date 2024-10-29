@@ -24,7 +24,7 @@ def clanrankingsearch(request):
 @csrf_exempt
 def clanrefresh(request, clantag):
     # Request variables
-    apikey = os.environ.get("API_KEY")
+    apikey = os.environ.get("API_KEY", "abc123")
     headers = {
         "Authorization": "Bearer " + apikey,
     }
