@@ -20,14 +20,14 @@ class Clan(models.Model):
 
 
 class Card(models.Model):
-    id = models.CharField(max_length=15, primary_key=True)
+    id = models.CharField(max_length=50, primary_key=True)
     name = models.CharField(max_length=100)
     level = models.PositiveIntegerField()
     maxLevel = models.PositiveIntegerField()
     rarity = models.CharField(max_length=50)
     elixirCost = models.PositiveIntegerField(null=True, blank=True)
-    iconUrlsm = models.CharField(max_length=50)
-    iconUrlse = models.CharField(max_length=50)
+    iconUrlsm = models.CharField(max_length=100)
+    iconUrlse = models.CharField(max_length=100)
 
 
 class Player(models.Model):
