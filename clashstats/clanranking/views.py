@@ -8,6 +8,9 @@ from django.utils import timezone
 import requests
 from .models import Members, Clans, Battles
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
+load_dotenv()
+import os
 
 
 def clanrankingsearch(request):
@@ -21,7 +24,7 @@ def clanrankingsearch(request):
 @csrf_exempt
 def clanrefresh(request, clantag):
     # Request variables
-    apikey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6IjRiODJiNzlmLTg5NzAtNDllYi05NGEyLWEyZDAzNzU5MjIyNSIsImlhdCI6MTcxMjk1MzUyMSwic3ViIjoiZGV2ZWxvcGVyLzNkNjhmM2MyLWM4ZmItNDAyYy0zZTU4LTk0YjIzMGY1Y2IzZCIsInNjb3BlcyI6WyJyb3lhbGUiXSwibGltaXRzIjpbeyJ0aWVyIjoiZGV2ZWxvcGVyL3NpbHZlciIsInR5cGUiOiJ0aHJvdHRsaW5nIn0seyJjaWRycyI6WyI3NC4xMi4xNjkuMjMwIiwiMTczLjE4Mi4xNTQuMjQ2IiwiMjA5LjE3MS4xNjIuMTQ1IiwiMjA3LjE2Ny4yMTYuODkiXSwidHlwZSI6ImNsaWVudCJ9XX0.YvF3ojCgj7r7KdBBCoSufuTnVj6Qd0wz6YaRWfdSet6QPIZOn3HSlXlJUlyLLfUQUQi0G6nfL3MPleE_CTnn2w"
+    apikey = os.environ.get("API_KEY")
     headers = {
         "Authorization": "Bearer " + apikey,
     }
