@@ -277,8 +277,6 @@ def twovtwo(request):
                             playerToList(players[player])[getPlayerName(battle.team1Tag_id)] = playerToList(players[player]).get(getPlayerName(battle.opponent2Tag_id)) + 1
                             playerToList(getPlayerName(battle.team1Tag_id))[getPlayerName(battle.winner1Tag_id)] = playerToList(getPlayerName(battle.team1Tag_id)).get(getPlayerName(battle.winner1Tag_id)) + 1
 
-        print('2v2 ranking generated')
-
     def updatePlayerRanking(player, opponent, ranking_data):
         player_list = playerToList(players[player])
         opponent_name = getPlayerName(opponent)
@@ -300,7 +298,7 @@ def twovtwo(request):
                         updatePlayerRanking(battle.winner1Tag_id, battle.team1Tag_id, players)
 
     generate2v2Ranking()
-
+    
     template = loader.get_template("2v2.html")
     context = {
         "Will": Will,
