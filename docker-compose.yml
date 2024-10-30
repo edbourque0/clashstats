@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  clashstats:
+    image: ghcr.io/edbourque0/edbourque0/clashstats:latest
+    ports:
+      - "8000:8000"
+    environment:
+      API_KEY: <your_api_key>
+      DB_HOST: <db_host>
+      DB_NAME: "clashstats"
+      DB_USER: "postgres"
+      DB_PASS: "postgres!"
+      DB_PORT: "5432"
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres!
+      POSTGRES_DB: clashstats
+    volumes:
+      - clashstats_data:/var/lib/postgresql/data
+
+volumes:
+  clashstats_data:
