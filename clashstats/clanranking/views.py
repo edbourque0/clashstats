@@ -317,6 +317,6 @@ def battles(request):
     template = loader.get_template("battles.html")
     context = {
         "battles": Battles.objects.all(),
-        "url": f'http://{os.environ.get("HOST", "127.0.0.1")}:{os.environ.get("PORT", "8000")}/battlelog/'
+        "url": f'{os.environ.get("HOST", "127.0.0.1")}:{os.environ.get("PORT", "8000")}/battlelog/'
     }
     return HttpResponse(template.render(context, request))
