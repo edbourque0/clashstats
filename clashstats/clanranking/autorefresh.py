@@ -1,8 +1,12 @@
 import requests
 import time
+from dotenv import load_dotenv
+load_dotenv()
+import os
+
 
 while True:
-    url = 'http://192.168.2.39:8000/clanrefresh/G9JVLC2C'
+    url = f'http://{os.environ.get("HOST", "127.0.0.1")}:{os.environ.get("PORT", "8000")}/clanrefresh/G9JVLC2C'
     try:
         response = requests.get(url)
         if response.status_code == 200:
