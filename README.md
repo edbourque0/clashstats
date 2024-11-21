@@ -18,6 +18,9 @@ A Django web app to get Clash Royale player info, battlelog and a clan ranking b
 
 ## Run Locally
 
+### Prerequisites
+- Python 3.11
+### Installation
 Clone the project
 
 ```bash
@@ -30,7 +33,7 @@ Go to the clashstats directory
   cd clashstats
 ```
 
-Create a .env file at the root of the project
+Create a .env file at the root of the project or use the env.exmaple file
 
 ```bash
   API_KEY=<your_api_key>
@@ -39,6 +42,9 @@ Create a .env file at the root of the project
   DB_USER=<username>
   DB_PASS=<strong_password>
   DB_PORT=<database_port>
+  HOST=<host_ip>
+  PORT=<host_port>
+  DEBUG=<boolean>
 ```
 
 Install dependencies
@@ -68,7 +74,10 @@ Start the server
 | `DB_NAME`     | Name of the database              | `clashstats`         | `clashstats`  |
 | `DB_USER`     | Database user                     | `username`           | `username`    |
 | `DB_PASSWORD` | Password for the database user    | `P4Ssw0Rd`           | `password`    |
-| `API_KEY`     | API key from [Clash Royale API](https://developer.clashroyale.com/#/)| `873yr4n27837rn28o7yh2y45rgfghfd3`   | `abc123` |
+| `API_KEY`     | API key from [Clash Royale API](https://developer.clashroyale.com/#/)| `873yr4n27837rn28o7yh2y45rgfghfd3`     | `abc123` |
+| `HOST` | IP/domain of your server    | `127.0.0.1` `clash.example.com`  | `127.0.0.1`    |
+| `PORT` | Port of the clashstats server             | `8000`              | `8000`        |
+| `DEBUG` | Disable/enable debug mode    | `True`                          | `False`       |
 
 
 ## Tech Stack

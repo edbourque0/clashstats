@@ -87,8 +87,10 @@ class Battles(models.Model):
         Members, on_delete=models.SET_NULL, null=True, related_name="winner1tag"
     )
     loser1Tag = models.ForeignKey(
-        Members, on_delete=models.SET_NULL, null=True, related_name="looser1tag"
+        Members, on_delete=models.SET_NULL, null=True, related_name="loser1tag"
     )
+    winner1Name = models.CharField(null=True, max_length=100)
+    loser1Name = models.CharField(null=True, max_length=100)
 
 
 class weeklyRanking(models.Model):
