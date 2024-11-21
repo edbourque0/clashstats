@@ -24,4 +24,5 @@ urlpatterns = [
     path("clanrankingsearch", views.clanrankingsearch, name="clanrankingsearch"),
     path("clanrefresh/<slug:clantag>", views.clanrefresh, name="clanrefresh"),
     path("2v2", views.twovtwo, name="2v2"),
+    path("settings", views.settings, name="settings"),
 ]

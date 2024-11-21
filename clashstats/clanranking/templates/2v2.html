@@ -39,14 +39,17 @@
                 <a class="nav-link active" aria-current="page" href="/2v2"> 2v2</a>
               </li>
             </ul>
+            <form class="form-inline" action="/settings">
+              <button class="btn btn-disabled border my-2 my-sm-0" type="submit"><i class="ti ti-settings"></i></button>
+            </form>
           </div>
         </div>
       </nav>
 <div class='container pt-5'>
     <div class='text-center'>
-        <h1 class='fw-bold text-warning'>Classement 2V2</h1>
-        <p class="text-muted">Nombre de parties gangées par duo</p>
-        <button id='refreshButton' href="/clanrefresh/G9JVLC2C" class="btn btn-primary mb-4" role="button">
+        <h1 class='fw-bold text-warning'>2v2 ranking</h1>
+        <p class="text-muted">Number of games won by each duo</p>
+        <button id='settingsButton' href="/clanrefresh/G9JVLC2C" class="btn btn-primary mb-4" role="button">
             <i class="ti ti-refresh"></i>
         </button>
     </div>
@@ -109,40 +112,4 @@
     </div>
 </div>
 </body>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
-
-        var refreshButton = document.getElementById('refreshButton');
-        refreshButton.addEventListener('click', function(event) {
-            this.innerHTML = '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>';
-            this.classList.add('disabled'); // Use Bootstrap's 'disabled' class to disable the button
-            this.setAttribute('aria-disabled', 'true'); // Optionally set aria-disabled for accessibility
-        });
-    });
-</script>
-<script>
-    $(document).ready(function() {
-        $('#dateForm').on('submit', function(e) {
-            e.preventDefault();
-            var formData = $(this).serialize();  // Serialize the form data
-            
-            $.ajax({
-                url: '{% url "clanranking" clantag="G9JVLC2C" %}',
-                type: 'POST',
-                data: formData,
-                headers: { 'X-Requested-With': 'XMLHttpRequest' },
-                success: function(response) {
-                    $('#rankingTable').html(response);
-                },
-                error: function(xhr, status, error) {
-                    console.error("Error occurred: " + error);
-                }
-            });
-        });
-    });
-</script>
 </html>

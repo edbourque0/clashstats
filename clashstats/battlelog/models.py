@@ -179,3 +179,11 @@ class FavoriteCard(models.Model):
     elixirCost = models.IntegerField()
     iconUrls = models.CharField(max_length=150)
     rarity = models.CharField(max_length=50)
+
+class Setting(models.Model):
+    refreshTime = models.PositiveIntegerField()
+    smtpHost = models.CharField(max_length=100)
+    smtpPort = models.PositiveIntegerField()
+    smtpUser = models.CharField(max_length=100)
+    smtpPass = models.CharField(max_length=100)
+    smtpSender = models.CharField(max_length=100)
