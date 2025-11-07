@@ -29,15 +29,11 @@ class Members(models.Model):
     elo = models.PositiveIntegerField(null=True)
 
 class BattleLogs(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.CharField(primary_key=True, editable=False)
     type = models.CharField(max_length=50)
     battleTime = models.DateTimeField()
     gameMode = models.CharField(max_length=25)
     winner1 = models.ForeignKey(Members, on_delete=models.CASCADE, null=False, related_name='winner12member')
-    winner1ElixirLeaked = models.PositiveIntegerField()
     winner2 = models.ForeignKey(Members, on_delete=models.CASCADE, null=False, related_name='winner22member')
-    winner2ElixirLeaked = models.PositiveIntegerField()
     loser1 = models.ForeignKey(Members, on_delete=models.CASCADE, null=False, related_name='loser12member')
-    loser1ElixirLeaked = models.PositiveIntegerField()
     loser2 = models.ForeignKey(Members, on_delete=models.CASCADE, null=False, related_name='loser22member')
-    loser2ElixirLeaked = models.PositiveIntegerField()
