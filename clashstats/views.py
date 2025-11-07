@@ -86,8 +86,12 @@ def addMembers(request):
     else:
         return JsonResponse({'message':'Method Not Allowed'}, status=405)
 
+
+
 @csrf_exempt
 def addBattleLog(request):
+    """This view creates the battles for a specific member"""
+
     if request.method == 'POST':
         playertag = request.POST.get('playertag')
 
@@ -95,15 +99,20 @@ def addBattleLog(request):
         battles = r.json()
 
         def defineWinnersLosers(battle):
+            """
+            This function determines the winners and losers of a battle
+            Args:
+                battle (dict): json of the battle returned by the Clash Royale API
+            """
             team1crowns = battle['team'][0]['crowns']
-            team2crowns = battle['team'][2]['crowns']
+            team2crowns = battle['opponent'][0]['crowns']
 
             if team1crowns > team2crowns:
                 winnersandlosers = {
                     'winner1': battle['team'][0]['tag'],
                     'winner2': battle['team'][1]['tag'],
-                    'loser1': battle['team'][3]['tag'],
-                    'loser2': battle['team'][4]['tag'],
+                    'loser1': battle['opponent'][0]['tag'],
+                    'loser2': battle['opponent'][1]['tag'],
                     'time' : battle['battleTime']
                 }
 
@@ -114,8 +123,8 @@ def addBattleLog(request):
 
             else:
                 winnersandlosers = {
-                    'winner1': battle['team'][2]['tag'],
-                    'winner2': battle['team'][3]['tag'],
+                    'winner1': battle['opponent'][0]['tag'],
+                    'winner2': battle['opponent'][1]['tag'],
                     'loser1': battle['team'][0]['tag'],
                     'loser2': battle['team'][1]['tag'],
                     'time': battle['battleTime']
@@ -126,27 +135,26 @@ def addBattleLog(request):
 
                 return winnersandlosers
 
-
         for battle in battles:
-            winlose = defineWinnersLosers(battle)
-            if BattleLogs.objects.get(id=winlose).DoesNotExist and battle['gameMode']['name'] == 'TeamVsTeam':
+            if len(battle['team']) == 2:
+                
+                if battle['type'] == 'clanMate2v2':
+                    winlose = defineWinnersLosers(battle)
 
-                BattleLogs.objects.create(
-                    id = winlose['hash'],
-                    type = battle['type'],
-                    battleTime = battle['battleTime'],
-                    gameMode = battle['gameMode']['name'],
-                    winner1 = Members.objects.get(winlose['winner1']),
-                    winner2 = Members.objects.get(winlose['winner2']),
-                    loser1 = Members.objects.get(winlose['loser1']),
-                    loser2 = Members.objects.get(winlose['loser2']),
-                )
+                    # Check if battle log doesn't already exist
+                    if not BattleLogs.objects.filter(id=winlose['hash']).exists():
+                        BattleLogs.objects.create(
+                            id=winlose['hash'],
+                            type=battle['type'],
+                            battleTime=battle['battleTime'],
+                            gameMode=battle['gameMode']['name'],
+                            winner1=Members.objects.get(tag=winlose['winner1']),
+                            winner2=Members.objects.get(tag=winlose['winner2']),
+                            loser1=Members.objects.get(tag=winlose['loser1']),
+                            loser2=Members.objects.get(tag=winlose['loser2']),
+                        )
 
-            else:
-                continue
-
-
-        return JsonResponse({'message': 'Members added successfully'}, status=200)
+        return JsonResponse({'message': 'Battles added successfully'}, status=200)
 
     else:
         return JsonResponse({'message':'Method Not Allowed'}, status=405)
