@@ -9,6 +9,7 @@ import json
 from dotenv import load_dotenv
 from .models import Clans, Members, BattleLogs
 import hashlib
+from django.shortcuts import render
 
 load_dotenv()
 
@@ -18,12 +19,38 @@ headers = {
         }
 
 def home(request):
-    template = loader.get_template("home.html")
-    context = {}
-    return HttpResponse(template.render(context, request))
+    """
+    Handles the processing of the homepage request. This function queries the
+    `Members` model to retrieve a filtered and ordered list of members, excluding
+    those with an ELO score of 1000, and sorts the remaining members by their ELO
+    score in descending order. Ties in the ELO score are resolved by sorting
+    alphabetically by the members' names. The retrieved member list is then passed
+    to the "home.html" template for rendering.
+
+    :param request: The HTTP request object containing metadata and other
+        relevant information for processing the homepage view.
+    :return: An HTTP response object with the rendered "home.html" template,
+        including the filtered and ordered list of member data.
+    """
+    members = (
+        Members.objects.only("name", "elo").exclude(elo=1000)
+        .order_by("-elo", "name")  # highest ELO first, tie-break by name
+    )
+    return render(request, "home.html", {"members": members})
 
 @csrf_exempt
 def searchClan(request):
+    """
+    Executes a clan search based on the provided name parameter in the POST request.
+    It forwards the request to an external API and retrieves the corresponding result.
+
+    :param request: The HTTP request object containing details about the client's request.
+    :type request: HttpRequest
+    :return: A JSON response with the search results if the request is valid, an error
+        message with HTTP 400 if the 'name' parameter is missing, or 405 if the
+        request method is not POST.
+    :rtype: JsonResponse
+    """
     if request.method == 'POST':
         if request.POST.get('name') != '':
             name = request.POST.get('name')
@@ -38,6 +65,18 @@ def searchClan(request):
 
 @csrf_exempt
 def addClan(request):
+    """
+    Handles the addition of a clan to the database. It retrieves clan data
+    from an external API using the provided clan tag, then updates or creates
+    the clan entry in the database based on the data fetched. Only HTTP POST
+    requests are allowed for this operation. In case of unsupported HTTP methods,
+    a proper response is returned.
+
+    :param request: Django HttpRequest object
+    :return: JsonResponse with a success message and status 200 for valid POST
+             requests, or a JsonResponse with an error message and status 405
+             for unsupported methods
+    """
     if request.method == 'POST':
         clantag = request.POST.get('clantag')
 
@@ -63,6 +102,20 @@ def addClan(request):
 
 @csrf_exempt
 def addMembers(request):
+    """
+    Adds and updates clan members in the database based on a POST request.
+
+    This function fetches the list of members of a specified clan from an external
+    API using the supplied clan tag. It updates the database with the current state
+    of the members or creates new entries if required. If the request method is
+    not POST, it returns an appropriate response indicating that the method is not
+    allowed.
+
+    :param request: Django's HTTP request object containing request data and context.
+    :type request: HttpRequest
+    :return: JSON response containing a message indicating the result of the operation.
+    :rtype: JsonResponse
+    """
     if request.method == 'POST':
         clantag = request.POST.get('clantag')
 
@@ -94,7 +147,24 @@ def addMembers(request):
 
 @csrf_exempt
 def addBattleLog(request):
-    """This view creates the battles for a specific member"""
+    """
+    Handles a request to add battle logs to the database. This function fetches battle details
+    from the Clash Royale API based on a player's tag provided in a HTTP POST request. It
+    extracts and processes relevant battles to identify winners and losers for each eligible
+    battle log. Validated and structured battle logs are stored in the database if unique.
+
+    Note:
+        Only POST requests are allowed. The function interacts with external APIs and the
+        database.
+
+    :param request: HTTP request object that contains the player's tag (`playertag`) as a
+        parameter in a POST request.
+    :type request: HttpRequest
+
+    :return: A JSON response with a success message if battles are added successfully or an
+        error message for unsupported HTTP methods.
+    :rtype: JsonResponse
+    """
 
     if request.method == 'POST':
         playertag = request.POST.get('playertag')
@@ -165,6 +235,16 @@ def addBattleLog(request):
 
 @csrf_exempt
 def refreshClan(request):
+    """
+    Handles the refreshing of clan data, clan member details, and their battlelogs
+    by making API requests. This function is primarily triggered by a POST request
+    and processes the clan information using the provided clantag.
+
+    :param request: Django HTTP request object
+    :type request: HttpRequest
+    :return: JSON response indicating success or failure of the operation
+    :rtype: JsonResponse
+    """
     if request.method == 'POST':
         """ Refresh clan """
         clantag = request.POST.get('clantag')
@@ -184,6 +264,21 @@ def refreshClan(request):
 
 @csrf_exempt
 def updateelo(request):
+    """
+    Updates ELO rankings for all battles that have not yet had their ELOs calculated.
+
+    This function retrieves all BattleLogs, sorts them by battle time, and iterates
+    through each battle that has not been marked as ELO-calculated. For each battle,
+    it computes and updates the ELO ratings of the winners and losers based on the
+    ELO calculation formula. Once the ratings are updated, the battle is flagged as
+    ELO-calculated. The updates are applied to the Members database. If the request
+    method is not GET, a response indicating the method is not allowed is returned.
+
+    :param request: HTTP request object containing details of the incoming request.
+    :type request: HttpRequest
+    :return: JsonResponse indicating the success or failure of the operation.
+    :rtype: JsonResponse
+    """
     if request.method == 'GET':
         sortedbattles = BattleLogs.objects.all().order_by('battleTime')
 
