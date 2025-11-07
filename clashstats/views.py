@@ -7,7 +7,8 @@ from django.template import loader
 import requests
 import json
 from dotenv import load_dotenv
-from .models import Clans, Members
+from .models import Clans, Members, BattleLogs
+import hashlib
 
 load_dotenv()
 
@@ -79,6 +80,71 @@ def addMembers(request):
                 donations = member['donations'],
                 donationsReceived = member['donationsReceived']
             )
+
+        return JsonResponse({'message': 'Members added successfully'}, status=200)
+
+    else:
+        return JsonResponse({'message':'Method Not Allowed'}, status=405)
+
+@csrf_exempt
+def addBattleLog(request):
+    if request.method == 'POST':
+        playertag = request.POST.get('playertag')
+
+        r = requests.get(url=f'{url}players/%23{playertag[1:]}/battlelog', headers=headers)
+        battles = r.json()
+
+        def defineWinnersLosers(battle):
+            team1crowns = battle['team'][0]['crowns']
+            team2crowns = battle['team'][2]['crowns']
+
+            if team1crowns > team2crowns:
+                winnersandlosers = {
+                    'winner1': battle['team'][0]['tag'],
+                    'winner2': battle['team'][1]['tag'],
+                    'loser1': battle['team'][3]['tag'],
+                    'loser2': battle['team'][4]['tag'],
+                    'time' : battle['battleTime']
+                }
+
+                h = hashlib.sha256(json.dumps(winnersandlosers, separators=(",", ":"), sort_keys=True).encode("utf-8")).hexdigest()
+                winnersandlosers['hash'] = h
+
+                return winnersandlosers
+
+            else:
+                winnersandlosers = {
+                    'winner1': battle['team'][2]['tag'],
+                    'winner2': battle['team'][3]['tag'],
+                    'loser1': battle['team'][0]['tag'],
+                    'loser2': battle['team'][1]['tag'],
+                    'time': battle['battleTime']
+                }
+
+                h = hashlib.sha256(json.dumps(winnersandlosers, separators=(",", ":"), sort_keys=True).encode("utf-8")).hexdigest()
+                winnersandlosers['hash'] = h
+
+                return winnersandlosers
+
+
+        for battle in battles:
+            winlose = defineWinnersLosers(battle)
+            if BattleLogs.objects.get(id=winlose).DoesNotExist and battle['gameMode']['name'] == 'TeamVsTeam':
+
+                BattleLogs.objects.create(
+                    id = winlose['hash'],
+                    type = battle['type'],
+                    battleTime = battle['battleTime'],
+                    gameMode = battle['gameMode']['name'],
+                    winner1 = Members.objects.get(winlose['winner1']),
+                    winner2 = Members.objects.get(winlose['winner2']),
+                    loser1 = Members.objects.get(winlose['loser1']),
+                    loser2 = Members.objects.get(winlose['loser2']),
+                )
+
+            else:
+                continue
+
 
         return JsonResponse({'message': 'Members added successfully'}, status=200)
 

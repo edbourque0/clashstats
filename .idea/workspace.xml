@@ -4,8 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="08130c95-e40a-4eff-916b-05872f0b417d" name="Changes" comment="Add endpoints, models, and logic for clan and member management.">
+    <list default="true" id="08130c95-e40a-4eff-916b-05872f0b417d" name="Changes" comment="Fix mistake of renaming addClan to refresh and clean code to make clean Battles branch">
+      <change afterPath="$PROJECT_DIR$/response_1762487055417.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clashstats/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clashstats/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clashstats/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -25,6 +29,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory"><![CDATA[{
@@ -67,13 +76,15 @@
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
     "django.template.preview.state": "SHOW_EDITOR",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "Battles",
     "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "C:/Users/edbou/Documents/Code/clashstats_v2",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.grazie",
     "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
   },
@@ -85,6 +96,9 @@
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\edbou\Documents\Code\clashstats_v2" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\edbou\Documents\Code\clashstats_v2\clashstats_v2" />
     </key>
@@ -162,7 +176,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1762466725545</updated>
-      <workItem from="1762466726547" duration="18370000" />
+      <workItem from="1762466726547" duration="21613000" />
     </task>
     <task id="LOCAL-00001" summary="Initialize Django project `clashstats_v2` with core app, basic configurations, and initial setup files.">
       <option name="closed" value="true" />
@@ -180,15 +194,33 @@
       <option name="project" value="LOCAL" />
       <updated>1762488727310</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Fix mistake of renaming addClan to refresh and clean code to make clean Battles branch">
+      <option name="closed" value="true" />
+      <created>1762488994643</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1762488994643</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="10871019-c7e1-4d0f-b79d-5c0ebfbed47c" value="TOOL_WINDOW" />
+      </map>
+    </option>
     <option name="TAB_STATES">
       <map>
+        <entry key="10871019-c7e1-4d0f-b79d-5c0ebfbed47c">
+          <value>
+            <State />
+          </value>
+        </entry>
         <entry key="MAIN">
           <value>
             <State />
@@ -200,7 +232,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initialize Django project `clashstats_v2` with core app, basic configurations, and initial setup files." />
     <MESSAGE value="Add endpoints, models, and logic for clan and member management." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add endpoints, models, and logic for clan and member management." />
+    <MESSAGE value="Fix mistake of renaming addClan to refresh and clean code to make clean Battles branch" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix mistake of renaming addClan to refresh and clean code to make clean Battles branch" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
