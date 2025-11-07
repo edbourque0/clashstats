@@ -4,32 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="08130c95-e40a-4eff-916b-05872f0b417d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.env.example" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/clashstats_v2.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/clashstats/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/clashstats/admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/clashstats/apps.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/clashstats/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/clashstats/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/clashstats/tests.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/clashstats/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/clashstats/views.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/clashstats_v2/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/clashstats_v2/asgi.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/clashstats_v2/generateApiKey.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/clashstats_v2/settings.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/clashstats_v2/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/clashstats_v2/wsgi.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/manage.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/home.html" afterDir="false" />
+    <list default="true" id="08130c95-e40a-4eff-916b-05872f0b417d" name="Changes" comment="Initialize Django project `clashstats_v2` with core app, basic configurations, and initial setup files.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clashstats/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clashstats/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clashstats/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -175,6 +154,9 @@
       </set>
     </attachedChunks>
   </component>
+  <component name="StructureViewState">
+    <option name="selectedTab" value="Logical" />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="08130c95-e40a-4eff-916b-05872f0b417d" name="Changes" comment="" />
@@ -182,8 +164,17 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1762466725545</updated>
-      <workItem from="1762466726547" duration="4599000" />
+      <workItem from="1762466726547" duration="18151000" />
     </task>
+    <task id="LOCAL-00001" summary="Initialize Django project `clashstats_v2` with core app, basic configurations, and initial setup files.">
+      <option name="closed" value="true" />
+      <created>1762471628858</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1762471628858</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -199,6 +190,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Initialize Django project `clashstats_v2` with core app, basic configurations, and initial setup files." />
+    <option name="LAST_COMMIT_MESSAGE" value="Initialize Django project `clashstats_v2` with core app, basic configurations, and initial setup files." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
