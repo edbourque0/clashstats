@@ -44,14 +44,16 @@ def addClan(request):
         r = requests.get(url=f'{url}clans/%23{clantag[1:]}', headers=headers, params={'name':clantag})
         clan = r.json()
 
-        Clans.objects.create(
+        Clans.objects.update_or_create(
             tag=clan['tag'],
-            name=clan['name'],
-            type=clan['type'],
-            badgeId=clan['badgeId'],
-            location=clan['location']['countryCode'],
-            donationsPerWeek=clan['donationsPerWeek'],
-            members=clan['members']
+            defaults={
+                'name': clan['name'],
+                'type': clan['type'],
+                'badgeId': clan['badgeId'],
+                'location': clan['location']['countryCode'],
+                'donationsPerWeek': clan['donationsPerWeek'],
+                'members': clan['members']
+            }
         )
 
         return JsonResponse({'message': 'Clan added successfully'}, status=200)
@@ -70,15 +72,17 @@ def addMembers(request):
         for member in members:
             Members.objects.update_or_create(
                 tag = member['tag'],
-                clanTag = Clans.objects.get(tag=clantag),
-                name = member['name'],
-                role = member['role'],
-                lastSeen = member['lastSeen'],
-                expLevel = member['expLevel'],
-                trophies = member['trophies'],
-                clanRank = member['clanRank'],
-                donations = member['donations'],
-                donationsReceived = member['donationsReceived']
+                defaults={
+                    'clanTag': Clans.objects.get(tag=clantag),
+                    'name': member['name'],
+                    'role': member['role'],
+                    'lastSeen': member['lastSeen'],
+                    'expLevel': member['expLevel'],
+                    'trophies': member['trophies'],
+                    'clanRank': member['clanRank'],
+                    'donations': member['donations'],
+                    'donationsReceived': member['donationsReceived']
+                }
             )
 
         return JsonResponse({'message': 'Members added successfully'}, status=200)
@@ -158,3 +162,22 @@ def addBattleLog(request):
 
     else:
         return JsonResponse({'message':'Method Not Allowed'}, status=405)
+
+@csrf_exempt
+def refreshClan(request):
+    if request.method == 'POST':
+        """ Refresh clan """
+        clantag = request.POST.get('clantag')
+        response = requests.post('http://localhost:8000/api/v1/clan', data={'clantag': clantag})
+
+        """ Refresh clan members """
+        response = requests.post('http://localhost:8000/api/v1/members', data={'clantag': clantag})
+
+        """ Refresh battlelog """
+        for member in Members.objects.select_related('clanTag').all():
+            response = requests.post('http://localhost:8000/api/v1/battlelog', data={'playertag': member.tag})
+
+        return JsonResponse({'message': 'Clan refreshed successfully'}, status=200)
+
+    else:
+        return JsonResponse({'message': 'Method Not Allowed'}, status=405)
