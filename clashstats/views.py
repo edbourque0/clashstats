@@ -181,3 +181,31 @@ def refreshClan(request):
 
     else:
         return JsonResponse({'message': 'Method Not Allowed'}, status=405)
+
+@csrf_exempt
+def updateelo(request):
+    if request.method == 'GET':
+        sortedbattles = BattleLogs.objects.all().order_by('battleTime')
+
+        for battle in sortedbattles:
+            """ Define common variables """
+            winnerselo = (battle.winner1.elo + battle.winner2.elo) / 2
+            loserselo = (battle.loser1.elo + battle.loser2.elo) / 2
+            winnersexpectedscore = 1 / (1 + 10 ** ((loserselo - winnerselo)/400))
+            losersexpectedscore = 1 / (1 + 10 ** ((winnerselo - loserselo) / 400))
+
+            """ Compute and update ELO of winners """
+            w1newelo = battle.winner1.elo + 20 * (1 - winnersexpectedscore)
+            w2newelo = battle.winner2.elo + 20 * (1 - winnersexpectedscore)
+            Members.objects.filter(tag=battle.winner1.tag).update(elo=w1newelo)
+            Members.objects.filter(tag=battle.winner2.tag).update(elo=w2newelo)
+
+            """ Compute and update ELO of losers """
+            l1newelo = battle.loser1.elo + 20 * (0 - losersexpectedscore)
+            l2newelo = battle.loser2.elo + 20 * (0 - losersexpectedscore)
+            Members.objects.filter(tag=battle.loser1.tag).update(elo=l1newelo)
+            Members.objects.filter(tag=battle.loser2.tag).update(elo=l2newelo)
+
+        return JsonResponse({'message': 'Elo updated successfully'}, status=200)
+    else:
+        return JsonResponse({'message': 'Method Not Allowed'}, status=405)

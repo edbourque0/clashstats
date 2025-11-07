@@ -26,7 +26,7 @@ class Members(models.Model):
     clanRank = models.PositiveIntegerField()
     donations = models.PositiveIntegerField()
     donationsReceived = models.PositiveIntegerField()
-    elo = models.PositiveIntegerField(null=True)
+    elo = models.PositiveIntegerField(null=False, default=1000)
 
 class BattleLogs(models.Model):
     id = models.CharField(primary_key=True, editable=False)
@@ -37,3 +37,4 @@ class BattleLogs(models.Model):
     winner2 = models.ForeignKey(Members, on_delete=models.CASCADE, null=False, related_name='winner22member')
     loser1 = models.ForeignKey(Members, on_delete=models.CASCADE, null=False, related_name='loser12member')
     loser2 = models.ForeignKey(Members, on_delete=models.CASCADE, null=False, related_name='loser22member')
+    elocalculated = models.BooleanField(null=False, default=False)

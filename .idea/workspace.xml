@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="08130c95-e40a-4eff-916b-05872f0b417d" name="Changes" comment="WIP - Add battle log endpoint and logic, update models, and clean up related files">
+    <list default="true" id="08130c95-e40a-4eff-916b-05872f0b417d" name="Changes" comment="Add `refreshClan` endpoint and improve clan/member update logic with `update_or_create`">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clashstats/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clashstats/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clashstats/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats/views.py" afterDir="false" />
     </list>
@@ -40,12 +41,22 @@
     &quot;assignee&quot;: &quot;edbourque0&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/edbourque0/clashstats_v2.git&quot;,
-    &quot;accountId&quot;: &quot;5803b673-7161-4c75-aab1-8fe1e0037f35&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/edbourque0/clashstats_v2.git",
+    "accountId": "5803b673-7161-4c75-aab1-8fe1e0037f35"
+  },
+  "recentNewPullRequestHead": {
+    "server": {
+      "useHttp": false,
+      "host": "github.com",
+      "port": null,
+      "suffix": null
+    },
+    "owner": "edbourque0",
+    "repository": "clashstats_v2"
   }
-}</component>
+}]]></component>
   <component name="HttpClientOnboardingState"><![CDATA[{
   "isOnboardingCommentShown": true
 }]]></component>
@@ -65,7 +76,7 @@
     "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
     "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "DefaultHtmlFileTemplate": "HTML File",
-    "Django Server.clashstats_v2.executor": "Run",
+    "Django Server.clashstats_v2.executor": "Debug",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "Python.generateApiKey.executor": "Run",
     "Python.test.executor": "Run",
@@ -79,7 +90,7 @@
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
     "datagrid.heatmap.switchedByDefault": "false",
     "django.template.preview.state": "SHOW_EDITOR",
-    "git-widget-placeholder": "Refresh",
+    "git-widget-placeholder": "Elo",
     "junie.onboarding.icon.badge.shown": "true",
     "last_opened_file_path": "C:/Users/edbou/Documents/Code/clashstats_v2",
     "node.js.detected.package.eslint": "true",
@@ -238,7 +249,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762492197015</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Add `refreshClan` endpoint and improve clan/member update logic with `update_or_create`">
+      <option name="closed" value="true" />
+      <created>1762545864393</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1762545864393</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -270,7 +289,9 @@
     <MESSAGE value="Add endpoints, models, and logic for clan and member management." />
     <MESSAGE value="Fix mistake of renaming addClan to refresh and clean code to make clean Battles branch" />
     <MESSAGE value="WIP - Add battle log endpoint and logic, update models, and clean up related files" />
-    <option name="LAST_COMMIT_MESSAGE" value="WIP - Add battle log endpoint and logic, update models, and clean up related files" />
+    <MESSAGE value="Add logic for battle log endpoint, fix bugs in winner/loser determination, and update related files" />
+    <MESSAGE value="Add `refreshClan` endpoint and improve clan/member update logic with `update_or_create`" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add `refreshClan` endpoint and improve clan/member update logic with `update_or_create`" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/clashstats_v2$test.coverage" NAME="test Coverage Results" MODIFIED="1762539281817" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
