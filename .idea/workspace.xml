@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="08130c95-e40a-4eff-916b-05872f0b417d" name="Changes" comment="Add `refreshClan` endpoint and improve clan/member update logic with `update_or_create`">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clashstats/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clashstats/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clashstats/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -35,31 +33,28 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="UPDATE_TYPE" value="REBASE" />
   </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;edbourque0&quot;
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {}
+}]]></component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/edbourque0/clashstats_v2.git&quot;,
+    &quot;accountId&quot;: &quot;5803b673-7161-4c75-aab1-8fe1e0037f35&quot;
+  },
+  &quot;recentNewPullRequestHead&quot;: {
+    &quot;server&quot;: {
+      &quot;useHttp&quot;: false,
+      &quot;host&quot;: &quot;github.com&quot;,
+      &quot;port&quot;: null,
+      &quot;suffix&quot;: null
+    },
+    &quot;owner&quot;: &quot;edbourque0&quot;,
+    &quot;repository&quot;: &quot;clashstats_v2&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/edbourque0/clashstats_v2.git",
-    "accountId": "5803b673-7161-4c75-aab1-8fe1e0037f35"
-  },
-  "recentNewPullRequestHead": {
-    "server": {
-      "useHttp": false,
-      "host": "github.com",
-      "port": null,
-      "suffix": null
-    },
-    "owner": "edbourque0",
-    "repository": "clashstats_v2"
-  }
-}]]></component>
-  <component name="HttpClientOnboardingState"><![CDATA[{
-  "isOnboardingCommentShown": true
-}]]></component>
+  <component name="HttpClientOnboardingState">{
+  &quot;isOnboardingCommentShown&quot;: true
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
 }</component>
@@ -76,7 +71,7 @@
     "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
     "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "DefaultHtmlFileTemplate": "HTML File",
-    "Django Server.clashstats_v2.executor": "Debug",
+    "Django Server.clashstats_v2.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "Python.generateApiKey.executor": "Run",
     "Python.test.executor": "Run",
@@ -192,6 +187,8 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.test" />
+        <item itemvalue="Python.generateApiKey" />
         <item itemvalue="Python.test" />
         <item itemvalue="Python.generateApiKey" />
       </list>
