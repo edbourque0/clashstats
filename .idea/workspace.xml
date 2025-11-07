@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="08130c95-e40a-4eff-916b-05872f0b417d" name="Changes" comment="Initialize Django project `clashstats_v2` with core app, basic configurations, and initial setup files.">
+    <list default="true" id="08130c95-e40a-4eff-916b-05872f0b417d" name="Changes" comment="Add endpoints, models, and logic for clan and member management.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clashstats/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clashstats/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clashstats/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -164,7 +162,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1762466725545</updated>
-      <workItem from="1762466726547" duration="18151000" />
+      <workItem from="1762466726547" duration="18370000" />
     </task>
     <task id="LOCAL-00001" summary="Initialize Django project `clashstats_v2` with core app, basic configurations, and initial setup files.">
       <option name="closed" value="true" />
@@ -174,7 +172,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762471628858</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Add endpoints, models, and logic for clan and member management.">
+      <option name="closed" value="true" />
+      <created>1762488727310</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1762488727310</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -193,7 +199,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initialize Django project `clashstats_v2` with core app, basic configurations, and initial setup files." />
-    <option name="LAST_COMMIT_MESSAGE" value="Initialize Django project `clashstats_v2` with core app, basic configurations, and initial setup files." />
+    <MESSAGE value="Add endpoints, models, and logic for clan and member management." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add endpoints, models, and logic for clan and member management." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

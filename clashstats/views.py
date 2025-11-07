@@ -36,7 +36,7 @@ def searchClan(request):
         return JsonResponse({'message':'Method not allowed'}, status=405)
 
 @csrf_exempt
-def refresh(request):
+def addClan(request):
     if request.method == 'POST':
         clantag = request.POST.get('clantag')
 
@@ -84,19 +84,3 @@ def addMembers(request):
 
     else:
         return JsonResponse({'message':'Method Not Allowed'}, status=405)
-
-# @csrf_exempt
-# def addBattleLog(request):
-#     if request.method == 'POST':
-#         playertag = request.POST.get('playertag')
-#
-#         r = requests.get(url=f'{url}players/%23{playertag[1:]}/battlelog', headers=headers)
-#         battles = r.json()
-#
-#         for battle in battles:
-#
-#
-#         return JsonResponse({'message': 'Members added successfully'}, status=200)
-#
-#     else:
-#         return JsonResponse({'message':'Method Not Allowed'}, status=405)
