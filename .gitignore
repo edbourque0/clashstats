@@ -1,5 +1,6 @@
 /.venv/
+/prod.env
 /.env
-/db.sqlite3
-/response_1762487055417.json
 /test.py
+/dev-compose.yaml
+/.idea

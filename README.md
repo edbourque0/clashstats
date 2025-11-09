@@ -38,7 +38,7 @@ A Django-based REST API for tracking and analyzing Clash Royale clan statistics,
    
    Copy `.env.example` to `.env` and fill in your credentials:
    ```bash
-   cp .env.example .env
+   cp prod.env.example prod.env
    ```
    
    Edit `.env`:

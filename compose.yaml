@@ -1,0 +1,28 @@
+services:
+  clashstats:
+    image: https://ghcr.io/edbourque0/clashstats:latest
+    ports:
+      - '8000:8000'
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    links:
+      - postgres
+    volumes:
+      - clashstats:/app
+
+  postgres:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - '5432:5432'
+    volumes:
+      - clashstats_postgres:/var/lib/postgresql
+
+volumes:
+  clashstats_postgres:
+  clashstats:

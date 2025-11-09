@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:postgresql://10.0.0.228:65432/clashstats</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="clashstats local" uuid="ccc7f3da-0692-4078-bbe6-0b8a35f5767a">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/clashstats</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
