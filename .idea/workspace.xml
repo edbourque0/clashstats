@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="08130c95-e40a-4eff-916b-05872f0b417d" name="Changes" comment="Edit docker compose">
+    <list default="true" id="08130c95-e40a-4eff-916b-05872f0b417d" name="Changes" comment="Initialize ClashStats migrations with models for Clans, Members, and BattleLogs. Add ELO fields and logic adjustments, optimize BattleLogs, and refine Member ELO defaults.">
       <change afterPath="$PROJECT_DIR$/dev-compose.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/compose.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -326,7 +325,23 @@
       <option name="project" value="LOCAL" />
       <updated>1762715169630</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Update JDBC URL port in dataSources.xml and refine Docker setup with additional migrations step">
+      <option name="closed" value="true" />
+      <created>1762715507105</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1762715507105</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Initialize ClashStats migrations with models for Clans, Members, and BattleLogs. Add ELO fields and logic adjustments, optimize BattleLogs, and refine Member ELO defaults.">
+      <option name="closed" value="true" />
+      <created>1762716433040</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1762716433040</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -366,7 +381,9 @@
     <MESSAGE value="Modularize view logic by introducing helper functions for clan, member, and battle log operations. Add Docker and compose files for environment setup. Update `.env` handling and improve documentation clarity." />
     <MESSAGE value="Implement automated clan refresh functionality using Django-cron. Update Dockerfile to integrate cron, modify `.env` for additional variables, and introduce GitHub Actions workflow for CI/CD and deployment." />
     <MESSAGE value="Edit docker compose" />
-    <option name="LAST_COMMIT_MESSAGE" value="Edit docker compose" />
+    <MESSAGE value="Update JDBC URL port in dataSources.xml and refine Docker setup with additional migrations step" />
+    <MESSAGE value="Initialize ClashStats migrations with models for Clans, Members, and BattleLogs. Add ELO fields and logic adjustments, optimize BattleLogs, and refine Member ELO defaults." />
+    <option name="LAST_COMMIT_MESSAGE" value="Initialize ClashStats migrations with models for Clans, Members, and BattleLogs. Add ELO fields and logic adjustments, optimize BattleLogs, and refine Member ELO defaults." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/clashstats_v2$test.coverage" NAME="test Coverage Results" MODIFIED="1762539281817" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
