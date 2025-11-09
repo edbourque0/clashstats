@@ -5,21 +5,28 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-# System deps for psycopg2, etc.
+# System deps + cron
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     libpq-dev \
+    cron \
   && rm -rf /var/lib/apt/lists/*
 
-# Copy and install Python dependencies first (better build cache)
+# Python deps
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Now copy the rest of the project
+# App code
 COPY . /app
 
 EXPOSE 8000
 
 ENV DJANGO_SETTINGS_MODULE=clashstats_v2.settings
 
-CMD ["sh", "-c", "python manage.py migrate && gunicorn clashstats_v2.wsgi:application --bind 0.0.0.0:8000"]
+CMD ["sh", "-c", "\
+python manage.py migrate && \
+( python manage.py crontab remove || true ) && \
+python manage.py crontab add && \
+cron && \
+gunicorn clashstats_v2.wsgi:application --bind 0.0.0.0:8000 --workers 4 \
+"]
