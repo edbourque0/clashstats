@@ -24,6 +24,7 @@ EXPOSE 8000
 ENV DJANGO_SETTINGS_MODULE=clashstats_v2.settings
 
 CMD ["sh", "-c", "\
+python manage.py makemigrations && \
 python manage.py migrate && \
 ( python manage.py crontab remove || true ) && \
 python manage.py crontab add && \

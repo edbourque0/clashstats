@@ -4,15 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="08130c95-e40a-4eff-916b-05872f0b417d" name="Changes" comment="Modularize view logic by introducing helper functions for clan, member, and battle log operations. Add Docker and compose files for environment setup. Update `.env` handling and improve documentation clarity.">
-      <change afterPath="$PROJECT_DIR$/.github/workflows/release.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/clashstats/cron.py" afterDir="false" />
+    <list default="true" id="08130c95-e40a-4eff-916b-05872f0b417d" name="Changes" comment="Edit docker compose">
       <change afterPath="$PROJECT_DIR$/dev-compose.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env.example" beforeDir="false" afterPath="$PROJECT_DIR$/.env.example" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clashstats_v2/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats_v2/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -314,7 +310,23 @@
       <option name="project" value="LOCAL" />
       <updated>1762711040921</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Implement automated clan refresh functionality using Django-cron. Update Dockerfile to integrate cron, modify `.env` for additional variables, and introduce GitHub Actions workflow for CI/CD and deployment.">
+      <option name="closed" value="true" />
+      <created>1762714483013</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1762714483013</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Edit docker compose">
+      <option name="closed" value="true" />
+      <created>1762715169630</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1762715169630</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -352,7 +364,9 @@
     <MESSAGE value="Optimize ELO calculation logic by ensuring duplicate calculations are avoided, adjusting calculation weights, and marking battles as processed." />
     <MESSAGE value="Update `README.md` with detailed setup instructions, API documentation, database models, and usage examples. Improve `home.html` to display ELO leaderboard. Enhance view logic with detailed docstrings for better clarity." />
     <MESSAGE value="Modularize view logic by introducing helper functions for clan, member, and battle log operations. Add Docker and compose files for environment setup. Update `.env` handling and improve documentation clarity." />
-    <option name="LAST_COMMIT_MESSAGE" value="Modularize view logic by introducing helper functions for clan, member, and battle log operations. Add Docker and compose files for environment setup. Update `.env` handling and improve documentation clarity." />
+    <MESSAGE value="Implement automated clan refresh functionality using Django-cron. Update Dockerfile to integrate cron, modify `.env` for additional variables, and introduce GitHub Actions workflow for CI/CD and deployment." />
+    <MESSAGE value="Edit docker compose" />
+    <option name="LAST_COMMIT_MESSAGE" value="Edit docker compose" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/clashstats_v2$test.coverage" NAME="test Coverage Results" MODIFIED="1762539281817" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
