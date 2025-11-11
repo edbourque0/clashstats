@@ -76,12 +76,23 @@ def home(request):
     now = timezone.now()
     start_of_week = now - timedelta(days=now.weekday())
 
+    if BattleLogs.objects.all().count() > 0:
+      first_match = timezone.now()
+    else:
+        first_match = BattleLogs.objects.order_by('battleTime')[0].battleTime
+
+    if Refresh.objects.all().count() > 0:
+        last_refresh = timezone.now()
+    else:
+        last_refresh = Refresh.objects.order_by('-timestamp')[0].timestamp
+
+
     context = {
         "members": members,
         "weekly_members": weekly_members,
         "last_monday": last_monday,
-        'first_match': BattleLogs.objects.order_by('battleTime')[0].battleTime,
-        'last_refresh': Refresh.objects.order_by('-timestamp')[0].timestamp,
+        'first_match': first_match,
+        'last_refresh': last_refresh,
         'battlecount': BattleLogs.objects.all().count(),
         'weeklybattlecount': BattleLogs.objects.filter(battleTime__gte=start_of_week,battleTime__lte=now,).count()
     }
