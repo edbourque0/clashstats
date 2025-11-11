@@ -36,10 +36,9 @@ class BattleLogs(models.Model):
     loser1 = models.ForeignKey(Members, on_delete=models.CASCADE, null=False, related_name='loser12member')
     loser2 = models.ForeignKey(Members, on_delete=models.CASCADE, null=False, related_name='loser22member')
     elocalculated = models.BooleanField(null=False, default=False)
-    weeklyelocalculated = models.DateTimeField(null=False, default=timezone.now())
 
 class Refresh(models.Model):
-    id = models.UUIDField(primary_key=True, null=False, default=uuid.uuid4())
-    timestamp = models.DateTimeField(null=False, default=timezone.now())
+    id = models.UUIDField(primary_key=True, null=False, default=uuid.uuid4)
+    timestamp = models.DateTimeField(null=False, default=timezone.now)
     clanTag = models.ForeignKey(Clans, on_delete=models.CASCADE, null=False, related_name='refresh2clan')
     source = models.CharField(null=False, default='api')
