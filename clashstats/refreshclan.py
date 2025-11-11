@@ -1,10 +1,10 @@
-from .models import Members
+from .models import Members, Refresh, Clans
 from .updateelo import updateelofcn
 from .clan import createclan
 from .member import createmembers
 from .battlelog import createbattlelog
 
-def refreshclanfcn(clantag, url, headers):
+def refreshclanfcn(clantag, url, headers, source='api'):
     """
     Handles the refreshing of clan data, clan member details, and their battlelogs
     by making API requests. This function is primarily triggered by a POST request
@@ -31,3 +31,8 @@ def refreshclanfcn(clantag, url, headers):
 
     """ Update ELO """
     updateelofcn()
+
+    Refresh.objects.create(
+        clanTag=Clans.objects.get(tag=clantag),
+        source=source
+    )

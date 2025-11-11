@@ -2,7 +2,7 @@ import os
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from dotenv import load_dotenv
-from .models import Members
+from .models import Members, BattleLogs, Refresh
 from django.shortcuts import render
 from .clan import createclan
 from .member import createmembers
@@ -10,6 +10,9 @@ from .battlelog import createbattlelog
 from .searchlan import searchclanfnc
 from .updateelo import updateelofcn
 from .refreshclan import refreshclanfcn
+from django.db.models import Q
+from django.utils import timezone
+from datetime import timedelta
 
 load_dotenv()
 
@@ -32,11 +35,57 @@ def home(request):
     :return: An HTTP response object with the rendered "home.html" template,
         including the filtered and ordered list of member data.
     """
-    members = (
-        Members.objects.only("name", "elo").exclude(elo=1000)
-        .order_by("-elo", "name")  # highest ELO first, tie-break by name
-    )
-    return render(request, "home.html", {"members": members})
+    members = list(Members.objects.all().order_by('-elo').exclude(elo=1000))
+
+    # Global W/L
+    for m in members:
+        m.wins = BattleLogs.objects.filter(
+            Q(winner1=m) | Q(winner2=m)
+        ).count()
+        m.losses = BattleLogs.objects.filter(
+            Q(loser1=m) | Q(loser2=m)
+        ).count()
+
+    # === Weekly leaderboard ===
+    now = timezone.now()
+    # Monday = 0 ... Sunday = 6
+    days_since_monday = now.weekday()
+    last_monday = now - timedelta(days=days_since_monday)
+
+    weekly_members = []
+    for m in members:
+        weekly_wins = BattleLogs.objects.filter(
+            Q(winner1=m) | Q(winner2=m),
+            battleTime__gte=last_monday,
+        ).count()
+
+        weekly_losses = BattleLogs.objects.filter(
+            Q(loser1=m) | Q(loser2=m),
+            battleTime__gte=last_monday,
+        ).count()
+
+        # Only show players who played this week
+        if weekly_wins or weekly_losses:
+            m.weekly_wins = weekly_wins
+            m.weekly_losses = weekly_losses
+            weekly_members.append(m)
+
+    # Sort weekly leaderboard by weekly wins (then ELO as tiebreaker)
+    weekly_members.sort(key=lambda x: (x.weekly_wins, x.elo), reverse=True)
+
+    now = timezone.now()
+    start_of_week = now - timedelta(days=now.weekday())
+
+    context = {
+        "members": members,
+        "weekly_members": weekly_members,
+        "last_monday": last_monday,
+        'first_match': BattleLogs.objects.order_by('battleTime')[0].battleTime,
+        'last_refresh': Refresh.objects.order_by('-timestamp')[0].timestamp,
+        'battlecount': BattleLogs.objects.all().count(),
+        'weeklybattlecount': BattleLogs.objects.filter(battleTime__gte=start_of_week,battleTime__lte=now,).count()
+    }
+    return render(request, "home.html", context)
 
 @csrf_exempt
 def searchClan(request):

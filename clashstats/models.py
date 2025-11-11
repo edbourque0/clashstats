@@ -1,10 +1,7 @@
-from django.db import models
-import requests
-from django.db.models import CASCADE
 import uuid
-
-
-# Create your models here.
+from django.db import models
+from django.db.models import CASCADE
+from django.utils import timezone
 
 class Clans(models.Model):
     tag = models.CharField(max_length=12, primary_key=True)
@@ -27,6 +24,7 @@ class Members(models.Model):
     donations = models.PositiveIntegerField()
     donationsReceived = models.PositiveIntegerField()
     elo = models.PositiveIntegerField(null=False, default=1000)
+    weeklyelo = models.PositiveIntegerField(null=False, default=1000)
 
 class BattleLogs(models.Model):
     id = models.CharField(primary_key=True, editable=False)
@@ -38,3 +36,10 @@ class BattleLogs(models.Model):
     loser1 = models.ForeignKey(Members, on_delete=models.CASCADE, null=False, related_name='loser12member')
     loser2 = models.ForeignKey(Members, on_delete=models.CASCADE, null=False, related_name='loser22member')
     elocalculated = models.BooleanField(null=False, default=False)
+    weeklyelocalculated = models.DateTimeField(null=False, default=timezone.now())
+
+class Refresh(models.Model):
+    id = models.UUIDField(primary_key=True, null=False, default=uuid.uuid4())
+    timestamp = models.DateTimeField(null=False, default=timezone.now())
+    clanTag = models.ForeignKey(Clans, on_delete=models.CASCADE, null=False, related_name='refresh2clan')
+    source = models.CharField(null=False, default='api')

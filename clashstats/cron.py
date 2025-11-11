@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 # Load .env in local/dev; in Docker you can still just use env vars
 load_dotenv()
 
-API_URL = "https://api.clashroyale.com/v1/"
+url = "https://api.clashroyale.com/v1/"
 
 
 def _get_headers():
@@ -32,5 +32,5 @@ def refresh_default_clan():
         return
 
     logger.info("Refreshing clan %s via refreshclanfcn", clantag)
-    refreshclanfcn(clantag, API_URL, headers)
+    refreshclanfcn(clantag, url, headers, source='cron')
     logger.info("Clan %s refresh complete", clantag)
