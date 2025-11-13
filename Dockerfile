@@ -26,7 +26,7 @@ ENV DJANGO_SETTINGS_MODULE=clashstats_v2.settings
 CMD ["sh", "-c", "\
   python manage.py makemigrations && \
   python manage.py migrate && \
-  service cron start && \
+  cron && \
   python manage.py crontab add && \
   gunicorn clashstats_v2.wsgi:application --bind 0.0.0.0:8000 --workers 4 \
 "]

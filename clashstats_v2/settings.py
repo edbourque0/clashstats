@@ -133,4 +133,4 @@ CRONJOBS = [
 ]
 
 CRONTAB_LOCK_JOBS = True
-CRONTAB_COMMAND_SUFFIX = '2>&1'
+CRONTAB_COMMAND_SUFFIX = '>> /var/log/django-cron.log 2>&1'

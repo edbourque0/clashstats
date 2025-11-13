@@ -1,6 +1,6 @@
 services:
   clashstats:
-    image: 3ba70c0d5598776b8c6dc02d436f32d436bd1845a9af1152f2648ba36ca423df
+    image: a5e2c308cb6db847c7df52dab2178f76c52af958b12725339676439b101d26d0
     ports:
       - '8000:8000'
     env_file:
