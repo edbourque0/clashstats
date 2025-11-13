@@ -1,18 +1,12 @@
 import logging
 import os
-
 from django.conf import settings
 from dotenv import load_dotenv
-
 from .refreshclan import refreshclanfcn
-
 logger = logging.getLogger(__name__)
-
-# Load .env in local/dev; in Docker you can still just use env vars
 load_dotenv()
 
 url = "https://api.clashroyale.com/v1/"
-
 
 def _get_headers():
     api_key = os.getenv("CLASH_API_KEY")

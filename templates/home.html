@@ -102,53 +102,58 @@
 {#        {% endif %}#}
 {#      </div>#}
 
-  <div class="card bg-dark border-secondary shadow-lg mx-auto">
-      <div class="card-header border-secondary d-flex justify-content-between align-items-center">
-        <span class="h5 m-2">
-          <i class="fa-solid fa-ranking-star me-2"></i>All-time
-        </span>
-          <small class="text-muted">
-              From {{ first_match|date:"Y-m-d" }}
-        </small>
-      </div>
-      <div class="card-body">
-        <div class="table-responsive">
-          <table class="table table-dark table-striped text-center">
-            <thead>
-              <tr>
-                <th class="rank-col"><i class="fa-solid fa-hashtag"></i></th>
-                <th class="text-start text-muted"><i class="fa-solid fa-user"></i></th>
-                <th><i class="fa-solid fa-crown text-muted"></i></th>
-                <th><i class="fa-solid fa-skull text-muted"></i></th>
-                <th><i class="fa-solid fa-trophy text-muted"></i></th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for member in members %}
-              <tr>
-                <td class="rank-col">{{ forloop.counter }}</td>
-                <td class="text-start">{{ member.name }}</td>
-                <td>{{ member.wins }}</td>
-                <td>{{ member.losses }}</td>
-                <td>
-                  <span class="badge text-bg-light">
-                    {{ member.elo }}
-                  </span>
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-            <div class="text-end text-muted">
+   <div class="card bg-dark border-secondary shadow-lg mx-auto">
+          <div class="card-header border-secondary d-flex justify-content-between align-items-center">
+            <span class="h5 m-2">
+              <i class="fa-solid fa-ranking-star me-2"></i>All-time
+            </span>
+              <small class="text-muted">
+                  From {{ first_match|date:"Y-m-d" }}
+            </small>
+          </div>
+          <div class="card-body">
+            {% if members %}
+            <div class="table-responsive">
+              <table class="table table-dark table-striped text-center">
+                <thead>
+                  <tr>
+                    <th class="rank-col"><i class="fa-solid fa-hashtag"></i></th>
+                    <th class="text-start text-muted"><i class="fa-solid fa-user"></i></th>
+                    <th><i class="fa-solid fa-crown text-muted"></i></th>
+                    <th><i class="fa-solid fa-skull text-muted"></i></th>
+                    <th><i class="fa-solid fa-trophy text-muted"></i></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for member in members %}
+                  <tr>
+                    <td class="rank-col">{{ forloop.counter }}</td>
+                    <td class="text-start">{{ member.name }}</td>
+                    <td>{{ member.wins }}</td>
+                    <td>{{ member.losses }}</td>
+                    <td>
+                      <span class="badge text-bg-light">
+                        {{ member.elo }}
+                      </span>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              <div class="text-end text-muted">
                 {{ battlecount }} battles
               </div>
+            </div>
+            {% else %}
+              <p class="text-center text-muted mb-0">
+                No battles recorded
+              </p>
+            {% endif %}
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="text-center text-secondary m-3">
-        As of {{ last_refresh|localtime|date:"Y-m-d H:i" }}
-    </div>
-    </div>
+            <div class="text-center text-secondary m-3">
+                As of {{ last_refresh|localtime|date:"Y-m-d H:i" }}
+            </div>
 
   </main>
 

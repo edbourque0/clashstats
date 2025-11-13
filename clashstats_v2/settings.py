@@ -131,5 +131,8 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CRONJOBS = [
-    (os.getenv('REFRESH_CRON'), 'cron.refresh_default_clan'),
+    (os.getenv('REFRESH_CRON', '0 */6 * * *'), 'clashstats.cron.refresh_default_clan', '>> /var/log/cron.log 2>&1'),
 ]
+
+CRONTAB_LOCK_JOBS = True
+CRONTAB_COMMAND_SUFFIX = '2>&1'

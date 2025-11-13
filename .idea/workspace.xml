@@ -4,9 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="08130c95-e40a-4eff-916b-05872f0b417d" name="Changes" comment="Remove initial migrations and add Docker compose file for service setup with PostgreSQL health checks and dependencies. Refactor `Refresh` model defaults. Fix migration error">
+    <list default="true" id="08130c95-e40a-4eff-916b-05872f0b417d" name="Changes" comment="Enhance home page styling with custom fonts and header, update leaderboard display logic, and fix empty dataset handling in views.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clashstats/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clashstats/cron.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats/cron.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clashstats_v2/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats_v2/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev-compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/dev-compose.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/home.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,7 +31,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="Elo" />
+        <entry key="$PROJECT_DIR$" value="weeklyelo" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -117,7 +121,7 @@
       <recent name="C:\Users\edbou\Documents\Code\clashstats_v2\clashstats_v2" />
     </key>
   </component>
-  <component name="RunManager" selected="Django Server.clashstats_v2">
+  <component name="RunManager" selected="Docker.dev-compose.yaml: Compose Deployment">
     <configuration name="generateApiKey" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="clashstats_v2" />
       <option name="ENV_FILES" value="" />
@@ -174,13 +178,14 @@
         <env name="DJANGO_SETTINGS_MODULE" value="clashstats_v2.settings" />
       </envs>
       <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.13 (clashstats_v2)" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="launchJavascriptDebuger" value="false" />
       <option name="port" value="8000" />
-      <option name="host" value="" />
+      <option name="host" value="192.168.2.151" />
       <option name="additionalOptions" value="" />
       <option name="browserUrl" value="" />
       <option name="runTestServer" value="false" />
@@ -228,13 +233,21 @@
       </deployment>
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Django Server.clashstats_v2" />
+      <item itemvalue="Docker.dev-compose.yaml.postgres: Compose Deployment" />
+      <item itemvalue="Docker.dev-compose.yaml: Compose Deployment" />
+      <item itemvalue="Docker.Dockerfile" />
+      <item itemvalue="Python.generateApiKey" />
+      <item itemvalue="Python.test" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Docker.dev-compose.yaml.postgres: Compose Deployment" />
-        <item itemvalue="Docker.dev-compose.yaml: Compose Deployment" />
-        <item itemvalue="Docker.Dockerfile" />
         <item itemvalue="Python.test" />
         <item itemvalue="Python.generateApiKey" />
+        <item itemvalue="Docker.Dockerfile" />
+        <item itemvalue="Docker.dev-compose.yaml: Compose Deployment" />
+        <item itemvalue="Docker.dev-compose.yaml.postgres: Compose Deployment" />
       </list>
     </recent_temporary>
   </component>
@@ -386,7 +399,23 @@
       <option name="project" value="LOCAL" />
       <updated>1762826205073</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Refactor `first_match` and `last_refresh` logic in views to handle empty datasets.">
+      <option name="closed" value="true" />
+      <created>1762828228516</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1762828228516</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Enhance home page styling with custom fonts and header, update leaderboard display logic, and fix empty dataset handling in views.">
+      <option name="closed" value="true" />
+      <created>1762830489458</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1762830489458</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -432,7 +461,9 @@
     <MESSAGE value="Set `DEBUG` to `False` in settings for production readiness." />
     <MESSAGE value="WIP : Implement weekly ELO leaderboard and refine models, views, and cron logic for enhanced battle tracking and ranking functionality." />
     <MESSAGE value="Remove initial migrations and add Docker compose file for service setup with PostgreSQL health checks and dependencies. Refactor `Refresh` model defaults. Fix migration error" />
-    <option name="LAST_COMMIT_MESSAGE" value="Remove initial migrations and add Docker compose file for service setup with PostgreSQL health checks and dependencies. Refactor `Refresh` model defaults. Fix migration error" />
+    <MESSAGE value="Refactor `first_match` and `last_refresh` logic in views to handle empty datasets." />
+    <MESSAGE value="Enhance home page styling with custom fonts and header, update leaderboard display logic, and fix empty dataset handling in views." />
+    <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/clashstats_v2$test.coverage" NAME="test Coverage Results" MODIFIED="1762539281817" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
