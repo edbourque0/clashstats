@@ -1,6 +1,6 @@
 services:
   clashstats:
-    image: d51fe76e59705ded1349116a83437c2b19588011b229cd590941a3dccaff02c1
+    image: 3ba70c0d5598776b8c6dc02d436f32d436bd1845a9af1152f2648ba36ca423df
     ports:
       - '8000:8000'
     env_file:
@@ -10,8 +10,6 @@ services:
         condition: service_healthy
     links:
       - postgres
-    volumes:
-      - clashstats:/app
 
   postgres:
     image: postgres:18
@@ -31,4 +29,3 @@ services:
 
 volumes:
   clashstats_postgres:
-  clashstats:
