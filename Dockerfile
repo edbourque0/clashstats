@@ -27,6 +27,7 @@ CMD ["sh", "-c", "\
   python manage.py makemigrations && \
   python manage.py migrate && \
   python manage.py crontab add && \
-  cron && \
+  python manage.py crontab show && \
+  service cron start && \
   gunicorn clashstats_v2.wsgi:application --bind 0.0.0.0:8000 --workers 4 \
 "]
