@@ -128,6 +128,10 @@ STATIC_URL = 'static/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
+API_KEY = os.getenv("CLASH_API_KEY", "")
+
+CRONTAB_COMMAND_PREFIX = f'CLASH_API_KEY="{API_KEY}" '
+
 CRONJOBS = [
     (os.getenv('REFRESH_CRON', '* */6 * * *'), 'clashstats.cron.refresh_default_clan'),
 ]
