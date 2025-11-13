@@ -129,7 +129,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 CRONJOBS = [
-    (os.getenv('REFRESH_CRON', '0 */6 * * *'), 'clashstats.cron.refresh_default_clan')
+    ('*/1 * * * *', 'clashstats.cron.refresh_default_clan'),
 ]
 
 CRONTAB_LOCK_JOBS = True
