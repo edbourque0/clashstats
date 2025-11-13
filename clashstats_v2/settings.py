@@ -128,10 +128,8 @@ STATIC_URL = 'static/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 CRONJOBS = [
-    (os.getenv('REFRESH_CRON', '0 */6 * * *'), 'clashstats.cron.refresh_default_clan', '>> /var/log/cron.log 2>&1'),
+    (os.getenv('REFRESH_CRON', '0 */6 * * *'), 'clashstats.cron.refresh_default_clan')
 ]
 
 CRONTAB_LOCK_JOBS = True
