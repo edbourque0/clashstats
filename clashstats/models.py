@@ -24,7 +24,6 @@ class Members(models.Model):
     donations = models.PositiveIntegerField()
     donationsReceived = models.PositiveIntegerField()
     elo = models.PositiveIntegerField(null=False, default=1000)
-    weeklyelo = models.PositiveIntegerField(null=False, default=1000)
 
 class BattleLogs(models.Model):
     id = models.CharField(primary_key=True, editable=False)
@@ -42,3 +41,11 @@ class Refresh(models.Model):
     timestamp = models.DateTimeField(null=False, default=timezone.now)
     clanTag = models.ForeignKey(Clans, on_delete=models.CASCADE, null=False, related_name='refresh2clan')
     source = models.CharField(null=False, default='api')
+
+class EloHistory(models.Model):
+    id = models.UUIDField(primary_key=True, null=False, default=uuid.uuid4)
+    member = models.ForeignKey(Members, on_delete=models.CASCADE, related_name="elo_history")
+    battle = models.ForeignKey(BattleLogs, on_delete=models.CASCADE, related_name="elo_history")
+    battleTime = models.DateTimeField()
+    elo_before = models.FloatField()
+    elo_after = models.FloatField()
