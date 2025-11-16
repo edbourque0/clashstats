@@ -2,8 +2,6 @@ from .models import BattleLogs, Members
 from datetime import timedelta
 from django.utils import timezone
 
-from .updateweeklyelo import updateweeklyelo
-
 
 def updateelofcn():
     """
@@ -45,12 +43,3 @@ def updateelofcn():
 
             """ Mark battle as elo-calculated """
             BattleLogs.objects.filter(id=battle.id).update(elocalculated=True)
-
-    """ Update the weekly elo """
-    now = timezone.now()
-    start_of_week = now - timedelta(days=now.weekday())
-    weeklysortedbattles = BattleLogs.objects.filter(
-        battleTime__gte=start_of_week,
-        battleTime__lte=now,
-    ).order_by("battleTime")
-    updateweeklyelo(weeklysortedbattles)
