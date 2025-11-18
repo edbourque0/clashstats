@@ -19,15 +19,15 @@ RUN pip install --no-cache-dir -r requirements.txt
 # App code
 COPY . /app
 
+# Create entrypoint script
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+# Create log file for cron
+RUN touch /var/log/cron.log
+
 EXPOSE 8000
 
 ENV DJANGO_SETTINGS_MODULE=clashstats_v2.settings
 
-CMD ["sh", "-c", "\
-    python manage.py makemigrations && \
-    python manage.py migrate && \
-    python manage.py crontab remove || true && \
-    python manage.py crontab add && \
-    service cron start && \
-    gunicorn clashstats_v2.wsgi:application --bind 0.0.0.0:8000 --workers 4 \
-"]
+ENTRYPOINT ["/docker-entrypoint.sh"]

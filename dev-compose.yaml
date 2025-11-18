@@ -1,6 +1,6 @@
 services:
   clashstats:
-    image: a5e2c308cb6db847c7df52dab2178f76c52af958b12725339676439b101d26d0
+    image: ghcr.io/edbourque0/clashstats_v2:latest
     ports:
       - '8000:8000'
     env_file:
