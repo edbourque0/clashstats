@@ -52,8 +52,8 @@ jobs:
           platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          no-cache: true
+          pull: true
 
       - name: Trigger Portainer webhook
         run: curl -fsS -X POST "$PORTAINER_WEBHOOK_URL"
