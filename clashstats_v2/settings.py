@@ -131,7 +131,7 @@ STATIC_URL = 'static/'
 API_KEY = os.getenv("CLASH_API_KEY")
 
 CRONJOBS = [
-    (os.getenv('REFRESH_CRON', '* */6 * * *'), 'clashstats.cron.refresh_default_clan'),
+    ('*/1 * * * *', 'django.core.management.call_command', ['refresh_clan'], '>> /var/log/django-cron.log 2>&1'),
 ]
 
 CRONTAB_LOCK_JOBS = True
