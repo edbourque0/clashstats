@@ -19,9 +19,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 # App code
 COPY . /app
 
-# Create entrypoint script
+# Create entrypoint script and fix line endings
 COPY docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
+RUN sed -i 's/\r$//' /docker-entrypoint.sh && \
+    chmod +x /docker-entrypoint.sh
 
 # Create log file for cron
 RUN touch /var/log/cron.log
