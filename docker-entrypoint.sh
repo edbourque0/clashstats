@@ -5,8 +5,14 @@ echo "Running migrations..."
 python manage.py makemigrations --noinput
 python manage.py migrate --noinput
 
-echo "Setting up cron jobs..."
+echo "Setting up cron jobs with environment variables..."
+# Remove old cron jobs
 python manage.py crontab remove || true
+
+# Export all environment variables to a file that cron can source
+printenv | grep -v "no_proxy" > /etc/environment
+
+# Add cron jobs
 python manage.py crontab add
 
 echo "Installed cron jobs:"
