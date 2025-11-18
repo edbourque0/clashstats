@@ -5,6 +5,8 @@ echo "Running migrations..."
 python manage.py makemigrations --noinput
 python manage.py migrate --noinput
 
+printenv > /etc/environment
+
 echo "Testing refresh_clan command..."
 python manage.py refresh_clan || echo "Initial refresh test completed"
 
