@@ -12,12 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
-import os
-load_dotenv()
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+load_dotenv()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -128,13 +124,12 @@ STATIC_URL = 'static/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
-API_KEY = os.getenv("CLASH_API_KEY", "")
-
-CRONTAB_COMMAND_PREFIX = f'CLASH_API_KEY="{API_KEY}" '
+API_KEY = os.getenv("CLASH_API_KEY")
 
 CRONJOBS = [
-    (os.getenv('REFRESH_CRON', '* */6 * * *'), 'clashstats.cron.refresh_default_clan'),
+    (os.getenv('REFRESH_CRON', '* */6 * * *'), 'django.core.management.call_command', ['refresh_clan']),
 ]
 
 CRONTAB_LOCK_JOBS = True
 CRONTAB_COMMAND_SUFFIX = '>> /var/log/django-cron.log 2>&1'
+CRONTAB_COMMAND_PREFIX = '. /etc/environment;'

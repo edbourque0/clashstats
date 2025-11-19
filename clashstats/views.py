@@ -18,7 +18,7 @@ load_dotenv()
 
 url = 'https://api.clashroyale.com/v1/'
 headers = {
-            "Authorization": "Bearer " + os.getenv('CLASH_API_KEY'),
+            "Authorization": "Bearer " + os.getenv('CLASH_API_KEY', ''),
         }
 
 def home(request):
