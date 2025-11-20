@@ -4,7 +4,8 @@ from .clan import createclan
 from .member import createmembers
 from .battlelog import createbattlelog
 
-def refreshclanfcn(clantag, url, headers, source='api'):
+
+def refreshclanfcn(clantag, url, headers, source="api"):
     """
     Handles the refreshing of clan data, clan member details, and their battlelogs
     by making API requests. This function is primarily triggered by a POST request
@@ -18,21 +19,10 @@ def refreshclanfcn(clantag, url, headers, source='api'):
     :return: JSON response indicating success or failure of the operation
     :rtype: JsonResponse
     """
-
-    """ Refresh clan """
     createclan(clantag, url, headers)
-
-    """ Refresh clan members """
     createmembers(clantag, url, headers)
-
-    """ Refresh battlelog """
-    for member in Members.objects.select_related('clanTag').all():
+    for member in Members.objects.select_related("clanTag").all():
         createbattlelog(member.tag, url, headers)
 
-    """ Update ELO """
     updateelofcn()
-
-    Refresh.objects.create(
-        clanTag=Clans.objects.get(tag=clantag),
-        source=source
-    )
+    Refresh.objects.create(clanTag=Clans.objects.get(tag=clantag), source=source)

@@ -1,6 +1,7 @@
 from .models import Clans
 import requests
 
+
 def createclan(clantag, url, headers):
     """
     Handles the addition of a clan to the database. It retrieves clan data
@@ -14,18 +15,19 @@ def createclan(clantag, url, headers):
              requests, or a JsonResponse with an error message and status 405
              for unsupported methods
     """
-
-    r = requests.get(url=f'{url}clans/%23{clantag[1:]}', headers=headers, params={'name': clantag})
+    r = requests.get(
+        url=f"{url}clans/%23{clantag[1:]}", headers=headers, params={"name": clantag}
+    )
     clan = r.json()
 
     Clans.objects.update_or_create(
-        tag=clan['tag'],
+        tag=clan["tag"],
         defaults={
-            'name': clan['name'],
-            'type': clan['type'],
-            'badgeId': clan['badgeId'],
-            'location': clan['location']['countryCode'],
-            'donationsPerWeek': clan['donationsPerWeek'],
-            'members': clan['members']
-        }
+            "name": clan["name"],
+            "type": clan["type"],
+            "badgeId": clan["badgeId"],
+            "location": clan["location"]["countryCode"],
+            "donationsPerWeek": clan["donationsPerWeek"],
+            "members": clan["members"],
+        },
     )

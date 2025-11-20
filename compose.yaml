@@ -1,17 +1,23 @@
 services:
-  clashstats:
-    image: ghcr.io/edbourque0/clashstats_v2:latest
+  app:
+    image: ghcr.io/edbourque0/clashstats:latest
     ports:
       - '8000:8000'
-    env_file:
-      - .env
+    environment:
+      - DB_NAME=clashstats
+      - DB_HOST=localhost
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASS=postgres
+      - CLASH_API_KEY=<api_key>
+      - REFRESH_CLAN_TAG=<clan_tag>
+      - REFRESH_CRON=* */6 * * *
     depends_on:
       postgres:
         condition: service_healthy
-    volumes:
-      - clashstats:/app
+    restart: unless-stopped
 
-  postgres:
+  db:
     image: postgres:18
     environment:
       POSTGRES_USER: ${DB_USER}
@@ -19,14 +25,14 @@ services:
       POSTGRES_DB: ${DB_NAME}
     ports:
       - '5432:5432'
-    volumes:
-      - clashstats_postgres:/var/lib/postgresql
+    restart: unless-stopped
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
       interval: 5s
       timeout: 5s
       retries: 5
+    volumes:
+      - clashstats_postgres:/var/lib/postgresql
 
 volumes:
   clashstats_postgres:
-  clashstats:

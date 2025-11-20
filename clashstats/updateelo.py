@@ -19,11 +19,11 @@ def updateelofcn():
     :return: JsonResponse indicating the success or failure of the operation.
     :rtype: JsonResponse
     """
-    sortedbattles = BattleLogs.objects.all().order_by('battleTime')
+    sortedbattles = BattleLogs.objects.all().order_by("battleTime")
 
     for battle in sortedbattles:
         if not battle.elocalculated:
-            """ Define common variables """
+            """Define common variables"""
             winnerselo = (battle.winner1.elo + battle.winner2.elo) / 2
             loserselo = (battle.loser1.elo + battle.loser2.elo) / 2
             winnersexpectedscore = 1 / (1 + 10 ** ((loserselo - winnerselo) / 400))

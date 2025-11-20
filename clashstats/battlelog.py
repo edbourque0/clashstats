@@ -7,7 +7,7 @@ import json
 def createbattlelog(playertag, url, headers):
     """
     Handles a request to add battle logs to the database. This function fetches battle details
-    from the Clash Royale API based on a player's tag provided in a HTTP POST request. It
+    from the Clash Royale API based on a player's tag provided in an HTTP POST request. It
     extracts and processes relevant battles to identify winners and losers for each eligible
     battle log. Validated and structured battle logs are stored in the database if unique.
 
@@ -24,27 +24,27 @@ def createbattlelog(playertag, url, headers):
     :rtype: JsonResponse
     """
 
-    r = requests.get(url=f'{url}players/%23{playertag[1:]}/battlelog', headers=headers)
+    r = requests.get(url=f"{url}players/%23{playertag[1:]}/battlelog", headers=headers)
     battles = r.json()
 
     for battle in battles:
-        if len(battle['team']) == 2:
+        if len(battle["team"]) == 2:
 
-            if battle['type'] == 'clanMate2v2':
+            if battle["type"] == "clanMate2v2":
                 winlose = defineWinnersLosers(battle)
 
-                # Check if battle log doesn't already exist
-                if not BattleLogs.objects.filter(id=winlose['hash']).exists():
+                if not BattleLogs.objects.filter(id=winlose["hash"]).exists():
                     BattleLogs.objects.create(
-                        id=winlose['hash'],
-                        type=battle['type'],
-                        battleTime=battle['battleTime'],
-                        gameMode=battle['gameMode']['name'],
-                        winner1=Members.objects.get(tag=winlose['winner1']),
-                        winner2=Members.objects.get(tag=winlose['winner2']),
-                        loser1=Members.objects.get(tag=winlose['loser1']),
-                        loser2=Members.objects.get(tag=winlose['loser2']),
+                        id=winlose["hash"],
+                        type=battle["type"],
+                        battleTime=battle["battleTime"],
+                        gameMode=battle["gameMode"]["name"],
+                        winner1=Members.objects.get(tag=winlose["winner1"]),
+                        winner2=Members.objects.get(tag=winlose["winner2"]),
+                        loser1=Members.objects.get(tag=winlose["loser1"]),
+                        loser2=Members.objects.get(tag=winlose["loser2"]),
                     )
+
 
 def defineWinnersLosers(battle):
     """
@@ -52,35 +52,41 @@ def defineWinnersLosers(battle):
     Args:
         battle (dict): json of the battle returned by the Clash Royale API
     """
-    team1crowns = battle['team'][0]['crowns']
-    team2crowns = battle['opponent'][0]['crowns']
+    team1crowns = battle["team"][0]["crowns"]
+    team2crowns = battle["opponent"][0]["crowns"]
 
     if team1crowns > team2crowns:
         winnersandlosers = {
-            'winner1': battle['team'][0]['tag'],
-            'winner2': battle['team'][1]['tag'],
-            'loser1': battle['opponent'][0]['tag'],
-            'loser2': battle['opponent'][1]['tag'],
-            'time': battle['battleTime']
+            "winner1": battle["team"][0]["tag"],
+            "winner2": battle["team"][1]["tag"],
+            "loser1": battle["opponent"][0]["tag"],
+            "loser2": battle["opponent"][1]["tag"],
+            "time": battle["battleTime"],
         }
 
         h = hashlib.sha256(
-            json.dumps(winnersandlosers, separators=(",", ":"), sort_keys=True).encode("utf-8")).hexdigest()
-        winnersandlosers['hash'] = h
+            json.dumps(winnersandlosers, separators=(",", ":"), sort_keys=True).encode(
+                "utf-8"
+            )
+        ).hexdigest()
+        winnersandlosers["hash"] = h
 
         return winnersandlosers
 
     else:
         winnersandlosers = {
-            'winner1': battle['opponent'][0]['tag'],
-            'winner2': battle['opponent'][1]['tag'],
-            'loser1': battle['team'][0]['tag'],
-            'loser2': battle['team'][1]['tag'],
-            'time': battle['battleTime']
+            "winner1": battle["opponent"][0]["tag"],
+            "winner2": battle["opponent"][1]["tag"],
+            "loser1": battle["team"][0]["tag"],
+            "loser2": battle["team"][1]["tag"],
+            "time": battle["battleTime"],
         }
 
         h = hashlib.sha256(
-            json.dumps(winnersandlosers, separators=(",", ":"), sort_keys=True).encode("utf-8")).hexdigest()
-        winnersandlosers['hash'] = h
+            json.dumps(winnersandlosers, separators=(",", ":"), sort_keys=True).encode(
+                "utf-8"
+            )
+        ).hexdigest()
+        winnersandlosers["hash"] = h
 
         return winnersandlosers
