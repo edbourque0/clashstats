@@ -56,3 +56,13 @@ class Refresh(models.Model):
         Clans, on_delete=models.CASCADE, null=False, related_name="refresh2clan"
     )
     source = models.CharField(null=False, default="api")
+
+class WeeklyElo(models.Model):
+    id = models.UUIDField(primary_key=True, null=False, default=uuid.uuid4)
+    member = models.ForeignKey(Members, on_delete=models.CASCADE, related_name="elo_history")
+    week = models.DateTimeField()
+    elo = models.PositiveIntegerField()
+
+    class Meta:
+        unique_together = ("member", "week")
+        ordering = ["-week", "-elo"]

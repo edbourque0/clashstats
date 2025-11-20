@@ -10,6 +10,7 @@ from .battlelog import createbattlelog
 from .searchclan import searchclanfnc
 from .updateelo import updateelofcn
 from .refreshclan import refreshclanfcn
+from .updateweeklyelo import updateweeklyelofcn
 from django.db.models import Q
 from django.utils import timezone
 from datetime import timedelta
@@ -157,6 +158,15 @@ def updateelo(request):
     if request.method == "GET":
         updateelofcn()
         return JsonResponse({"message": "Elo updated successfully"}, status=200)
+
+    else:
+        return JsonResponse({"message": "Method Not Allowed"}, status=405)
+
+@csrf_exempt
+def updateweeklyelo(request):
+    if request.method == "GET":
+        updateweeklyelofcn()
+        return JsonResponse({"message": "Weekly elo updated successfully"}, status=200)
 
     else:
         return JsonResponse({"message": "Method Not Allowed"}, status=405)

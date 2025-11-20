@@ -9,5 +9,6 @@ urlpatterns = [
     path('api/v1/clan', views.addClan, name='addClan'),
     path('api/v1/battlelog', views.addBattleLog, name='addBattleLog'),
     path('api/v1/refreshclan', views.refreshClan, name='refreshClan'),
-    path('api/v1/updateelo', views.updateelo, name='updateElo')
+    path('api/v1/updateelo', views.updateelo, name='updateElo'),
+    path('api/v1/updateweeklyelo', views.updateweeklyelo, name='updateWeeklyElo'),
 ]
