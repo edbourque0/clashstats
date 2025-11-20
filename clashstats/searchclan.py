@@ -1,6 +1,7 @@
 import requests
 from django.http import JsonResponse
 
+
 def searchclanfnc(name, url, headers):
     """
     Executes a clan search based on the provided name parameter in the POST request.
@@ -13,5 +14,5 @@ def searchclanfnc(name, url, headers):
         request method is not POST.
     :rtype: JsonResponse
     """
-    r = requests.get(url=f'{url}clans', headers=headers, params={'name': name})
+    r = requests.get(url=f"{url}clans", headers=headers, params={"name": name})
     return JsonResponse(r.json(), status=200)
