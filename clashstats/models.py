@@ -33,9 +33,7 @@ class Members(models.Model):
 
 class BattleLogs(models.Model):
     id = models.CharField(primary_key=True, editable=False)
-    type = models.CharField(max_length=50)
     battleTime = models.DateTimeField()
-    gameMode = models.CharField(max_length=25)
     winner1 = models.ForeignKey(
         Members, on_delete=models.CASCADE, null=False, related_name="winner12member"
     )
