@@ -36,9 +36,7 @@ def createbattlelog(playertag, url, headers):
                 if not BattleLogs.objects.filter(id=winlose["hash"]).exists():
                     BattleLogs.objects.create(
                         id=winlose["hash"],
-                        type=battle["type"],
                         battleTime=battle["battleTime"],
-                        gameMode=battle["gameMode"]["name"],
                         winner1=Members.objects.get(tag=winlose["winner1"]),
                         winner2=Members.objects.get(tag=winlose["winner2"]),
                         loser1=Members.objects.get(tag=winlose["loser1"]),
