@@ -1,100 +1,99 @@
-# python
-from collections import defaultdict
 from datetime import timedelta
-from functools import lru_cache
 from django.utils import timezone
-from .models import BattleLogs, WeeklyElo
+from .models import BattleLogs, WeeklyElo, Members
+from django.db.models.functions import TruncWeek
+import datetime
+from collections import defaultdict
 
-INITIAL_ELO = 1000
-K_FACTOR = 32
-
-def get_week_start(dt):
-    """
-    Returns Monday 00:00 (ISO week start) for a datetime, keeping tz.
-    """
+def getweek(dt):
     if timezone.is_naive(dt):
         dt = timezone.make_aware(dt, timezone.get_default_timezone())
 
     dt = timezone.localtime(dt)
     monday = dt - timedelta(days=dt.weekday())
-    return monday.replace(hour=0, minute=0, second=0, microsecond=0)
-
-
-def update_elo(rating_a, rating_b, result_a, k=K_FACTOR):
-    """
-    Simple Elo update for one game.
-    result_a: 1 = A wins, 0.5 = draw, 0 = A loses
-    Returns (new_rating_a, new_rating_b).
-    """
-    expected_a = 1 / (1 + 10 ** ((rating_b - rating_a) / 400))
-    expected_b = 1 - expected_a
-
-    new_a = rating_a + k * (result_a - expected_a)
-    new_b = rating_b + k * ((1 - result_a) - expected_b)
-
-    return new_a, new_b
-
-
-@lru_cache(maxsize=None)
-def _starting_rating(member_id, week_start):
-    previous = (
-        WeeklyElo.objects.filter(member_id=member_id, week__lt=week_start)
-        .order_by("-week")
-        .values_list("elo", flat=True)
-        .first()
-    )
-    return previous if previous is not None else INITIAL_ELO
-
+    sunday = monday + timedelta(days=6)
+    return {'start':monday.replace(hour=0, minute=0, second=0, microsecond=0), 'end':sunday.replace(hour=23, minute=59, second=59, microsecond=999999)}
 
 def updateweeklyelofcn():
-    now = timezone.now()
-    current_week_start = get_week_start(now)
-    battles_by_week = defaultdict(list)
+    # Get all existing weeks from battles
+    weeks = (
+        BattleLogs.objects
+        .annotate(week_start=TruncWeek('battleTime'))
+        .values('week_start')
+        .distinct()
+        .order_by('week_start')
+    )
 
-    for battle in BattleLogs.objects.all().order_by("battleTime"):
-        week_start = get_week_start(battle.battleTime)
-        battles_by_week[week_start].append(battle)
+    # Optional: if you always recompute everything, wipe the table first
+    WeeklyElo.objects.all().delete()
 
-    for week_start in sorted(battles_by_week.keys()):
-        is_locked_week = week_start < current_week_start
+    K = 32  # K-factor
 
-        if is_locked_week and WeeklyElo.objects.filter(week=week_start).exists():
-            continue
+    for week in weeks:
+        week_start = week['week_start']                      # aware datetime (Monday 00:00)
+        week_end = week_start + datetime.timedelta(days=7)   # exclusive
+        week_date = week_start.date()                        # if WeeklyElo.week is DateField
 
-        if week_start == current_week_start:
-            WeeklyElo.objects.filter(week=week_start).delete()
+        battles = (
+            BattleLogs.objects
+            .filter(battleTime__gte=week_start,
+                    battleTime__lt=week_end)
+            .order_by('battleTime')
+        )
 
-        ratings = {}
+        # Elo per player for THIS week – all start at 1000
+        current_elo = defaultdict(lambda: 1000.0)
 
-        def ensure_rating(member):
-            member_id = member.pk
-            if member_id not in ratings:
-                ratings[member_id] = _starting_rating(member_id, week_start)
-            return ratings[member_id]
+        for battle in battles:
+            w1 = battle.winner1
+            w2 = battle.winner2
+            l1 = battle.loser1
+            l2 = battle.loser2
 
-        for battle in battles_by_week[week_start]:
-            winners = [battle.winner1, battle.winner2]
-            losers = [battle.loser1, battle.loser2]
+            # Safety if some slots can be null
+            if not (w1 and w2 and l1 and l2):
+                continue
 
-            winner_ratings = [ensure_rating(player) for player in winners]
-            loser_ratings = [ensure_rating(player) for player in losers]
+            # Current week Elo
+            w1_elo = current_elo[w1.tag]
+            w2_elo = current_elo[w2.tag]
+            l1_elo = current_elo[l1.tag]
+            l2_elo = current_elo[l2.tag]
 
-            win_team_rating = sum(winner_ratings) / len(winner_ratings)
-            lose_team_rating = sum(loser_ratings) / len(loser_ratings)
+            winners_elo = (w1_elo + w2_elo) / 2
+            losers_elo = (l1_elo + l2_elo) / 2
 
-            new_win_team, new_lose_team = update_elo(win_team_rating, lose_team_rating, 1)
+            winners_expected = 1 / (1 + 10 ** ((losers_elo - winners_elo) / 400))
+            losers_expected  = 1 / (1 + 10 ** ((winners_elo - losers_elo) / 400))
 
-            win_delta = new_win_team - win_team_rating
-            lose_delta = new_lose_team - lose_team_rating
+            # Update Elo in-memory
+            w1_elo_new = w1_elo + K * (1 - winners_expected)
+            w2_elo_new = w2_elo + K * (1 - winners_expected)
+            l1_elo_new = l1_elo + K * (0 - losers_expected)
+            l2_elo_new = l2_elo + K * (0 - losers_expected)
 
-            for player in winners:
-                ratings[player.pk] = ensure_rating(player) + win_delta
-            for player in losers:
-                ratings[player.pk] = ensure_rating(player) + lose_delta
+            current_elo[w1.tag] = w1_elo_new
+            current_elo[w2.tag] = w2_elo_new
+            current_elo[l1.tag] = l1_elo_new
+            current_elo[l2.tag] = l2_elo_new
 
-        bulk_objs = [
-            WeeklyElo(member_id=member_id, week=week_start, elo=int(round(elo)))
-            for member_id, elo in ratings.items()
-        ]
+        # After processing all battles of the week, write final Elo to WeeklyElo
+        weekly_rows = []
+        # You can resolve members once; using objects as keys is also fine
+        tag_to_member = {
+            m.tag: m
+            for m in Members.objects.filter(tag__in=current_elo.keys())
+        }
 
-        WeeklyElo.objects.bulk_create(bulk_objs, ignore_conflicts=True)
+        for member_tag, elo in current_elo.items():
+            weekly_rows.append(
+                WeeklyElo(
+                    week=week_date,
+                    member=tag_to_member[member_tag],
+                                        elo=int(round(elo)),
+                )
+            )
+
+        WeeklyElo.objects.bulk_create(weekly_rows)
+
+    return
