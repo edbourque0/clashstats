@@ -1,6 +1,6 @@
 /.venv/
 /prod.env
 /.env
-/test.py
+/clashstats/test.py
 /dev-compose.yaml
 /.idea
