@@ -78,7 +78,7 @@
               {% for member in weekly_members %}
               <tr>
                 <td class="rank-col">{{ forloop.counter }}</td>
-                <td class="text-start">{{ member.name }}</td>
+                <td class="text-start">{{ member.member.name }}</td>
                 <td>{{ member.weekly_wins }}</td>
                 <td>{{ member.weekly_losses }}</td>
                 <td>
@@ -93,12 +93,12 @@
           <div class="text-end text-muted">
               {{ weeklybattlecount }} battles
           </div>
-        </div>
-        {% else %}
+            {% else %}
           <p class="text-center text-muted mb-0">
-            No battles recorded since last Monday.
+            No battles recorded this week.
           </p>
         {% endif %}
+        </div>
       </div>
 
    <div class="card bg-dark border-secondary shadow-lg mx-auto">
