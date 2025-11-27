@@ -11,7 +11,7 @@ from .searchclan import searchclanfnc
 from .updateelo import updateelofcn
 from .refreshclan import refreshclanfcn
 from .updateweeklyelo import updateweeklyelofcn
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.utils import timezone
 from datetime import timedelta
 
@@ -37,12 +37,13 @@ def home(request):
     :return: An HTTP response object with the rendered "home.html" template,
         including the filtered and ordered list of member data.
     """
-    members = list(Members.objects.all().order_by("-elo").exclude(elo=1000))
-
-    # Global W/L
-    for m in members:
-        m.wins = BattleLogs.objects.filter(Q(winner1=m) | Q(winner2=m)).count()
-        m.losses = BattleLogs.objects.filter(Q(loser1=m) | Q(loser2=m)).count()
+    # Get all members with win/loss counts using annotations to avoid N+1 queries
+    members = list(
+        Members.objects.annotate(
+            wins=Count('winner12member', distinct=True) + Count('winner22member', distinct=True),
+            losses=Count('loser12member', distinct=True) + Count('loser22member', distinct=True)
+        ).exclude(elo=1000).order_by("-elo")
+    )
 
     # === Weekly leaderboard ===
     now = timezone.now()
@@ -51,39 +52,39 @@ def home(request):
         hour=0, minute=0, second=0, microsecond=0
     )
 
-    weekly_members = list(WeeklyElo.objects.filter(week=last_monday))
+    # Get weekly members with prefetched related member data
+    weekly_members = list(
+        WeeklyElo.objects.filter(week=last_monday).select_related('member')
+    )
 
+    # Get battle logs for this week once, then count in Python
+    weekly_battles = BattleLogs.objects.filter(battleTime__gte=last_monday)
+
+    # Pre-compute wins and losses for all weekly members
     for m in weekly_members:
         player = m.member
-
-        m.weekly_wins = BattleLogs.objects.filter(
-            battleTime__gte=last_monday
-        ).filter(
+        m.weekly_wins = weekly_battles.filter(
             Q(winner1=player) | Q(winner2=player)
         ).count()
-
-        m.weekly_losses = BattleLogs.objects.filter(
-            battleTime__gte=last_monday
-        ).filter(
+        m.weekly_losses = weekly_battles.filter(
             Q(loser1=player) | Q(loser2=player)
         ).count()
 
-        m.better_than_last_week = WeeklyElo.objects.filter(member=player).order_by("week")[1].elo < m.elo
+        # Get previous week's elo for comparison with error handling
+        previous_weeks = WeeklyElo.objects.filter(
+            member=player
+        ).exclude(week=last_monday).order_by("-week")
+        if previous_weeks.exists():
+            m.better_than_last_week = previous_weeks.first().elo < m.elo
+        else:
+            m.better_than_last_week = None
 
-    dt = timezone.localtime(now)
-    start_of_week = (dt - timedelta(days=dt.weekday())).replace(
-        hour=0, minute=0, second=0, microsecond=0
-    )
+    # Get first match date and last refresh using first() instead of [0]
+    first_battle = BattleLogs.objects.order_by("battleTime").first()
+    first_match = first_battle.battleTime if first_battle else timezone.now()
 
-    if BattleLogs.objects.all().count() == 0:
-        first_match = timezone.now()
-    else:
-        first_match = BattleLogs.objects.order_by("battleTime")[0].battleTime
-
-    if Refresh.objects.all().count() == 0:
-        last_refresh = timezone.now()
-    else:
-        last_refresh = Refresh.objects.order_by("-timestamp")[0].timestamp
+    last_refresh_obj = Refresh.objects.order_by("-timestamp").first()
+    last_refresh = last_refresh_obj.timestamp if last_refresh_obj else timezone.now()
 
     context = {
         "members": members,
@@ -91,11 +92,8 @@ def home(request):
         "last_monday": last_monday,
         "first_match": first_match,
         "last_refresh": last_refresh,
-        "battlecount": BattleLogs.objects.all().count(),
-        "weeklybattlecount": BattleLogs.objects.filter(
-            battleTime__gte=start_of_week,
-            battleTime__lte=now,
-        ).count(),
+        "battlecount": BattleLogs.objects.count(),
+        "weeklybattlecount": weekly_battles.count(),
     }
     return render(request, "home.html", context)
 
