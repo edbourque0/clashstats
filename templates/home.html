@@ -71,6 +71,7 @@
                 <th class="text-start text-muted"><i class="fa-solid fa-user"></i></th>
                 <th><i class="fa-solid fa-crown text-muted"></i></th>
                 <th><i class="fa-solid fa-skull text-muted"></i></th>
+                  <th><i class="fa-solid fa-chart-area text-muted"></i></th>
                 <th><i class="fa-solid fa-trophy text-muted"></i></th>
               </tr>
             </thead>
@@ -81,11 +82,8 @@
                 <td class="text-start">{{ member.member.name }}</td>
                 <td>{{ member.weekly_wins }}</td>
                 <td>{{ member.weekly_losses }}</td>
-                <td>
-                  <span class="badge text-bg-light">
-                    {{ member.elo }}
-                  </span>
-                    {% if member.better_than_last_week == True %}
+                                <td>
+                  {% if member.better_than_last_week == True %}
                     <span style="color: palegreen;">
                         <i class="fa-solid fa-arrow-trend-up p-1"></i>
                     </span>
@@ -95,9 +93,14 @@
                     </span>
                         {% else %}
                         <span>
-                        <i class="fa-solid fa-icon-does-not-exist p-1"></i>
+                        <i class="fa-solid fa-icon-minus p-1"></i>
                         </span>
                 {% endif %}
+              </td>
+                <td>
+                  <span class="badge text-bg-light">
+                    {{ member.elo }}
+                  </span>
                 </td>
               </tr>
               {% endfor %}
