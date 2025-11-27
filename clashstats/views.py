@@ -53,6 +53,23 @@ def home(request):
 
     weekly_members = list(WeeklyElo.objects.filter(week=last_monday))
 
+    for m in weekly_members:
+        player = m.member
+
+        m.weekly_wins = BattleLogs.objects.filter(
+            battleTime__gte=last_monday
+        ).filter(
+            Q(winner1=player) | Q(winner2=player)
+        ).count()
+
+        m.weekly_losses = BattleLogs.objects.filter(
+            battleTime__gte=last_monday
+        ).filter(
+            Q(loser1=player) | Q(loser2=player)
+        ).count()
+
+        m.better_than_last_week = WeeklyElo.objects.filter(member=player).order_by("week")[1].elo < m.elo
+
     dt = timezone.localtime(now)
     start_of_week = (dt - timedelta(days=dt.weekday())).replace(
         hour=0, minute=0, second=0, microsecond=0
