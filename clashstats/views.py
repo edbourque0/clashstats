@@ -2,7 +2,7 @@ import os
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from dotenv import load_dotenv
-from .models import Members, BattleLogs, Refresh
+from .models import Members, BattleLogs, Refresh, WeeklyElo
 from django.shortcuts import render
 from .clan import createclan
 from .member import createmembers
@@ -46,33 +46,34 @@ def home(request):
 
     # === Weekly leaderboard ===
     now = timezone.now()
-    # Monday = 0 ... Sunday = 6
-    days_since_monday = now.weekday()
-    last_monday = now - timedelta(days=days_since_monday)
+    dt = timezone.localtime(now)
+    last_monday = (dt - timedelta(days=dt.weekday())).replace(
+        hour=0, minute=0, second=0, microsecond=0
+    )
 
-    weekly_members = []
-    for m in members:
-        weekly_wins = BattleLogs.objects.filter(
-            Q(winner1=m) | Q(winner2=m),
-            battleTime__gte=last_monday,
+    weekly_members = list(WeeklyElo.objects.filter(week=last_monday))
+
+    for m in weekly_members:
+        player = m.member
+
+        m.weekly_wins = BattleLogs.objects.filter(
+            battleTime__gte=last_monday
+        ).filter(
+            Q(winner1=player) | Q(winner2=player)
         ).count()
 
-        weekly_losses = BattleLogs.objects.filter(
-            Q(loser1=m) | Q(loser2=m),
-            battleTime__gte=last_monday,
+        m.weekly_losses = BattleLogs.objects.filter(
+            battleTime__gte=last_monday
+        ).filter(
+            Q(loser1=player) | Q(loser2=player)
         ).count()
 
-        # Only show players who played this week
-        if weekly_wins or weekly_losses:
-            m.weekly_wins = weekly_wins
-            m.weekly_losses = weekly_losses
-            weekly_members.append(m)
+        m.better_than_last_week = WeeklyElo.objects.filter(member=player).order_by("week")[1].elo < m.elo
 
-    # Sort weekly leaderboard by weekly wins (then ELO as tiebreaker)
-    weekly_members.sort(key=lambda x: (x.weekly_wins, x.elo), reverse=True)
-
-    now = timezone.now()
-    start_of_week = now - timedelta(days=now.weekday())
+    dt = timezone.localtime(now)
+    start_of_week = (dt - timedelta(days=dt.weekday())).replace(
+        hour=0, minute=0, second=0, microsecond=0
+    )
 
     if BattleLogs.objects.all().count() == 0:
         first_match = timezone.now()

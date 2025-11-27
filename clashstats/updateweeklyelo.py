@@ -5,14 +5,21 @@ from django.db.models.functions import TruncWeek
 import datetime
 from collections import defaultdict
 
-def getweek(dt):
+def get_week(dt):
     if timezone.is_naive(dt):
         dt = timezone.make_aware(dt, timezone.get_default_timezone())
 
     dt = timezone.localtime(dt)
     monday = dt - timedelta(days=dt.weekday())
+
+    monday = monday.replace(hour=0, minute=0, second=0, microsecond=0)
     sunday = monday + timedelta(days=6)
-    return {'start':monday.replace(hour=0, minute=0, second=0, microsecond=0), 'end':sunday.replace(hour=23, minute=59, second=59, microsecond=999999)}
+    sunday = sunday.replace(hour=23, minute=59, second=59, microsecond=999999)
+
+    return {
+        'start': monday,
+        'end': sunday,
+    }
 
 def updateweeklyelofcn():
     # Get all existing weeks from battles
