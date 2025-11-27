@@ -63,27 +63,31 @@ def home(request):
         'winner1', 'winner2', 'loser1', 'loser2'
     ))
 
-    # Get previous week's elo data for all members upfront
+    # Pre-compute wins and losses counts for all players using single pass through battles
+    weekly_wins_count = {}
+    weekly_losses_count = {}
+    for battle in weekly_battles:
+        for winner in (battle.winner1, battle.winner2):
+            weekly_wins_count[winner.tag] = weekly_wins_count.get(winner.tag, 0) + 1
+        for loser in (battle.loser1, battle.loser2):
+            weekly_losses_count[loser.tag] = weekly_losses_count.get(loser.tag, 0) + 1
+
+    # Get previous week's elo data for all members upfront using a single query
+    # Only fetch the most recent non-current-week elo for each member
     member_tags = [m.member.tag for m in weekly_members]
     previous_elos = {}
     for elo_record in WeeklyElo.objects.filter(
         member__tag__in=member_tags
-    ).exclude(week=last_monday).order_by('member', '-week'):
+    ).exclude(week=last_monday).order_by('member', '-week').select_related('member'):
         # Only keep the most recent previous week for each member
         if elo_record.member.tag not in previous_elos:
             previous_elos[elo_record.member.tag] = elo_record.elo
 
-    # Pre-compute wins and losses for all weekly members
+    # Assign pre-computed wins/losses and elo comparison to weekly members
     for m in weekly_members:
         player = m.member
-        m.weekly_wins = sum(
-            1 for b in weekly_battles
-            if b.winner1 == player or b.winner2 == player
-        )
-        m.weekly_losses = sum(
-            1 for b in weekly_battles
-            if b.loser1 == player or b.loser2 == player
-        )
+        m.weekly_wins = weekly_wins_count.get(player.tag, 0)
+        m.weekly_losses = weekly_losses_count.get(player.tag, 0)
 
         # Get previous week's elo for comparison
         prev_elo = previous_elos.get(player.tag)
