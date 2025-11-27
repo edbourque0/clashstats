@@ -38,10 +38,11 @@ def home(request):
         including the filtered and ordered list of member data.
     """
     # Get all members with win/loss counts using annotations to avoid N+1 queries
+    # Count battles where member appears as winner1, winner2, loser1, or loser2
     members = list(
         Members.objects.annotate(
-            wins=Count('winner12member', distinct=True) + Count('winner22member', distinct=True),
-            losses=Count('loser12member', distinct=True) + Count('loser22member', distinct=True)
+            wins=Count('winner12member') + Count('winner22member'),
+            losses=Count('loser12member') + Count('loser22member')
         ).exclude(elo=1000).order_by("-elo")
     )
 
@@ -57,25 +58,37 @@ def home(request):
         WeeklyElo.objects.filter(week=last_monday).select_related('member')
     )
 
-    # Get battle logs for this week once, then count in Python
-    weekly_battles = BattleLogs.objects.filter(battleTime__gte=last_monday)
+    # Get battle logs for this week once and cache results
+    weekly_battles = list(BattleLogs.objects.filter(battleTime__gte=last_monday).select_related(
+        'winner1', 'winner2', 'loser1', 'loser2'
+    ))
+
+    # Get previous week's elo data for all members upfront
+    member_tags = [m.member.tag for m in weekly_members]
+    previous_elos = {}
+    for elo_record in WeeklyElo.objects.filter(
+        member__tag__in=member_tags
+    ).exclude(week=last_monday).order_by('member', '-week'):
+        # Only keep the most recent previous week for each member
+        if elo_record.member.tag not in previous_elos:
+            previous_elos[elo_record.member.tag] = elo_record.elo
 
     # Pre-compute wins and losses for all weekly members
     for m in weekly_members:
         player = m.member
-        m.weekly_wins = weekly_battles.filter(
-            Q(winner1=player) | Q(winner2=player)
-        ).count()
-        m.weekly_losses = weekly_battles.filter(
-            Q(loser1=player) | Q(loser2=player)
-        ).count()
+        m.weekly_wins = sum(
+            1 for b in weekly_battles
+            if b.winner1 == player or b.winner2 == player
+        )
+        m.weekly_losses = sum(
+            1 for b in weekly_battles
+            if b.loser1 == player or b.loser2 == player
+        )
 
-        # Get previous week's elo for comparison with error handling
-        previous_weeks = WeeklyElo.objects.filter(
-            member=player
-        ).exclude(week=last_monday).order_by("-week")
-        if previous_weeks.exists():
-            m.better_than_last_week = previous_weeks.first().elo < m.elo
+        # Get previous week's elo for comparison
+        prev_elo = previous_elos.get(player.tag)
+        if prev_elo is not None:
+            m.better_than_last_week = prev_elo < m.elo
         else:
             m.better_than_last_week = None
 
@@ -93,7 +106,7 @@ def home(request):
         "first_match": first_match,
         "last_refresh": last_refresh,
         "battlecount": BattleLogs.objects.count(),
-        "weeklybattlecount": weekly_battles.count(),
+        "weeklybattlecount": len(weekly_battles),
     }
     return render(request, "home.html", context)
 
