@@ -4,3 +4,5 @@
 /clashstats/test.py
 /dev-compose.yaml
 /.idea
+__pycache__/
+*.pyc
