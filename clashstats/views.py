@@ -11,7 +11,7 @@ from .searchclan import searchclanfnc
 from .updateelo import updateelofcn
 from .refreshclan import refreshclanfcn
 from .updateweeklyelo import updateweeklyelofcn
-from django.db.models import Q, Count
+from django.db.models import Q
 from django.utils import timezone
 from datetime import timedelta
 
@@ -37,14 +37,12 @@ def home(request):
     :return: An HTTP response object with the rendered "home.html" template,
         including the filtered and ordered list of member data.
     """
-    # Get all members with win/loss counts using annotations to avoid N+1 queries
-    # Count battles where member appears as winner1, winner2, loser1, or loser2
-    members = list(
-        Members.objects.annotate(
-            wins=Count('winner12member') + Count('winner22member'),
-            losses=Count('loser12member') + Count('loser22member')
-        ).exclude(elo=1000).order_by("-elo")
-    )
+    members = list(Members.objects.all().order_by("-elo").exclude(elo=1000))
+
+    # Global W/L
+    for m in members:
+        m.wins = BattleLogs.objects.filter(Q(winner1=m) | Q(winner2=m)).count()
+        m.losses = BattleLogs.objects.filter(Q(loser1=m) | Q(loser2=m)).count()
 
     # === Weekly leaderboard ===
     now = timezone.now()
@@ -53,55 +51,39 @@ def home(request):
         hour=0, minute=0, second=0, microsecond=0
     )
 
-    # Get weekly members with prefetched related member data
-    weekly_members = list(
-        WeeklyElo.objects.filter(week=last_monday).select_related('member')
-    )
+    weekly_members = list(WeeklyElo.objects.filter(week=last_monday))
 
-    # Get battle logs for this week once and cache results
-    weekly_battles = list(BattleLogs.objects.filter(battleTime__gte=last_monday).select_related(
-        'winner1', 'winner2', 'loser1', 'loser2'
-    ))
-
-    # Pre-compute wins and losses counts for all players using single pass through battles
-    weekly_wins_count = {}
-    weekly_losses_count = {}
-    for battle in weekly_battles:
-        for winner in (battle.winner1, battle.winner2):
-            weekly_wins_count[winner.tag] = weekly_wins_count.get(winner.tag, 0) + 1
-        for loser in (battle.loser1, battle.loser2):
-            weekly_losses_count[loser.tag] = weekly_losses_count.get(loser.tag, 0) + 1
-
-    # Get previous week's elo data for all members upfront using a single query
-    # Only fetch the most recent non-current-week elo for each member
-    member_tags = [m.member.tag for m in weekly_members]
-    previous_elos = {}
-    for elo_record in WeeklyElo.objects.filter(
-        member__tag__in=member_tags
-    ).exclude(week=last_monday).order_by('member', '-week').select_related('member'):
-        # Only keep the most recent previous week for each member
-        if elo_record.member.tag not in previous_elos:
-            previous_elos[elo_record.member.tag] = elo_record.elo
-
-    # Assign pre-computed wins/losses and elo comparison to weekly members
     for m in weekly_members:
         player = m.member
-        m.weekly_wins = weekly_wins_count.get(player.tag, 0)
-        m.weekly_losses = weekly_losses_count.get(player.tag, 0)
 
-        # Get previous week's elo for comparison
-        prev_elo = previous_elos.get(player.tag)
-        if prev_elo is not None:
-            m.better_than_last_week = prev_elo < m.elo
-        else:
-            m.better_than_last_week = None
+        m.weekly_wins = BattleLogs.objects.filter(
+            battleTime__gte=last_monday
+        ).filter(
+            Q(winner1=player) | Q(winner2=player)
+        ).count()
 
-    # Get first match date and last refresh using first() instead of [0]
-    first_battle = BattleLogs.objects.order_by("battleTime").first()
-    first_match = first_battle.battleTime if first_battle else timezone.now()
+        m.weekly_losses = BattleLogs.objects.filter(
+            battleTime__gte=last_monday
+        ).filter(
+            Q(loser1=player) | Q(loser2=player)
+        ).count()
 
-    last_refresh_obj = Refresh.objects.order_by("-timestamp").first()
-    last_refresh = last_refresh_obj.timestamp if last_refresh_obj else timezone.now()
+        m.better_than_last_week = WeeklyElo.objects.filter(member=player).order_by("week")[1].elo < m.elo
+
+    dt = timezone.localtime(now)
+    start_of_week = (dt - timedelta(days=dt.weekday())).replace(
+        hour=0, minute=0, second=0, microsecond=0
+    )
+
+    if BattleLogs.objects.all().count() == 0:
+        first_match = timezone.now()
+    else:
+        first_match = BattleLogs.objects.order_by("battleTime")[0].battleTime
+
+    if Refresh.objects.all().count() == 0:
+        last_refresh = timezone.now()
+    else:
+        last_refresh = Refresh.objects.order_by("-timestamp")[0].timestamp
 
     context = {
         "members": members,
@@ -109,8 +91,11 @@ def home(request):
         "last_monday": last_monday,
         "first_match": first_match,
         "last_refresh": last_refresh,
-        "battlecount": BattleLogs.objects.count(),
-        "weeklybattlecount": len(weekly_battles),
+        "battlecount": BattleLogs.objects.all().count(),
+        "weeklybattlecount": BattleLogs.objects.filter(
+            battleTime__gte=start_of_week,
+            battleTime__lte=now,
+        ).count(),
     }
     return render(request, "home.html", context)
 
