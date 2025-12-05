@@ -7,7 +7,7 @@ def create_clan(clan_tag, url, headers):
     Handles the addition of a clan to the database. It retrieves clan data
     from an external API using the provided clan tag, then updates or creates
     the clan entry in the database based on the data fetched. Only HTTP POST
-    requests are allowed for this operation. When unsupported HTTP methods,
+    requests are allowed for this operation. When an unsupported HTTP method is used,
     a proper response is returned.
 
     :return: JsonResponse with a success message and status 200 for valid POST
