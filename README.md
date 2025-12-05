@@ -1,299 +1,79 @@
 # ClashStats
 
-A Django-based REST API for tracking and analyzing Clash Royale clan statistics, member performance, and battle logs with an ELO rating system for 2v2 battles.
+A Django web app for tracking and analyzing Clash Royale 2v2 battle with an ELO rating system and weekly ELO scores.
 
-## Features
+## Project status
 
-- **Clan Management**: Search, add, and track Clash Royale clans
-- **Member Tracking**: Monitor clan members' statistics and performance
-- **Battle Log Analysis**: Track 2v2 battle outcomes
-- **ELO Rating System**: Calculate and update player ELO ratings based on battle results
-- **Auto-refresh**: Automatically sync data with Clash Royale API
+\- Active Django project that stores 2v2 battles, calculates ELO and records weekly ELO snapshots that become fixed after a week ends. Weekly snapshots are updated in\-place while the week is ongoing and locked once the week finishes.
+
+## Key features
+
+\- Clan management and member tracking.  
+\- Clan 2v2 battle log ingestion.  
+\- ELO rating system for 2v2: team average ELO used for match expectation.  
+\- Weekly ELO snapshots: `WeeklyElo` model stores each player's ELO per week; entries are updated until the week ends, then marked fixed.  
+\- Utilities for determining week start from any `datetime`.
 
 ## Requirements
 
-- Python 3.13.2
-- PostgreSQL
-- Clash Royale API Key ([Get one here](https://developer.clashroyale.com/))
+\- Python 3.13.2  
+\- PostgreSQL
 
-## Installation
+# Docker compose installation:
 
-### 1. Clone the repository
 
-```bash
-git clone https://github.com/edbourque0/clashstats.git
-cd clashstats
-```
 
-### 2. Create and activate virtual environment
+## API endpoints (high level)
 
-```bash
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-```
+\- `POST /api/v1/clan/search` \- search clans by name.  
+\- `POST /api/v1/clan` \- add a clan to track (parameter: `clantag`).  
+\- `POST /api/v1/members` \- fetch and add/update clan members (parameter: `clantag`).  
+\- `POST /api/v1/battlelog` \- add battle logs for a player (parameter: `playertag`). Only 2v2 clanMate2v2 battles are stored.  
+\- `POST /api/v1/refreshclan` \- refresh clan, members, and battle logs.  
+\- `GET /api/v1/updateelo` \- run full ELO recalculation across stored battles.  
+\- `POST /api/v1/updateweeklyelo` \- update weekly ELO snapshots (updates ongoing week entries, fixes past weeks).  
+\- `GET /api/v1/weeklyelo` \- query weekly ELO snapshots (filters: player, week_start).
 
-### 3. Install dependencies
+## ELO algorithm
 
-```bash
-pip install django psycopg2 python-dotenv requests
-```
+\- Starting ELO: 1000.  
+\- K factor: 32.
+\- Team ELOs are calculated using the average of each player
 
-### 4. Configure environment variables
+## Weekly ELO behavior
 
-Copy `prod.env.example` to `prod.env` and fill in your credentials:
+\- The `WeeklyElo` model records per\-player ELO for the week identified by its `week_start` (the start of the week datetime).  
+\- While the current week is ongoing, the entry for that player's week is updated in\-place as new battles are processed.  
+\- Once the week ends, entries are marked fixed and no longer auto\-updated.  
+\- `WeeklyElo` may reference the `BattleLog` (or store `battleTime`) to associate updates with the correct battle timestamp.
 
-```bash
-cp prod.env.example prod.env
-```
+## Data models (high level)
 
-Edit `prod.env`:
+\- `Clan` \- basic clan info. See `clashstats/models.py`.  
+\- `Member` \- player record with `elo` field (default 1000).  
+\- `BattleLog` \- stores 2v2 battles with `battleTime`, participants (`winner1`, `winner2`, `loser1`, `loser2`), and `elocalculated` flag.  
+\- `WeeklyElo` \- per\-player weekly snapshot: `player` (FK), `week_start` (datetime), `elo` (int), `is_fixed` (bool), optional relation to `BattleLog` or `battleTime`.
 
-```env
-CLASH_API_KEY=your_clash_royale_api_key_here
-DB_NAME=clashstats
-DB_USER=postgres
-DB_PASS=your_password
-DB_HOST=localhost
-DB_PORT=5432
-```
+## Utilities
 
-### 5. Set up PostgreSQL database
-
-```bash
-createdb clashstats
-```
-
-### 6. Run migrations
-
-```bash
-python manage.py migrate
-```
-
-### 7. Start the development server
-
-```bash
-python manage.py runserver
-```
-
-The API will be available at `http://localhost:8000`
-
-## API Endpoints
-
-### Search Clan
-
-Search for clans by name using the Clash Royale API.
-
-- **Endpoint**: `POST /api/v1/clan/search`
-- **Parameters**:
-  - `name` (string, required): Clan name to search
-
-**Example**:
-```bash
-curl -X POST http://localhost:8000/api/v1/clan/search \
-  -d "name=YourClanName"
-```
-
-### Add Clan
-
-Add a clan to the database.
-
-- **Endpoint**: `POST /api/v1/clan`
-- **Parameters**:
-  - `clantag` (string, required): Clan tag (e.g., `#G9JVLC2C`)
-
-**Example**:
-```bash
-curl -X POST http://localhost:8000/api/v1/clan \
-  -d "clantag=#G9JVLC2C"
-```
-
-### Add Members
-
-Fetch and add all members of a clan to the database.
-
-- **Endpoint**: `POST /api/v1/members`
-- **Parameters**:
-  - `clantag` (string, required): Clan tag
-
-**Example**:
-```bash
-curl -X POST http://localhost:8000/api/v1/members \
-  -d "clantag=#G9JVLC2C"
-```
-
-### Add Battle Log
-
-Add battle logs for a specific player.
-
-- **Endpoint**: `POST /api/v1/battlelog`
-- **Parameters**:
-  - `playertag` (string, required): Player tag (e.g., `#CJG89UPQR`)
-
-**Example**:
-```bash
-curl -X POST http://localhost:8000/api/v1/battlelog \
-  -d "playertag=#CJG89UPQR"
-```
-
-**Note**: Only stores 2v2 battles of type `clanMate2v2`
-
-### Refresh Clan
-
-Refresh all data for a clan (clan info, members, and battle logs).
-
-- **Endpoint**: `POST /api/v1/refreshclan`
-- **Parameters**:
-  - `clantag` (string, required): Clan tag
-
-**Example**:
-```bash
-curl -X POST http://localhost:8000/api/v1/refreshclan \
-  -d "clantag=#G9JVLC2C"
-```
-
-### Update ELO Ratings
-
-Calculate and update ELO ratings for all members based on battle results.
-
-- **Endpoint**: `GET /api/v1/updateelo`
-
-**Example**:
-```bash
-curl http://localhost:8000/api/v1/updateelo
-```
-
-**ELO Algorithm**:
-- Starting ELO: 1000
-- K-factor: 20
-- Formula: `New ELO = Old ELO + K × (Actual Score - Expected Score)`
-- Team average ELO is used for calculations
-
-## Data Models
-
-### Clan
-
-- `tag` (Primary Key): Clan tag
-- `name`: Clan name
-- `type`: Clan type (open, inviteOnly, closed)
-- `badgeId`: Badge identifier
-- `location`: Country code
-- `donationsPerWeek`: Weekly donation count
-- `members`: Number of members
-
-### Member
-
-- `tag` (Primary Key): Player tag
-- `clanTag` (Foreign Key): Associated clan
-- `name`: Player name
-- `role`: Role in clan (member, elder, coLeader, leader)
-- `lastSeen`: Last seen timestamp
-- `expLevel`: Experience level
-- `trophies`: Current trophies
-- `clanRank`: Rank in clan
-- `donations`: Donations given
-- `donationsReceived`: Donations received
-- `elo`: ELO rating (default: 1000)
-
-### BattleLog
-
-- `id` (Primary Key): SHA-256 hash of battle data
-- `type`: Battle type
-- `battleTime`: When the battle occurred
-- `gameMode`: Game mode name
-- `winner1`, `winner2` (Foreign Keys): Winning team members
-- `loser1`, `loser2` (Foreign Keys): Losing team members
-- `elocalculated`: Whether ELO has been calculated for this battle
-
-## Usage Example
-
-1. **Add a clan to track**:
-```bash
-curl -X POST http://localhost:8000/api/v1/clan \
-  -d "clantag=#G9JVLC2C"
-```
-
-2. **Add clan members**:
-```bash
-curl -X POST http://localhost:8000/api/v1/members \
-  -d "clantag=#G9JVLC2C"
-```
-
-3. **Fetch battle logs for all members**:
-```bash
-# This is done automatically in refreshclan, or manually per player
-curl -X POST http://localhost:8000/api/v1/battlelog \
-  -d "playertag=#CJG89UPQR"
-```
-
-4. **Calculate ELO ratings**:
-```bash
-curl http://localhost:8000/api/v1/updateelo
-```
-
-5. **Or do everything at once**:
-```bash
-curl -X POST http://localhost:8000/api/v1/refreshclan \
-  -d "clantag=#G9JVLC2C"
-curl http://localhost:8000/api/v1/updateelo
-```
-
-## Project Structure
-
-```
-clashstats/
-├── clashstats/              # Main Django app
-│   ├── migrations/          # Database migrations
-│   ├── models.py            # Data models
-│   ├── views.py             # API endpoints
-│   └── urls.py              # URL routing
-├── clashstats_v2/           # Project settings
-│   ├── settings.py          # Django settings
-│   └── generateApiKey.py    # API key generator utility
-├── templates/               # HTML templates
-├── prod.env.example         # Environment variables template
-├── manage.py                # Django management script
-└── README.md                # This file
-```
+\- Helper to compute week start from a `datetime` (used to normalize week buckets). Implemented in utilities module and used by ELO updater and weekly snapshot updater.  
+\- `update_elo` logic processes battles in chronological order; `update_weekly_elo` updates weekly snapshots and fixes weeks that have ended.
 
 ## Development
 
-### Running Tests
+\- Project tested with `python manage.py test`.  
+\- Use `PyCharm 2025.2.4` on Windows for development. Virtualenv workflows and run configurations are supported.  
+\- Branching: current branch `clean-up`. Remotes: `main`, `edbourque0`.
 
-```bash
-python manage.py test
-```
+## Notes
 
-### Database Migrations
-
-```bash
-python manage.py makemigrations
-python manage.py migrate
-```
-
-## Security Notes
-
-- **CSRF**: CSRF protection is disabled for API endpoints (decorated with `@csrf_exempt`)
-- **Authentication**: No authentication is currently implemented
-- **Production**: Change `DEBUG = False` and update `SECRET_KEY` before deploying
-- **API Key**: Keep your Clash Royale API key secure in `prod.env`
+\- Keep your Clash Royale API key in `.env`.  
+\- Weekly fixation logic: ensure server timezone and week boundary logic are consistent across deployments.
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+\- Fork, create a branch, commit, push, and open a PR against `master`.
 
 ## License
 
-MIT License
-
-## Support
-
-For issues or questions, please open an issue on the [GitHub repository](https://github.com/edbourque0/clashstats).
-
-## Acknowledgments
-
-- Powered by [Clash Royale API](https://developer.clashroyale.com/)
-- Built with Django and PostgreSQL
+\- MIT

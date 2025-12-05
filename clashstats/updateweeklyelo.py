@@ -21,8 +21,7 @@ def get_week(dt):
         'end': sunday,
     }
 
-def updateweeklyelofcn():
-    # Get all existing weeks from battles
+def update_weekly_elo():
     weeks = (
         BattleLogs.objects
         .annotate(week_start=TruncWeek('battleTime'))
@@ -31,15 +30,14 @@ def updateweeklyelofcn():
         .order_by('week_start')
     )
 
-    # Optional: if you always recompute everything, wipe the table first
     WeeklyElo.objects.all().delete()
 
-    K = 32  # K-factor
+    k = 32
 
     for week in weeks:
-        week_start = week['week_start']                      # aware datetime (Monday 00:00)
-        week_end = week_start + datetime.timedelta(days=7)   # exclusive
-        week_date = week_start.date()                        # if WeeklyElo.week is DateField
+        week_start = week['week_start']
+        week_end = week_start + datetime.timedelta(days=7)
+        week_date = week_start.date()
 
         battles = (
             BattleLogs.objects
@@ -48,7 +46,6 @@ def updateweeklyelofcn():
             .order_by('battleTime')
         )
 
-        # Elo per player for THIS week – all start at 1000
         current_elo = defaultdict(lambda: 1000.0)
 
         for battle in battles:
@@ -57,11 +54,9 @@ def updateweeklyelofcn():
             l1 = battle.loser1
             l2 = battle.loser2
 
-            # Safety if some slots can be null
             if not (w1 and w2 and l1 and l2):
                 continue
 
-            # Current week Elo
             w1_elo = current_elo[w1.tag]
             w2_elo = current_elo[w2.tag]
             l1_elo = current_elo[l1.tag]
@@ -73,20 +68,17 @@ def updateweeklyelofcn():
             winners_expected = 1 / (1 + 10 ** ((losers_elo - winners_elo) / 400))
             losers_expected  = 1 / (1 + 10 ** ((winners_elo - losers_elo) / 400))
 
-            # Update Elo in-memory
-            w1_elo_new = w1_elo + K * (1 - winners_expected)
-            w2_elo_new = w2_elo + K * (1 - winners_expected)
-            l1_elo_new = l1_elo + K * (0 - losers_expected)
-            l2_elo_new = l2_elo + K * (0 - losers_expected)
+            w1_elo_new = w1_elo + k * (1 - winners_expected)
+            w2_elo_new = w2_elo + k * (1 - winners_expected)
+            l1_elo_new = l1_elo + k * (0 - losers_expected)
+            l2_elo_new = l2_elo + k * (0 - losers_expected)
 
             current_elo[w1.tag] = w1_elo_new
             current_elo[w2.tag] = w2_elo_new
             current_elo[l1.tag] = l1_elo_new
             current_elo[l2.tag] = l2_elo_new
 
-        # After processing all battles of the week, write final Elo to WeeklyElo
         weekly_rows = []
-        # You can resolve members once; using objects as keys is also fine
         tag_to_member = {
             m.tag: m
             for m in Members.objects.filter(tag__in=current_elo.keys())

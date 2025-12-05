@@ -2,7 +2,7 @@ from .models import Clans, Members
 import requests
 
 
-def createmembers(clantag, url, headers):
+def create_members(clan_tag, url, headers):
     """
     Adds and updates clan members in the database based on a POST request.
 
@@ -12,19 +12,17 @@ def createmembers(clantag, url, headers):
     not POST, it returns an appropriate response indicating that the method is not
     allowed.
 
-    :param request: Django's HTTP request object containing request data and context.
-    :type request: HttpRequest
     :return: JSON response containing a message indicating the result of the operation.
     :rtype: JsonResponse
     """
-    r = requests.get(url=f"{url}clans/%23{clantag[1:]}/members", headers=headers)
-
+    r = requests.get(url=f"{url}clans/%23{clan_tag[1:]}/members", headers=headers)
     members = r.json()["items"]
+
     for member in members:
         Members.objects.update_or_create(
             tag=member["tag"],
             defaults={
-                "clanTag": Clans.objects.get(tag=clantag),
+                "clanTag": Clans.objects.get(tag=clan_tag),
                 "name": member["name"],
                 "role": member["role"],
                 "lastSeen": member["lastSeen"],

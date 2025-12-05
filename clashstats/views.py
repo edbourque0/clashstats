@@ -4,13 +4,13 @@ from django.views.decorators.csrf import csrf_exempt
 from dotenv import load_dotenv
 from .models import Members, BattleLogs, Refresh, WeeklyElo
 from django.shortcuts import render
-from .clan import createclan
-from .member import createmembers
-from .battlelog import createbattlelog
-from .searchclan import searchclanfnc
-from .updateelo import updateelofcn
-from .refreshclan import refreshclanfcn
-from .updateweeklyelo import updateweeklyelofcn
+from .clan import create_clan
+from .member import create_members
+from .battlelog import create_battlelog
+from .searchclan import search_clan
+from .updateelo import update_elo
+from .refreshclan import refresh_clan
+from .updateweeklyelo import update_weekly_elo
 from django.db.models import Q
 from django.utils import timezone
 from datetime import timedelta
@@ -39,12 +39,10 @@ def home(request):
     """
     members = list(Members.objects.all().order_by("-elo").exclude(elo=1000))
 
-    # Global W/L
     for m in members:
         m.wins = BattleLogs.objects.filter(Q(winner1=m) | Q(winner2=m)).count()
         m.losses = BattleLogs.objects.filter(Q(loser1=m) | Q(loser2=m)).count()
 
-    # === Weekly leaderboard ===
     now = timezone.now()
     dt = timezone.localtime(now)
     last_monday = (dt - timedelta(days=dt.weekday())).replace(
@@ -108,8 +106,7 @@ def home(request):
 def searchClan(request):
     if request.method == "POST":
         name = request.POST.get("name")
-        searchclanfnc(name, url, headers)
-
+        return search_clan(name, url, headers)
     else:
         return JsonResponse({"message": "Method not allowed"}, status=405)
 
@@ -118,7 +115,7 @@ def searchClan(request):
 def addClan(request):
     if request.method == "POST":
         clantag = request.POST.get("clantag")
-        createclan(clantag, url, headers)
+        create_clan(clantag, url, headers)
         return JsonResponse({"message": "Clan added successfully"}, status=200)
 
     else:
@@ -129,7 +126,7 @@ def addClan(request):
 def addMembers(request):
     if request.method == "POST":
         clantag = request.POST.get("clantag")
-        createmembers(clantag, url, headers)
+        create_members(clantag, url, headers)
         return JsonResponse({"message": "Members added successfully"}, status=200)
 
     else:
@@ -140,7 +137,7 @@ def addMembers(request):
 def addBattleLog(request):
     if request.method == "POST":
         playertag = request.POST.get("playertag")
-        createbattlelog(playertag, url, headers)
+        create_battlelog(playertag, url, headers)
         return JsonResponse({"message": "Battles added successfully"}, status=200)
 
     else:
@@ -151,7 +148,7 @@ def addBattleLog(request):
 def refreshClan(request):
     if request.method == "POST":
         clantag = request.POST.get("clantag")
-        refreshclanfcn(clantag, url, headers)
+        refresh_clan(clantag, url, headers)
         return JsonResponse({"message": "Clan refreshed successfully"}, status=200)
 
     else:
@@ -161,7 +158,7 @@ def refreshClan(request):
 @csrf_exempt
 def updateelo(request):
     if request.method == "GET":
-        updateelofcn()
+        update_elo()
         return JsonResponse({"message": "Elo updated successfully"}, status=200)
 
     else:
@@ -170,7 +167,7 @@ def updateelo(request):
 @csrf_exempt
 def updateweeklyelo(request):
     if request.method == "GET":
-        updateweeklyelofcn()
+        update_weekly_elo()
         return JsonResponse({"message": "Weekly elo updated successfully"}, status=200)
 
     else:

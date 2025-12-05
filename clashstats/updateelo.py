@@ -1,9 +1,7 @@
 from .models import BattleLogs, Members
-from datetime import timedelta
-from django.utils import timezone
 
 
-def updateelofcn():
+def update_elo():
     """
     Updates ELO rankings for all battles that have not yet had their ELOs calculated.
 
@@ -14,32 +12,31 @@ def updateelofcn():
     ELO-calculated. The updates are applied to the Members database. If the request
     method is not GET, a response indicating the method is not allowed is returned.
 
-    :param request: HTTP request object containing details of the incoming request.
     :type request: HttpRequest
     :return: JsonResponse indicating the success or failure of the operation.
     :rtype: JsonResponse
     """
-    sortedbattles = BattleLogs.objects.all().order_by("battleTime")
+    sorted_battles = BattleLogs.objects.all().order_by("battleTime")
 
-    for battle in sortedbattles:
+    for battle in sorted_battles:
         if not battle.elocalculated:
             """Define common variables"""
-            winnerselo = (battle.winner1.elo + battle.winner2.elo) / 2
-            loserselo = (battle.loser1.elo + battle.loser2.elo) / 2
-            winnersexpectedscore = 1 / (1 + 10 ** ((loserselo - winnerselo) / 400))
-            losersexpectedscore = 1 / (1 + 10 ** ((winnerselo - loserselo) / 400))
+            winners_elo = (battle.winner1.elo + battle.winner2.elo) / 2
+            losers_elo = (battle.loser1.elo + battle.loser2.elo) / 2
+            winners_expected = 1 / (1 + 10 ** ((losers_elo - winners_elo) / 400))
+            losers_expected = 1 / (1 + 10 ** ((winners_elo - losers_elo) / 400))
 
             """ Compute and update ELO of winners """
-            w1newelo = battle.winner1.elo + 32 * (1 - winnersexpectedscore)
-            w2newelo = battle.winner2.elo + 32 * (1 - winnersexpectedscore)
-            Members.objects.filter(tag=battle.winner1.tag).update(elo=w1newelo)
-            Members.objects.filter(tag=battle.winner2.tag).update(elo=w2newelo)
+            winner1_new_elo = battle.winner1.elo + 32 * (1 - winners_expected)
+            winner2_new_elo = battle.winner2.elo + 32 * (1 - winners_expected)
+            Members.objects.filter(tag=battle.winner1.tag).update(elo=winner1_new_elo)
+            Members.objects.filter(tag=battle.winner2.tag).update(elo=winner2_new_elo)
 
             """ Compute and update ELO of losers """
-            l1newelo = battle.loser1.elo + 32 * (0 - losersexpectedscore)
-            l2newelo = battle.loser2.elo + 32 * (0 - losersexpectedscore)
-            Members.objects.filter(tag=battle.loser1.tag).update(elo=l1newelo)
-            Members.objects.filter(tag=battle.loser2.tag).update(elo=l2newelo)
+            loser1_new_elo = battle.loser1.elo + 32 * (0 - losers_win_chance)
+            loser2_new_elo = battle.loser2.elo + 32 * (0 - losers_win_chance)
+            Members.objects.filter(tag=battle.loser1.tag).update(elo=loser1_new_elo)
+            Members.objects.filter(tag=battle.loser2.tag).update(elo=loser2_new_elo)
 
             """ Mark battle as elo-calculated """
             BattleLogs.objects.filter(id=battle.id).update(elocalculated=True)
