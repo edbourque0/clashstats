@@ -68,7 +68,11 @@ def home(request):
             Q(loser1=player) | Q(loser2=player)
         ).count()
 
-        m.better_than_last_week = WeeklyElo.objects.filter(member=player).order_by("week")[1].elo < m.elo
+        try:
+            m.better_than_last_week = WeeklyElo.objects.filter(member=player).order_by("week")[1].elo < m.elo
+        except IndexError:
+            continue
+
 
     dt = timezone.localtime(now)
     start_of_week = (dt - timedelta(days=dt.weekday())).replace(
