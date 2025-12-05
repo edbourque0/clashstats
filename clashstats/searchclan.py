@@ -14,6 +14,5 @@ def search_clan(name, url, headers):
     :rtype: JsonResponse
     """
 
-
     r = requests.get(url=f"{url}clans", headers=headers, params={"name": name})
     return JsonResponse(r.json(), status=200)
