@@ -23,12 +23,12 @@ def update_elo():
             """Define common variables"""
             winners_elo = (battle.winner1.elo + battle.winner2.elo) / 2
             losers_elo = (battle.loser1.elo + battle.loser2.elo) / 2
-            winners_win_chance = 1 / (1 + 10 ** ((losers_elo - winners_elo) / 400))
-            losers_win_chance = 1 / (1 + 10 ** ((winners_elo - losers_elo) / 400))
+            winners_expected = 1 / (1 + 10 ** ((losers_elo - winners_elo) / 400))
+            losers_expected = 1 / (1 + 10 ** ((winners_elo - losers_elo) / 400))
 
             """ Compute and update ELO of winners """
-            winner1_new_elo = battle.winner1.elo + 32 * (1 - winners_win_chance)
-            winner2_new_elo = battle.winner2.elo + 32 * (1 - winners_win_chance)
+            winner1_new_elo = battle.winner1.elo + 32 * (1 - winners_expected)
+            winner2_new_elo = battle.winner2.elo + 32 * (1 - winners_expected)
             Members.objects.filter(tag=battle.winner1.tag).update(elo=winner1_new_elo)
             Members.objects.filter(tag=battle.winner2.tag).update(elo=winner2_new_elo)
 
