@@ -106,9 +106,7 @@ def home(request):
 def searchClan(request):
     if request.method == "POST":
         name = request.POST.get("name")
-        search_clan(name, url, headers)
         return search_clan(name, url, headers)
-
     else:
         return JsonResponse({"message": "Method not allowed"}, status=405)
 

@@ -33,10 +33,10 @@ def update_elo():
             Members.objects.filter(tag=battle.winner2.tag).update(elo=winner2_new_elo)
 
             """ Compute and update ELO of losers """
-            looser1_new_elo = battle.loser1.elo + 32 * (0 - losers_expected)
-            looser2_new_elo = battle.loser2.elo + 32 * (0 - losers_expected)
-            Members.objects.filter(tag=battle.loser1.tag).update(elo=looser1_new_elo)
-            Members.objects.filter(tag=battle.loser2.tag).update(elo=looser2_new_elo)
+            loser1_new_elo = battle.loser1.elo + 32 * (0 - losers_win_chance)
+            loser2_new_elo = battle.loser2.elo + 32 * (0 - losers_win_chance)
+            Members.objects.filter(tag=battle.loser1.tag).update(elo=loser1_new_elo)
+            Members.objects.filter(tag=battle.loser2.tag).update(elo=loser2_new_elo)
 
             """ Mark battle as elo-calculated """
             BattleLogs.objects.filter(id=battle.id).update(elocalculated=True)
