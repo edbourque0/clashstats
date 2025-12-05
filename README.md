@@ -38,7 +38,7 @@ A Django web app for tracking and analyzing Clash Royale 2v2 battle with an ELO 
 
 \- Starting ELO: 1000.  
 \- K factor: 32.
-\- Team ELOs are calculating using the average of each player
+\- Team ELOs are calculated using the average of each player
 
 ## Weekly ELO behavior
 
