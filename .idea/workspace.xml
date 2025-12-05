@@ -4,13 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="08130c95-e40a-4eff-916b-05872f0b417d" name="Changes" comment="[WIP] Add WeeklyElo model and updateweeklyelo function for weekly Elo rating updates">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="08130c95-e40a-4eff-916b-05872f0b417d" name="Changes" comment="Refactor battle log processing and add error handling for weekly Elo comparison">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clashstats/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clashstats/battlelog.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats/battlelog.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clashstats/clan.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats/clan.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clashstats/cron.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats/cron.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clashstats/member.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats/member.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clashstats/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clashstats/refreshclan.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats/refreshclan.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clashstats/searchclan.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats/searchclan.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clashstats/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats/tests.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clashstats/updateelo.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats/updateelo.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clashstats/updateweeklyelo.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats/updateweeklyelo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev-compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/dev-compose.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clashstats/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clashstats/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,7 +41,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="weeklyelo" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -39,6 +49,17 @@
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {}
+}</component>
+  <component name="GitHubPullRequestState">{
+  &quot;prStates&quot;: [
+    {
+      &quot;id&quot;: {
+        &quot;id&quot;: &quot;PR_kwDOQQx9oM616ctt&quot;,
+        &quot;number&quot;: 13
+      },
+      &quot;lastSeen&quot;: 1764551873523
+    }
+  ]
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
@@ -61,6 +82,9 @@
 }</component>
   <component name="LLMProjectSettings">
     <option name="turned_on" value="false" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
@@ -95,7 +119,7 @@
     &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
     &quot;datagrid.heatmap.switchedByDefault&quot;: &quot;false&quot;,
     &quot;django.template.preview.state&quot;: &quot;SHOW_EDITOR&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;weekly-elo&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;clean-up&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/edbou/Documents/Code/clashstats_v2&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -103,6 +127,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;aDefault&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.grazie&quot;,
     &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
@@ -124,7 +149,7 @@
       <recent name="C:\Users\edbou\Documents\Code\clashstats_v2\clashstats_v2" />
     </key>
   </component>
-  <component name="RunManager" selected="Docker.dev-compose.yaml: Compose Deployment">
+  <component name="RunManager" selected="Django Server.clashstats_v2">
     <configuration name="generateApiKey" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="clashstats_v2" />
       <option name="ENV_FILES" value="" />
@@ -162,7 +187,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="C:\Users\edbou\Documents\Code\clashstats_v2\clashstats\test.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -251,10 +276,10 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Docker.dev-compose.yaml: Compose Deployment" />
-        <item itemvalue="Docker.Dockerfile" />
         <item itemvalue="Python.test" />
         <item itemvalue="Python.generateApiKey" />
+        <item itemvalue="Docker.Dockerfile" />
+        <item itemvalue="Docker.dev-compose.yaml: Compose Deployment" />
         <item itemvalue="Docker.dev-compose.yaml.postgres: Compose Deployment" />
       </list>
     </recent_temporary>
@@ -278,6 +303,9 @@
       <option name="presentableId" value="Default" />
       <updated>1762466725545</updated>
       <workItem from="1762466726547" duration="26410000" />
+      <workItem from="1764551829133" duration="305000" />
+      <workItem from="1764723079052" duration="610000" />
+      <workItem from="1764898287087" duration="2523000" />
     </task>
     <task id="LOCAL-00001" summary="Initialize Django project `clashstats_v2` with core app, basic configurations, and initial setup files.">
       <option name="closed" value="true" />
@@ -431,7 +459,23 @@
       <option name="project" value="LOCAL" />
       <updated>1763608512588</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="allo">
+      <option name="closed" value="true" />
+      <created>1764197985053</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1764197985053</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Refactor battle log processing and add error handling for weekly Elo comparison">
+      <option name="closed" value="true" />
+      <created>1764898920411</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1764898920411</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -481,14 +525,9 @@
     <MESSAGE value="Enhance home page styling with custom fonts and header, update leaderboard display logic, and fix empty dataset handling in views." />
     <MESSAGE value="[WIP] " />
     <MESSAGE value="[WIP] Add WeeklyElo model and updateweeklyelo function for weekly Elo rating updates" />
-    <option name="LAST_COMMIT_MESSAGE" value="[WIP] Add WeeklyElo model and updateweeklyelo function for weekly Elo rating updates" />
-  </component>
-  <component name="XDebuggerManager">
-    <watches-manager>
-      <configuration name="Python.DjangoServer">
-        <watch expression="weeks.model.loser2" />
-      </configuration>
-    </watches-manager>
+    <MESSAGE value="allo" />
+    <MESSAGE value="Refactor battle log processing and add error handling for weekly Elo comparison" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor battle log processing and add error handling for weekly Elo comparison" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/clashstats_v2$test.coverage" NAME="test Coverage Results" MODIFIED="1763751489318" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

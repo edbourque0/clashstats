@@ -1,9 +1,8 @@
 import logging
 import os
-from django.conf import settings
 from dotenv import load_dotenv
-from .refreshclan import refreshclanfcn
-from .updateweeklyelo import updateweeklyelofcn
+from .refreshclan import refresh_clan
+from .updateweeklyelo import update_weekly_elo
 
 logger = logging.getLogger(__name__)
 load_dotenv()
@@ -29,6 +28,6 @@ def refresh_default_clan():
         return
 
     logger.info("Refreshing clan %s via refreshclanfcn", clantag)
-    refreshclanfcn(clantag, url, headers, source="cron")
-    updateweeklyelofcn()
+    refresh_clan(clantag, url, headers, source="cron")
+    update_weekly_elo()
     logger.info("Clan %s refresh complete", clantag)
