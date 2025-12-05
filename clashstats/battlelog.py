@@ -15,7 +15,12 @@ def create_battlelog(playertag, url, headers):
         Only POST requests are allowed. The function interacts with external APIs and the
         database.
 
-    :type request: HttpRequest
+    :param playertag: The tag of the player whose battle logs are to be fetched.
+    :type playertag: str
+    :param url: The base URL for the Clash Royale API.
+    :type url: str
+    :param headers: The headers to use for the API request.
+    :type headers: dict
 
     :return: A JSON response with a success message if battles are added successfully or an
         error message for unsupported HTTP methods.
