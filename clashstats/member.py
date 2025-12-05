@@ -12,7 +12,6 @@ def create_members(clan_tag, url, headers):
     not POST, it returns an appropriate response indicating that the method is not
     allowed.
 
-    :type request: HttpRequest
     :return: JSON response containing a message indicating the result of the operation.
     :rtype: JsonResponse
     """
