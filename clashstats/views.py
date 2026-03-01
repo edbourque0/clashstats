@@ -51,7 +51,7 @@ def home(request):
         hour=0, minute=0, second=0, microsecond=0
     )
 
-    weekly_members = list(WeeklyElo.objects.filter(week=last_monday))
+    weekly_members = list(WeeklyElo.objects.filter(week=last_monday.date()))
 
     for m in weekly_members:
         player = m.member

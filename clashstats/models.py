@@ -60,7 +60,7 @@ class Refresh(models.Model):
 class WeeklyElo(models.Model):
     id = models.UUIDField(primary_key=True, null=False, default=uuid.uuid4)
     member = models.ForeignKey(Members, on_delete=models.CASCADE, related_name="elo_history")
-    week = models.DateTimeField()
+    week = models.DateField()
     elo = models.PositiveIntegerField()
 
     class Meta:
