@@ -22,7 +22,7 @@ load_dotenv()
 SECRET_KEY = '2983erh2@@sa7xz(24ly!shcp3ml-w3r166t*5akj#vcphblp$j=4fb3@np7qt'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', False),
 
 ALLOWED_HOSTS = ['*']
 
