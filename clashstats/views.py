@@ -11,9 +11,10 @@ from .searchclan import search_clan
 from .updateelo import update_elo
 from .refreshclan import refresh_clan
 from .updateweeklyelo import update_weekly_elo
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.utils import timezone
 from datetime import timedelta
+from collections import defaultdict
 
 load_dotenv()
 
@@ -24,68 +25,86 @@ headers = {
 
 
 def home(request):
-    """
-    Handles the processing of the homepage request. This function queries the
-    `Members` model to retrieve a filtered and ordered list of members, excluding
-    those with an ELO score of 1000, and sorts the remaining members by their ELO
-    score in descending order. Ties in the ELO score are resolved by sorting
-    alphabetically by the members' names. The retrieved member list is then passed
-    to the "home.html" template for rendering.
+    # --- All-time leaderboard ---
+    # Use annotate() to count wins and losses in a single SQL query instead of
+    # issuing 2 queries per member in a Python loop (N+1 problem).
+    members = (
+        Members.objects
+        .exclude(elo=1000)
+        .annotate(
+            wins=Count("winner12member", distinct=True) + Count("winner22member", distinct=True),
+            losses=Count("loser12member", distinct=True) + Count("loser22member", distinct=True),
+        )
+        .order_by("-elo")
+    )
 
-    :param request: The HTTP request object containing metadata and other
-        relevant information for processing the homepage view.
-    :return: An HTTP response object with the rendered "home.html" template,
-        including the filtered and ordered list of member data.
-    """
-    members = list(Members.objects.all().order_by("-elo").exclude(elo=1000))
-
-    for m in members:
-        m.wins = BattleLogs.objects.filter(Q(winner1=m) | Q(winner2=m)).count()
-        m.losses = BattleLogs.objects.filter(Q(loser1=m) | Q(loser2=m)).count()
-
+    # --- Week boundary (computed once, reused everywhere) ---
     now = timezone.now()
     dt = timezone.localtime(now)
     last_monday = (dt - timedelta(days=dt.weekday())).replace(
         hour=0, minute=0, second=0, microsecond=0
     )
 
-    weekly_members = list(WeeklyElo.objects.filter(week=last_monday))
-
-    for m in weekly_members:
-        player = m.member
-
-        m.weekly_wins = BattleLogs.objects.filter(
-            battleTime__gte=last_monday
-        ).filter(
-            Q(winner1=player) | Q(winner2=player)
-        ).count()
-
-        m.weekly_losses = BattleLogs.objects.filter(
-            battleTime__gte=last_monday
-        ).filter(
-            Q(loser1=player) | Q(loser2=player)
-        ).count()
-
-        try:
-            m.better_than_last_week = WeeklyElo.objects.filter(member=player).order_by("week")[1].elo < m.elo
-        except IndexError:
-            continue
-
-
-    dt = timezone.localtime(now)
-    start_of_week = (dt - timedelta(days=dt.weekday())).replace(
-        hour=0, minute=0, second=0, microsecond=0
+    # --- Weekly leaderboard ---
+    weekly_members = list(
+        WeeklyElo.objects
+        .filter(week=last_monday)
+        .select_related("member")
     )
 
-    if BattleLogs.objects.all().count() == 0:
-        first_match = timezone.now()
-    else:
-        first_match = BattleLogs.objects.order_by("battleTime")[0].battleTime
+    if weekly_members:
+        # Fetch ALL this week's battles in one query instead of 2 queries per player
+        weekly_battles = list(
+            BattleLogs.objects
+            .filter(battleTime__gte=last_monday)
+            .values("winner1_id", "winner2_id", "loser1_id", "loser2_id")
+        )
 
-    if Refresh.objects.all().count() == 0:
-        last_refresh = timezone.now()
+        weekly_wins = defaultdict(int)
+        weekly_losses = defaultdict(int)
+        for b in weekly_battles:
+            weekly_wins[b["winner1_id"]] += 1
+            weekly_wins[b["winner2_id"]] += 1
+            weekly_losses[b["loser1_id"]] += 1
+            weekly_losses[b["loser2_id"]] += 1
+
+        # Fetch previous week's ELOs in one query instead of 1 query per player.
+        # Also fixes the sort-order bug: the original code used order_by("week")[1]
+        # (ascending), which returned the second-oldest week rather than last week.
+        prev_week = last_monday - timedelta(weeks=1)
+        prev_elo_map = dict(
+            WeeklyElo.objects
+            .filter(week=prev_week)
+            .values_list("member_id", "elo")
+        )
+
+        for m in weekly_members:
+            tag = m.member_id
+            m.weekly_wins   = weekly_wins.get(tag, 0)
+            m.weekly_losses = weekly_losses.get(tag, 0)
+            prev_elo = prev_elo_map.get(tag)
+            if prev_elo is not None:
+                m.better_than_last_week = prev_elo < m.elo
+
+    # --- Metadata ---
+    # Use .exists() instead of .count() == 0 for the presence check, and compute
+    # the battle count once rather than calling .count() three separate times.
+    if not BattleLogs.objects.exists():
+        first_match = now
+        battlecount = 0
     else:
-        last_refresh = Refresh.objects.order_by("-timestamp")[0].timestamp
+        first_match = BattleLogs.objects.order_by("battleTime").values_list("battleTime", flat=True).first()
+        battlecount = BattleLogs.objects.count()
+
+    last_refresh = (
+        Refresh.objects.order_by("-timestamp").values_list("timestamp", flat=True).first()
+        or now
+    )
+
+    weeklybattlecount = BattleLogs.objects.filter(
+        battleTime__gte=last_monday,
+        battleTime__lte=now,
+    ).count()
 
     context = {
         "members": members,
@@ -93,11 +112,8 @@ def home(request):
         "last_monday": last_monday,
         "first_match": first_match,
         "last_refresh": last_refresh,
-        "battlecount": BattleLogs.objects.all().count(),
-        "weeklybattlecount": BattleLogs.objects.filter(
-            battleTime__gte=start_of_week,
-            battleTime__lte=now,
-        ).count(),
+        "battlecount": battlecount,
+        "weeklybattlecount": weeklybattlecount,
     }
     return render(request, "home.html", context)
 

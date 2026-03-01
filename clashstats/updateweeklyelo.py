@@ -43,6 +43,7 @@ def update_weekly_elo():
             BattleLogs.objects
             .filter(battleTime__gte=week_start,
                     battleTime__lt=week_end)
+            .select_related("winner1", "winner2", "loser1", "loser2")
             .order_by('battleTime')
         )
 
