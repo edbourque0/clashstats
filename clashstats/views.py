@@ -48,7 +48,7 @@ def home(request):
     # --- Weekly leaderboard ---
     weekly_members = list(
         WeeklyElo.objects
-        .filter(week=last_monday)
+        .filter(week=last_monday.date())
         .select_related("member")
     )
 
@@ -74,7 +74,7 @@ def home(request):
         prev_week = last_monday - timedelta(weeks=1)
         prev_elo_map = dict(
             WeeklyElo.objects
-            .filter(week=prev_week)
+            .filter(week=prev_week.date())
             .values_list("member_id", "elo")
         )
 
