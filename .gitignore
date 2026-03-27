@@ -3,6 +3,7 @@
 /.env
 /clashstats/test.py
 /dev-compose.yaml
-/.idea
+/.idea/
 __pycache__/
+/staticfiles/
 *.pyc

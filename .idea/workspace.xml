@@ -4,10 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="08130c95-e40a-4eff-916b-05872f0b417d" name="Changes" comment="Refactor function names for consistency and improve code readability">
+    <list default="true" id="08130c95-e40a-4eff-916b-05872f0b417d" name="Changes" comment="Add debug environment variable">
+      <change afterPath="$PROJECT_DIR$/static/css/bootstrap.min.css.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/fonts/mozilla-headline-v1-latin-regular.woff2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/fonts/mozilla-text-v1-latin-regular.woff2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/js/bootstrap.bundle.min.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clashstats_v2/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/clashstats_v2/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev-compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/dev-compose.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-entrypoint.sh" beforeDir="false" afterPath="$PROJECT_DIR$/docker-entrypoint.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,6 +23,9 @@
   </component>
   <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
     <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
+  </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="614" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -28,7 +38,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="clean-up" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -37,24 +47,6 @@
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {}
 }</component>
-  <component name="GitHubPullRequestState"><![CDATA[{
-  "prStates": [
-    {
-      "id": {
-        "id": "PR_kwDOQQx9oM616ctt",
-        "number": 13
-      },
-      "lastSeen": 1764551873523
-    },
-    {
-      "id": {
-        "id": "PR_kwDOQQx9oM7HFA6p",
-        "number": 17
-      },
-      "lastSeen": 1772392433339
-    }
-  ]
-}]]></component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/edbourque0/clashstats_v2.git&quot;,
@@ -71,18 +63,15 @@
     &quot;repository&quot;: &quot;clashstats_v2&quot;
   }
 }</component>
+  <component name="HttpClientEndpointsTabState">
+    <option name="cachedRequestData" value="&lt;CachedHttpClientTabRequests /&gt;" />
+  </component>
   <component name="HttpClientOnboardingState">{
   &quot;isOnboardingCommentShown&quot;: true
 }</component>
-  <component name="LLMProjectSettings">
-    <option name="turned_on" value="false" />
-  </component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
-  </component>
-  <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
@@ -104,8 +93,8 @@
     "Docker.Dockerfile.executor": "Run",
     "Docker.dev-compose.yaml.postgres: Compose Deployment.executor": "Run",
     "Docker.dev-compose.yaml: Compose Deployment.executor": "Run",
+    "HTTP Request.generated-requests | #1.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.examen.executor": "Run",
     "Python.generateApiKey.executor": "Run",
     "Python.test.executor": "Run",
     "RunOnceActivity.MCP Project settings loaded": "true",
@@ -116,21 +105,21 @@
     "RunOnceActivity.pycharm.django.structure.promotion.once.per.project": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "SHELLCHECK.PATH": "C:\\Users\\edbou\\AppData\\Roaming\\JetBrains\\PyCharm2025.3\\plugins\\Shell Script\\shellcheck.exe",
     "ai.playground.ignore.import.keys.banner.in.settings": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
     "datagrid.heatmap.switchedByDefault": "false",
     "django.template.preview.state": "SHOW_EDITOR",
-    "git-widget-placeholder": "#17 on claude/improve-app-performance-ZX5VH",
+    "git-widget-placeholder": "web-optimization",
     "junie.onboarding.icon.badge.shown": "true",
-    "last_opened_file_path": "C:/Users/edbou/Documents/Code/clashstats_v2",
+    "last_opened_file_path": "C:/Users/edbou/Documents/Code/clashstats_v2/static/fonts",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "run.code.analysis.last.selected.profile": "aDefault",
-    "settings.editor.selected.configurable": "com.github.copilot.settings.general.GeneralConfigurable",
+    "settings.editor.selected.configurable": "swagger",
     "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
   },
@@ -141,8 +130,12 @@
     ]
   }
 }]]></component>
+  <component name="RecapUselessUpdatesCounter">
+    <option name="suspendCountdown" value="8" />
+  </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\edbou\Documents\Code\clashstats_v2\static\fonts" />
       <recent name="C:\Users\edbou\Documents\Code\clashstats_v2" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -151,29 +144,21 @@
       <recent name="C:\Users\edbou\Documents\Code\clashstats_v2\clashstats_v2" />
     </key>
   </component>
+  <component name="RunDashboard">
+    <option name="configurationStatuses">
+      <map>
+        <entry key="HttpClient.HttpRequestRunConfigurationType">
+          <value>
+            <map>
+              <entry key="generated-requests | #1" value="STOPPED" />
+            </map>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="RunManager" selected="Docker.dev-compose.yaml: Compose Deployment">
-    <configuration name="examen" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="clashstats_v2" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="RUN_TOOL" value="" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/examen.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
+    <configuration name="generated-requests | #1" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/generated-requests.http" executionIdentifier="#1" runType="Run single request">
       <method v="2" />
     </configuration>
     <configuration name="generateApiKey" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
@@ -215,7 +200,7 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="RUN_TOOL" value="" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\edbou\Documents\Code\clashstats_v2\clashstats\test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -254,6 +239,7 @@
     <configuration name="Dockerfile" type="docker-deploy" factoryName="dockerfile" temporary="true" server-name="Docker">
       <deployment type="dockerfile">
         <settings>
+          <option name="buildOnly" value="true" />
           <option name="containerName" value="" />
           <option name="sourceFilePath" value="Dockerfile" />
         </settings>
@@ -284,7 +270,7 @@
       <item itemvalue="Django Server.clashstats_v2" />
       <item itemvalue="Docker.Dockerfile" />
       <item itemvalue="Docker.dev-compose.yaml: Compose Deployment" />
-      <item itemvalue="Python.examen" />
+      <item itemvalue="HTTP Request.generated-requests | #1" />
       <item itemvalue="Python.generateApiKey" />
       <item itemvalue="Python.test" />
       <item itemvalue="Shell Script.Push to GHCR" />
@@ -293,7 +279,7 @@
       <list>
         <item itemvalue="Docker.dev-compose.yaml: Compose Deployment" />
         <item itemvalue="Docker.Dockerfile" />
-        <item itemvalue="Python.examen" />
+        <item itemvalue="HTTP Request.generated-requests | #1" />
         <item itemvalue="Python.test" />
         <item itemvalue="Python.generateApiKey" />
       </list>
@@ -302,8 +288,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-PY-253.31033.139" />
-        <option value="bundled-python-sdk-2653e85de345-6d6dccd035ac-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.31033.139" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-PY-253.32098.74" />
+        <option value="bundled-python-sdk-1cd77e80b48f-6d6dccd035ac-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.32098.74" />
       </set>
     </attachedChunks>
   </component>
@@ -318,17 +304,12 @@
       <option name="presentableId" value="Default" />
       <updated>1762466725545</updated>
       <workItem from="1762466726547" duration="26410000" />
-      <workItem from="1764551829133" duration="305000" />
-      <workItem from="1764723079052" duration="610000" />
-      <workItem from="1764898287087" duration="2523000" />
-      <workItem from="1765234173350" duration="3607000" />
-      <workItem from="1765410196795" duration="3789000" />
-      <workItem from="1767329280078" duration="22000" />
-      <workItem from="1771294549941" duration="1084000" />
-      <workItem from="1771549197683" duration="83000" />
-      <workItem from="1772391170088" duration="426000" />
-      <workItem from="1772391695442" duration="202000" />
-      <workItem from="1772392110185" duration="1201000" />
+      <workItem from="1773106900362" duration="29000" />
+      <workItem from="1773620358936" duration="1313000" />
+      <workItem from="1774197423883" duration="150000" />
+      <workItem from="1774197583453" duration="1248000" />
+      <workItem from="1774201169509" duration="341000" />
+      <workItem from="1774641513945" duration="2032000" />
     </task>
     <task id="LOCAL-00001" summary="Initialize Django project `clashstats_v2` with core app, basic configurations, and initial setup files.">
       <option name="closed" value="true" />
@@ -482,31 +463,7 @@
       <option name="project" value="LOCAL" />
       <updated>1763608512588</updated>
     </task>
-    <task id="LOCAL-00020" summary="allo">
-      <option name="closed" value="true" />
-      <created>1764197985053</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1764197985053</updated>
-    </task>
-    <task id="LOCAL-00021" summary="Refactor battle log processing and add error handling for weekly Elo comparison">
-      <option name="closed" value="true" />
-      <created>1764898920411</created>
-      <option name="number" value="00021" />
-      <option name="presentableId" value="LOCAL-00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1764898920411</updated>
-    </task>
-    <task id="LOCAL-00022" summary="Refactor function names for consistency and improve code readability">
-      <option name="closed" value="true" />
-      <created>1764901796320</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1764901796320</updated>
-    </task>
-    <option name="localTasksCounter" value="23" />
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -556,14 +513,10 @@
     <MESSAGE value="Enhance home page styling with custom fonts and header, update leaderboard display logic, and fix empty dataset handling in views." />
     <MESSAGE value="[WIP] " />
     <MESSAGE value="[WIP] Add WeeklyElo model and updateweeklyelo function for weekly Elo rating updates" />
-    <MESSAGE value="allo" />
-    <MESSAGE value="Refactor battle log processing and add error handling for weekly Elo comparison" />
-    <MESSAGE value="Refactor function names for consistency and improve code readability" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactor function names for consistency and improve code readability" />
+    <option name="LAST_COMMIT_MESSAGE" value="[WIP] Add WeeklyElo model and updateweeklyelo function for weekly Elo rating updates" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/clashstats_v2$examen.coverage" NAME="examen Coverage Results" MODIFIED="1765413344398" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/clashstats_v2$test.coverage" NAME="test Coverage Results" MODIFIED="1765234309328" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/clashstats_v2$test.coverage" NAME="test Coverage Results" MODIFIED="1763751489318" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>
