@@ -5,6 +5,9 @@ echo "Running migrations..."
 python manage.py makemigrations --noinput
 python manage.py migrate --noinput
 
+echo "Collecting static files..."
+python manage.py collectstatic --noinput
+
 echo "Refreshing clan..."
 python manage.py refresh_clan || echo "Initial refresh test completed"
 
